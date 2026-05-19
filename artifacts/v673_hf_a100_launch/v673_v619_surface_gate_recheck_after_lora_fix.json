@@ -1,0 +1,85 @@
+{
+  "blockers": [],
+  "decision": "surface_gate_passed",
+  "export_env_if_used_by_next_launcher": {
+    "KG1_V618_MODULE_SURFACE_GATE_STATUS": "passed",
+    "KG1_V619_ATTENTION_SURFACE": "k_proj,o_proj,q_proj,v_proj",
+    "KG1_V619_MODULE_SURFACE_REPORT": "artifacts\\v673_hf_a100_launch\\v673_v619_surface_gate_recheck_after_lora_fix.json"
+  },
+  "finding_counts": {
+    "blocker": 0,
+    "warning": 0
+  },
+  "generated_at_utc": "2026-05-19T18:27:25.880679+00:00",
+  "launch_report": {
+    "attention_requested": [
+      "k_proj",
+      "o_proj",
+      "q_proj",
+      "v_proj"
+    ],
+    "blockers": [],
+    "launch_manifest": "artifacts\\v673_hf_a100_launch\\v673-a100-guarded-eqbit-v290ckpt6-20260519T181928Z_launch_manifest.json",
+    "missing_required_attention_modules": [],
+    "observations": [
+      "target_parameters_are_moe_expert_only_but_attention_surface_is_requested_and_verified"
+    ],
+    "only_moe_target_parameters": true,
+    "target_parameters": [
+      "mlp.experts.gate_up_proj",
+      "mlp.experts.down_proj"
+    ],
+    "trainable_lora_modules": [
+      "down_proj",
+      "k_proj",
+      "o_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ],
+    "warnings": []
+  },
+  "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "observations": [
+    "target_parameters_are_moe_expert_only_but_attention_surface_is_requested_and_verified"
+  ],
+  "ok": true,
+  "revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "rules": {
+    "moe_target_parameters_warning": "MoE target_parameters may coexist only after this gate proves attention trainable modules are requested.",
+    "no_gpu_if_source_attention_missing": true,
+    "no_gpu_if_trainable_attention_missing": true
+  },
+  "schema_version": "kg1_v619_nemotron_module_surface_gate_v1",
+  "source_report": {
+    "architectures": [
+      "NemotronHForCausalLM"
+    ],
+    "attention_surface_available": true,
+    "config_path": "C:\\Users\\davis\\.cache\\huggingface\\hub\\models--nvidia--NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\\snapshots\\cbd3fa9f933d55ef16a84236559f4ee2a0526848\\config.json",
+    "declared_linear_counts": {
+      "down_proj": 1,
+      "in_proj": 1,
+      "k_proj": 1,
+      "lm_head": 1,
+      "o_proj": 1,
+      "out_proj": 1,
+      "q_proj": 1,
+      "up_proj": 1,
+      "v_proj": 1
+    },
+    "lm_head_available": true,
+    "model_type": "nemotron_h",
+    "modeling_path": "C:\\Users\\davis\\.cache\\huggingface\\hub\\models--nvidia--NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\\snapshots\\cbd3fa9f933d55ef16a84236559f4ee2a0526848\\modeling_nemotron_h.py",
+    "source_snippets": {
+      "down_proj": "ermediate_size self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=config.mlp_bias) self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=config.mlp_bias) self.act_fn = ACT2FN[config.mlp_hidden_act] def forward(self, x): re",
+      "k_proj": "self.q_proj = nn.Linear(self.hidden_size, self.num_heads * self.head_dim, bias=config.attention_bias) self.k_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=config.attention_bias) self.v_proj = nn.Linear(self.hidden_size, self.num_key_value",
+      "lm_head": "r().__init__(config) self.backbone = NemotronHModel(config) self.vocab_size = config.vocab_size self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False) # Initialize weights and apply final processing self.post_init() def get_input_emb",
+      "o_proj": "self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=config.attention_bias) self.o_proj = nn.Linear(self.head_dim * self.num_heads, self.hidden_size, bias=config.attention_bias) def forward( self, hidden_states: torch.Tensor, #",
+      "q_proj": "alue_heads self.max_position_embeddings = config.max_position_embeddings self.is_causal = True self.q_proj = nn.Linear(self.hidden_size, self.num_heads * self.head_dim, bias=config.attention_bias) self.k_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * s",
+      "up_proj": "hidden_size = config.hidden_size self.intermediate_size = intermediate_size or config.intermediate_size self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=config.mlp_bias) self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=config.ml",
+      "v_proj": "self.k_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=config.attention_bias) self.v_proj = nn.Linear(self.hidden_size, self.num_key_value_heads * self.head_dim, bias=config.attention_bias) self.o_proj = nn.Linear(self.head_dim * self.num_heads, self"
+    }
+  },
+  "warnings": []
+}

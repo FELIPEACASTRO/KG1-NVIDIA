@@ -1,0 +1,9 @@
+{
+  "file_count": 1,
+  "files": [
+    "artifacts/v673_hf_a100_launch/launch_v673_hf_a100_guarded_eqbit.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

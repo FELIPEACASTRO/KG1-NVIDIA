@@ -1,0 +1,117 @@
+{
+  "data": {
+    "data_repo": "local",
+    "pretokenized_archive_resolved_path": null,
+    "pretokenized_archive_sha256": null,
+    "pretokenized_archive_zip": "",
+    "pretokenized_exclude_categories": [],
+    "pretokenized_validation_copy_only": false,
+    "pretokenized_validation_examples": 0,
+    "pretokenized_validation_fraction": 0.0,
+    "tokenized_train_records": 720,
+    "tokenized_validation_records": 180,
+    "train_file": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T174833Z/v673_guarded_equation_bit_transfer_train.jsonl",
+    "train_file_sha256": "cdf85573584c2bb965f8fb19bb8b698e7b03a7231013d39a74ff0410e0d76343",
+    "train_records": 720,
+    "validation_file": "artifacts/v673_guarded_equation_bit_transfer_dataset/20260519T174833Z/v673_guarded_equation_bit_transfer_val.jsonl",
+    "validation_file_sha256": "858c02fcc046d130c4405aac942c102aaf0ded38c347479734c5339d6960e057",
+    "validation_records": 180
+  },
+  "decision": {
+    "full_training_allowed": true,
+    "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. Model/adapter trainability is checked by the subsequent real train cell."
+  },
+  "lora": {
+    "alpha": 32,
+    "dropout": 0.0,
+    "init_adapter_dir": "",
+    "init_adapter_repo": "",
+    "init_adapter_revision": "",
+    "init_adapter_subfolder": "",
+    "parsed_target_modules": [
+      "down_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "out_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ],
+    "r": 32,
+    "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+    "target_parameters": "mlp.experts.gate_up_proj,mlp.experts.down_proj",
+    "trainable_lora_module_filter": {
+      "checked_after_model_load": false,
+      "enabled": true,
+      "requested": [
+        "down_proj",
+        "k_proj",
+        "o_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "requested_name_substrings": [],
+      "require_lora_target_parameter_match": true,
+      "required_trainable_lora_name_substrings": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    }
+  },
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "run_id": "v673-local-tokenize-dryrun-after-f2-fix",
+  "runtime": {
+    "cuda_available": false,
+    "tokenize_only_dry_run": true,
+    "torch": "2.10.0+cpu"
+  },
+  "trainable_parameters": {
+    "checked_after_model_load": false,
+    "reason": "TOKENIZE_ONLY_DRY_RUN=1 skips the expensive model load."
+  },
+  "training": {
+    "answer_span_loss": {
+      "min_weighted_tokens": 0,
+      "weight": 1.0
+    },
+    "batch_size": 2,
+    "gradient_accumulation": 2,
+    "max_length": 1024,
+    "max_prompt_truncation_rate": 0.0,
+    "max_trainable_param_ratio": 0.06,
+    "micro_batch_size": 1,
+    "sampling": {
+      "mode": "weighted_replacement",
+      "source_weights": {
+        "v673_guarded_equation_bit_transfer_dataset": 1.0
+      },
+      "subcategory_weights": {
+        "bit_exact_global_binary_replay": 1.0,
+        "bit_exact_global_ternary_replay": 1.0,
+        "bit_fullbyte_ternary_v366_new": 1.0,
+        "equation_numeric_add_direct": 1.0,
+        "equation_numeric_colon_trailing_zero": 1.0,
+        "equation_numeric_minus_signed": 1.0
+      },
+      "weighted_share_by_source": {
+        "v673_guarded_equation_bit_transfer_dataset": 1.0
+      },
+      "weighted_share_by_subcategory": {
+        "bit_exact_global_binary_replay": 0.066667,
+        "bit_exact_global_ternary_replay": 0.133333,
+        "bit_fullbyte_ternary_v366_new": 0.133333,
+        "equation_numeric_add_direct": 0.166667,
+        "equation_numeric_colon_trailing_zero": 0.166667,
+        "equation_numeric_minus_signed": 0.333333
+      }
+    }
+  }
+}

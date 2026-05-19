@@ -30,7 +30,10 @@ Optional env:
   TRAINABLE_LORA_MODULES, TRAINABLE_LORA_NAME_SUBSTRINGS,
   REQUIRE_LORA_TARGET_PARAMETER_MATCH, REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS,
   ANSWER_SPAN_LOSS_WEIGHT, ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
-  USE_ROW_LOSS_WEIGHT, REQUIRE_ROW_LOSS_WEIGHT
+  USE_ROW_LOSS_WEIGHT, REQUIRE_ROW_LOSS_WEIGHT, LOSS_MASK_STOP_AFTER_EOS. When row loss weighting is
+  enabled, the same row-weight contract is applied to both train and validation
+  examples so eval_loss measures the trained objective instead of the physical
+  row distribution.
 """
 
 from __future__ import annotations
@@ -231,6 +234,7 @@ ANSWER_SPAN_LOSS_WEIGHT = env_float("ANSWER_SPAN_LOSS_WEIGHT", 1.0)
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = env_int("ANSWER_SPAN_MIN_WEIGHTED_TOKENS", 0)
 USE_ROW_LOSS_WEIGHT = env_bool("USE_ROW_LOSS_WEIGHT", False)
 REQUIRE_ROW_LOSS_WEIGHT = env_bool("REQUIRE_ROW_LOSS_WEIGHT", False)
+LOSS_MASK_STOP_AFTER_EOS = env_bool("LOSS_MASK_STOP_AFTER_EOS", True)
 LOSS_NORMALIZATION_MODE = env_str("LOSS_NORMALIZATION_MODE", "token_mean")
 VALID_LOSS_NORMALIZATION_MODES = {"token_mean", "example_mean"}
 if LOSS_NORMALIZATION_MODE not in VALID_LOSS_NORMALIZATION_MODES:
@@ -1265,6 +1269,20 @@ def build_completion_mask(
     if not assistant_text:
         return [], [], False, False, 0
 
+    def stop_mask_after_first_eos(input_ids: list[int], loss_mask: list[float]) -> list[float]:
+        if not LOSS_MASK_STOP_AFTER_EOS:
+            return loss_mask
+        eos_id = getattr(tokenizer, "eos_token_id", None)
+        if eos_id is None:
+            return loss_mask
+        trimmed = list(loss_mask)
+        for idx, token_id in enumerate(input_ids):
+            if trimmed[idx] and int(token_id) == int(eos_id):
+                for after_idx in range(idx + 1, len(trimmed)):
+                    trimmed[after_idx] = 0.0
+                break
+        return trimmed
+
     def answer_char_span() -> tuple[int, int] | None:
         """Return the assistant-relative final-answer span, when explicit."""
 
@@ -1323,6 +1341,7 @@ def build_completion_mask(
                         weighted_tokens += 1
                     else:
                         loss_mask.append(1.0)
+                loss_mask = stop_mask_after_first_eos(input_ids, loss_mask)
                 return input_ids, loss_mask, True, False, weighted_tokens
         except (NotImplementedError, TypeError, ValueError):
             pass
@@ -1347,6 +1366,7 @@ def build_completion_mask(
     prefix_mismatch = full_ids[: len(prompt_ids)] != prompt_ids
     prompt_len = min(len(prompt_ids), len(full_ids))
     loss_mask = [0.0] * prompt_len + [1.0] * (len(full_ids) - prompt_len)
+    loss_mask = stop_mask_after_first_eos(full_ids, loss_mask)
     return full_ids, loss_mask, False, prefix_mismatch, 0
 
 
@@ -1788,12 +1808,13 @@ def make_manifest(
                 "weight": ANSWER_SPAN_LOSS_WEIGHT,
                 "min_weighted_tokens": ANSWER_SPAN_MIN_WEIGHTED_TOKENS,
                 "markers": ["Final answer:", "ANSWER:", "\\boxed{...}"],
+                "stop_mask_after_eos": LOSS_MASK_STOP_AFTER_EOS,
             },
             "row_loss_weight": {
                 "enabled": USE_ROW_LOSS_WEIGHT,
-                "required_for_train_rows": REQUIRE_ROW_LOSS_WEIGHT,
+                "required_for_weighted_rows": REQUIRE_ROW_LOSS_WEIGHT,
                 "source_fields": ["metadata.loss_weight", "loss_weight"],
-                "validation_ignores_row_weight": True,
+                "validation_ignores_row_weight": False,
             },
             "loss_normalization": {
                 "mode": LOSS_NORMALIZATION_MODE,
@@ -2001,7 +2022,7 @@ def train() -> None:
                 f"Validation dataset too small: {len(val_examples)} < MIN_VAL_EXAMPLES={MIN_VAL_EXAMPLES}"
             )
         train_data = tokenize_examples(train_examples, tokenizer, "Train", apply_row_loss_weight=True)
-        val_data = tokenize_examples(val_examples, tokenizer, "Validation", apply_row_loss_weight=False)
+        val_data = tokenize_examples(val_examples, tokenizer, "Validation", apply_row_loss_weight=True)
     if len(train_data) < MIN_TOKENIZED_TRAIN_EXAMPLES:
         raise RuntimeError(
             "Too few train examples survived tokenization: "

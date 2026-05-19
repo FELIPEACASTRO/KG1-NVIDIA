@@ -70,6 +70,7 @@ ANSWER_SPAN_MIN_WEIGHTED_TOKENS = "0"
 LOSS_NORMALIZATION_MODE = "example_mean"
 USE_ROW_LOSS_WEIGHT = "1"
 REQUIRE_ROW_LOSS_WEIGHT = "1"
+LOSS_MASK_STOP_AFTER_EOS = "1"
 
 SOURCE_WEIGHTS = "v673_guarded_equation_bit_transfer_dataset=1.00"
 SUBCATEGORY_WEIGHTS = (
@@ -89,9 +90,9 @@ REQUIRED_SUBCATEGORIES = (
     "equation_numeric_minus_signed"
 )
 TRAINABLE_LORA_MODULES = "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj"
-TRAINABLE_LORA_NAME_SUBSTRINGS = "gate_up_proj"
+TRAINABLE_LORA_NAME_SUBSTRINGS = ""
 REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS = (
-    "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj,gate_up_proj"
+    "q_proj,k_proj,v_proj,o_proj,up_proj,down_proj"
 )
 REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE = "1"
 
@@ -151,9 +152,10 @@ KG1_STATIC_GATE_CONTRACT = {
 # export LOSS_NORMALIZATION_MODE=example_mean
 # export USE_ROW_LOSS_WEIGHT=1
 # export REQUIRE_ROW_LOSS_WEIGHT=1
+# export LOSS_MASK_STOP_AFTER_EOS=1
 # export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
-# export TRAINABLE_LORA_NAME_SUBSTRINGS='gate_up_proj'
-# export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj,gate_up_proj'
+# export TRAINABLE_LORA_NAME_SUBSTRINGS=''
+# export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
 # export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1
 # export LORA_R=32
 # export LORA_ALPHA=32
@@ -202,7 +204,7 @@ del x, y
 torch.cuda.empty_cache()
 PY
 $PYBIN -m pip install -q --no-cache-dir --upgrade pip
-$PYBIN -m pip install -q --no-cache-dir --upgrade 'huggingface_hub>=0.36.0' packaging wheel setuptools 'peft>=0.17.0' 'accelerate>=1.10.0' safetensors sentencepiece hf_transfer ninja einops
+$PYBIN -m pip install -q --no-cache-dir --upgrade 'huggingface_hub>=0.36.0' packaging wheel setuptools 'transformers==4.57.6' 'peft==0.19.1' 'accelerate>=1.10.0' safetensors sentencepiece hf_transfer ninja einops
 rm -rf /tmp/kg1
 git clone --depth 1 --branch "$KG1_BRANCH" https://github.com/FELIPEACASTRO/KG1-NVIDIA.git /tmp/kg1
 cd /tmp/kg1
@@ -242,8 +244,8 @@ export LORA_DROPOUT=0.0
 export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj'
 export LORA_TARGET_PARAMETERS="$KG1_LORA_TARGET_PARAMETERS"
 export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
-export TRAINABLE_LORA_NAME_SUBSTRINGS='gate_up_proj'
-export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj,gate_up_proj'
+export TRAINABLE_LORA_NAME_SUBSTRINGS=''
+export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
 export REQUIRE_LORA_TARGET_PARAMETER_MATCH=1
 export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1
 export MAX_TRAINABLE_PARAM_RATIO=0.060
@@ -264,6 +266,7 @@ export ANSWER_SPAN_MIN_WEIGHTED_TOKENS="$KG1_ANSWER_SPAN_MIN_WEIGHTED_TOKENS"
 export LOSS_NORMALIZATION_MODE="$KG1_LOSS_NORMALIZATION_MODE"
 export USE_ROW_LOSS_WEIGHT="$KG1_USE_ROW_LOSS_WEIGHT"
 export REQUIRE_ROW_LOSS_WEIGHT="$KG1_REQUIRE_ROW_LOSS_WEIGHT"
+export LOSS_MASK_STOP_AFTER_EOS="$KG1_LOSS_MASK_STOP_AFTER_EOS"
 export BASELINE_EVAL_BEFORE_TRAIN=1
 export REQUIRE_FINAL_EVAL_LTE_BASELINE=0
 export ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA=0.16
@@ -489,6 +492,7 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_LOSS_NORMALIZATION_MODE": LOSS_NORMALIZATION_MODE,
         "KG1_USE_ROW_LOSS_WEIGHT": USE_ROW_LOSS_WEIGHT,
         "KG1_REQUIRE_ROW_LOSS_WEIGHT": REQUIRE_ROW_LOSS_WEIGHT,
+        "KG1_LOSS_MASK_STOP_AFTER_EOS": LOSS_MASK_STOP_AFTER_EOS,
         "KG1_SOURCE_WEIGHTS": SOURCE_WEIGHTS,
         "KG1_SUBCATEGORY_WEIGHTS": SUBCATEGORY_WEIGHTS,
         "KG1_REQUIRE_MAMBA_IMPORTS": "1",
@@ -597,8 +601,8 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "cuda13_a100_driver_gate_ok",
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'",
-        "export TRAINABLE_LORA_NAME_SUBSTRINGS='gate_up_proj'",
-        "export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj,gate_up_proj'",
+        "export TRAINABLE_LORA_NAME_SUBSTRINGS=''",
+        "export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'",
         "export REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=1",
         "export MAX_LENGTH=1024",
         "export MAX_STEPS=20",
@@ -609,6 +613,7 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export LOSS_NORMALIZATION_MODE=\"$KG1_LOSS_NORMALIZATION_MODE\"",
         "export USE_ROW_LOSS_WEIGHT=\"$KG1_USE_ROW_LOSS_WEIGHT\"",
         "export REQUIRE_ROW_LOSS_WEIGHT=\"$KG1_REQUIRE_ROW_LOSS_WEIGHT\"",
+        "export LOSS_MASK_STOP_AFTER_EOS=\"$KG1_LOSS_MASK_STOP_AFTER_EOS\"",
         "scripts/audit_v478_training_objective_alignment.py",
         "\"--use-row-loss-weight\"",
         "\"--require-row-loss-weight\"",
@@ -703,6 +708,7 @@ def manifest_payload(
             "final_learning_rate": FINAL_LEARNING_RATE,
             "loss_normalization_mode": LOSS_NORMALIZATION_MODE,
             "use_row_loss_weight": USE_ROW_LOSS_WEIGHT,
+            "loss_mask_stop_after_eos": LOSS_MASK_STOP_AFTER_EOS,
             "source_weights": SOURCE_WEIGHTS,
             "subcategory_weights": SUBCATEGORY_WEIGHTS,
             "cuda13_a100_policy": "allowed only after inline torch matmul smoke gate in command",
