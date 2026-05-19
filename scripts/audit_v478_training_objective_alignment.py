@@ -3,7 +3,9 @@
 
 This CPU-only gate checks a gap that tokenization gates do not catch: a dataset
 can contain enough guardrail rows physically while weighted replacement makes
-those rows nearly absent from the effective training objective.
+those rows nearly absent from the effective training objective.  When row-level
+loss weights are enabled, train and validation must be summarized under the same
+weighting contract so eval_loss cannot drift away from the trained objective.
 
 The script intentionally does not train, evaluate a model, package, or submit.
 It reads local JSONL data plus the exact source/subcategory weights that a HF
@@ -240,6 +242,27 @@ def gate_findings(args: argparse.Namespace, report: dict[str, Any]) -> list[dict
                     "detail": str(split["unknown_subcategory_rows"]),
                 }
             )
+    if args.use_row_loss_weight and not val.get("use_row_loss_weight", False):
+        findings.append(
+            {
+                "level": "error",
+                "code": "validation_row_loss_weight_not_applied",
+                "detail": "train uses row loss weights but validation summary does not",
+            }
+        )
+    if args.use_row_loss_weight and args.require_row_loss_weight:
+        for split_name, split in [("train", train), ("validation", val)]:
+            if int(split.get("explicit_row_weight_rows", 0)) != int(split.get("rows", 0)):
+                findings.append(
+                    {
+                        "level": "error",
+                        "code": f"{split_name}_row_loss_weight_missing_rows",
+                        "detail": (
+                            f"explicit={int(split.get('explicit_row_weight_rows', 0))} "
+                            f"rows={int(split.get('rows', 0))}"
+                        ),
+                    }
+                )
     return findings
 
 
@@ -257,6 +280,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-any-family-effective-share", type=float, default=0.80)
     parser.add_argument("--use-row-loss-weight", action="store_true")
     parser.add_argument("--require-row-loss-weight", action="store_true")
+    parser.add_argument(
+        "--require-validation-row-loss-weight",
+        action="store_true",
+        help=(
+            "Fail closed unless validation rows also carry metadata.loss_weight. "
+            "This is explicit documentation for launchers; --require-row-loss-weight "
+            "already applies to every weighted split."
+        ),
+    )
     parser.add_argument("--output-json", type=Path, default=None)
     parser.add_argument("--enforce", action="store_true")
     return parser.parse_args()
@@ -264,6 +296,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.require_validation_row_loss_weight and not args.use_row_loss_weight:
+        raise RuntimeError("--require-validation-row-loss-weight requires --use-row-loss-weight")
     manifest: dict[str, Any] = {}
     train_path = args.train_jsonl
     val_path = args.val_jsonl
@@ -296,6 +330,7 @@ def main() -> int:
             "max_any_family_effective_share": args.max_any_family_effective_share,
             "use_row_loss_weight": args.use_row_loss_weight,
             "require_row_loss_weight": args.require_row_loss_weight,
+            "require_validation_row_loss_weight": args.require_validation_row_loss_weight,
         },
         "train": summarize_split(
             train_rows,
@@ -308,8 +343,8 @@ def main() -> int:
             val_rows,
             source_weights,
             subcategory_weights,
-            use_row_loss_weight=False,
-            require_row_loss_weight=False,
+            use_row_loss_weight=args.use_row_loss_weight,
+            require_row_loss_weight=args.require_row_loss_weight or args.require_validation_row_loss_weight,
         ),
     }
     findings = gate_findings(args, report)
