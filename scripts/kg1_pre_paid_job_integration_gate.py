@@ -440,6 +440,88 @@ def audit_decoding_vs_adapter_drift_gate(text: str, findings: list[Finding]) -> 
     }
 
 
+def audit_v666_launcher_contract(
+    text: str,
+    findings: list[Finding],
+) -> dict[str, Any]:
+    """Require the launcher to carry the V666 CPU stack decision into paid jobs."""
+
+    status = parse_launcher_env_value(text, "KG1_V666_CPU_GATE_STACK_STATUS")
+    report = parse_launcher_env_value(text, "KG1_V666_CPU_GATE_STACK_REPORT")
+    if status.lower() != "passed":
+        findings.append(
+            Finding(
+                "error",
+                "launcher_v666_cpu_gate_stack_not_passed",
+                f"KG1_V666_CPU_GATE_STACK_STATUS expected 'passed', got {status or '<missing>'!r}",
+            )
+        )
+    if not report:
+        findings.append(
+            Finding(
+                "error",
+                "launcher_v666_cpu_gate_report_missing",
+                "KG1_V666_CPU_GATE_STACK_REPORT must point to the exact CPU gate stack report used by the pre-paid gate",
+            )
+        )
+    return {
+        "required_status": "passed",
+        "observed_status": status,
+        "declared_report": report,
+    }
+
+
+def audit_v666_cpu_gate_report(path: Path | None, findings: list[Finding]) -> dict[str, Any]:
+    """Require the aggregated V666 CPU gate to allow GPU before paid launch."""
+
+    if path is None:
+        findings.append(Finding("error", "v666_cpu_gate_report_missing", "--v666-cpu-gate-report-json is required"))
+        return {"missing": True}
+    if not path.is_file():
+        findings.append(Finding("error", "v666_cpu_gate_report_not_found", str(path)))
+        return {"path": str(path), "missing": True}
+    payload = read_json(path)
+    checks = payload.get("checks", [])
+    failed_checks = [check.get("name") for check in checks if not check.get("ok")]
+    blockers = payload.get("blockers", [])
+    ok = (
+        payload.get("schema_version") == "kg1_v666_cpu_gate_stack_v1"
+        and payload.get("ok") is True
+        and payload.get("gpu_allowed") is True
+        and payload.get("decision") == "gpu_allowed"
+        and not blockers
+        and not failed_checks
+    )
+    if not ok:
+        findings.append(
+            Finding(
+                "error",
+                "v666_cpu_gate_report_not_gpu_allowed",
+                json.dumps(
+                    {
+                        "schema_version": payload.get("schema_version"),
+                        "ok": payload.get("ok"),
+                        "gpu_allowed": payload.get("gpu_allowed"),
+                        "decision": payload.get("decision"),
+                        "blockers": blockers,
+                        "failed_checks": failed_checks,
+                    },
+                    sort_keys=True,
+                ),
+            )
+        )
+    return {
+        "path": str(path),
+        "schema_version": payload.get("schema_version"),
+        "ok": bool(payload.get("ok", False)),
+        "gpu_allowed": bool(payload.get("gpu_allowed", False)),
+        "decision": payload.get("decision"),
+        "blockers": blockers,
+        "failed_checks": failed_checks,
+        "check_count": len(checks),
+    }
+
+
 def block_quarantined_identity(text: str, findings: list[Finding], *, source: str) -> None:
     for marker, reason in BLOCKED_DATASET_MARKERS.items():
         if marker in text:
@@ -463,6 +545,7 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         if args.allow_missing_decoding_drift_gate
         else audit_decoding_vs_adapter_drift_gate(text, findings)
     )
+    v666_launcher_report = audit_v666_launcher_contract(text, findings)
     if args.require_crisis_guards:
         require_regex(
             text,
@@ -631,8 +714,13 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         row_weight_flag_counts = {
             "--use-row-loss-weight": text.count("--use-row-loss-weight"),
             "--require-row-loss-weight": text.count("--require-row-loss-weight"),
+            "--require-validation-row-loss-weight": text.count("--require-validation-row-loss-weight"),
         }
-        if row_weight_flag_counts["--use-row-loss-weight"] < 2 or row_weight_flag_counts["--require-row-loss-weight"] < 2:
+        if (
+            row_weight_flag_counts["--use-row-loss-weight"] < 2
+            or row_weight_flag_counts["--require-row-loss-weight"] < 2
+            or row_weight_flag_counts["--require-validation-row-loss-weight"] < 2
+        ):
             findings.append(
                 Finding(
                     "error",
@@ -714,10 +802,12 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "row_loss_weight_flag_counts": {
             "--use-row-loss-weight": text.count("--use-row-loss-weight"),
             "--require-row-loss-weight": text.count("--require-row-loss-weight"),
+            "--require-validation-row-loss-weight": text.count("--require-validation-row-loss-weight"),
         },
         "declared_dataset_schema": declared_schema,
         "residual_first_gpu_gate": residual_first_report,
         "decoding_vs_adapter_drift_gate": decoding_vs_adapter_drift_report,
+        "v666_cpu_gate_launcher_contract": v666_launcher_report,
     }
 
 
@@ -1145,6 +1235,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--require-row-loss-weight", action="store_true")
     parser.add_argument("--tokenization-manifest-json", type=Path, default=None)
     parser.add_argument("--learnability-manifest-json", type=Path, default=None)
+    parser.add_argument("--v666-cpu-gate-report-json", type=Path, default=None)
     parser.add_argument("--expected-data-repo", default="")
     parser.add_argument("--expected-data-root", default="")
     parser.add_argument("--expected-train-sha256", default="")
@@ -1155,7 +1246,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--expected-init-adapter-repo", default="")
     parser.add_argument("--expected-init-adapter-subfolder", default="")
     parser.add_argument("--expected-pair-score-mode", default="")
-    parser.add_argument("--expected-flavor", default="h200")
+    parser.add_argument("--expected-flavor", default="a100-large")
     parser.add_argument("--expected-max-unit-cost-usd", default="0.09")
     parser.add_argument("--allow-missing-crisis-guards", action="store_true")
     parser.add_argument("--allow-missing-residual-first-gates", action="store_true")
@@ -1175,6 +1266,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "--expected-output-repo": args.expected_output_repo,
             "--expected-init-adapter-repo": args.expected_init_adapter_repo,
             "--expected-init-adapter-subfolder": args.expected_init_adapter_subfolder,
+            "--v666-cpu-gate-report-json": args.v666_cpu_gate_report_json,
         }
         missing = [name for name, value in required_values.items() if value in (None, "", 0)]
         if missing:
@@ -1309,6 +1401,7 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
         preference_manifest_summary = {"skipped": True, "reason": "sft_schema_does_not_use_preference_audit"}
     tokenization_summary = audit_tokenization_manifest(args.tokenization_manifest_json, args, findings)
     learnability_summary = audit_learnability_manifest(args.learnability_manifest_json, findings)
+    v666_cpu_gate_summary = audit_v666_cpu_gate_report(args.v666_cpu_gate_report_json, findings)
     report = {
         "schema_version": "kg1_pre_paid_job_integration_gate_v2",
         "dataset_schema": args.dataset_schema,
@@ -1319,6 +1412,7 @@ def run_gate(args: argparse.Namespace, *, emit: bool = True) -> dict[str, Any]:
         "validation_dataset": val_report,
         "tokenization_manifest": tokenization_summary,
         "learnability_manifest": learnability_summary,
+        "v666_cpu_gate": v666_cpu_gate_summary,
         "preference_manifest": preference_manifest_summary,
         "v438_audit": preference_manifest_summary if preference_manifest_summary.get("kind") == "v438" else {"skipped": True},
         "findings": [item.__dict__ for item in findings],
@@ -1405,7 +1499,7 @@ MAX_STEPS = 4
 MAX_LENGTH = 2048
 ABORT_MAX_RESERVED_GIB = 70
 LOSS_NORMALIZATION_MODE = "example_mean"
-FLAVOR = "h200"
+FLAVOR = "a100-large"
 ANSWER_SPAN_LOSS_WEIGHT = 2.0
 ANSWER_SPAN_MIN_WEIGHTED_TOKENS = 1
 USE_ROW_LOSS_WEIGHT = "1"
@@ -1434,6 +1528,8 @@ KG1_CPU_SIMULATED_LOST_BIT_ROWS = "0"
 KG1_CPU_SIMULATED_LOST_EQUATION_ROWS = "0"
 KG1_MAX_TOKEN_HEADROOM_RATIO = "0.90"
 KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS = "passed"
+KG1_V666_CPU_GATE_STACK_STATUS = "passed"
+KG1_V666_CPU_GATE_STACK_REPORT = "artifacts/v665_v664_failure_analysis/v666_cpu_gate_stack.json"
 KG1_V568_LOGITS_NLL_GATE_STATUS = "passed"
 KG1_V568_PROTECTED_MARGIN_STATUS = "passed"
 KG1_V568_MIN_WRONG_MINUS_CORRECT_MARGIN = "-0.01"
@@ -1456,8 +1552,8 @@ export DATA_REPO='kg1/self-test-data'
 export MAX_LENGTH=2048
 export ABORT_MAX_RESERVED_GIB=70
 export LOSS_NORMALIZATION_MODE=example_mean
-local_objective_alignment_cmd = "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight"
-python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight
+local_objective_alignment_cmd = "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight --require-validation-row-loss-weight"
+python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight --require-validation-row-loss-weight
 timeout=3600
 Return only one line with \\boxed{{...}}. No reasoning.
 """
@@ -1473,6 +1569,29 @@ def self_test() -> None:
         _write_jsonl(val, _self_test_sft_rows())
         train_sha = sha256_file(train)
         val_sha = sha256_file(val)
+        v666_report = root / "v666_cpu_gate_stack.json"
+        v666_report.write_text(
+            json.dumps(
+                {
+                    "schema_version": "kg1_v666_cpu_gate_stack_v1",
+                    "ok": True,
+                    "gpu_allowed": True,
+                    "decision": "gpu_allowed",
+                    "blockers": [],
+                    "checks": [
+                        {"name": "self_test_v478_objective_alignment", "ok": True},
+                        {"name": "self_test_loss_mask_eos_contract", "ok": True},
+                        {"name": "self_test_v614_anti_runaway_promotion", "ok": True},
+                        {"name": "self_test_post_train_openrouter_rule", "ok": True},
+                    ],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
         launcher = root / "launcher.py"
         launcher.write_text(_self_test_launcher_text(train_sha, val_sha), encoding="utf-8", newline="\n")
         common_args = [
@@ -1519,6 +1638,8 @@ def self_test() -> None:
             "felipesp1983/kg1-self-test-init",
             "--expected-init-adapter-subfolder",
             "checkpoint-6",
+            "--v666-cpu-gate-report-json",
+            str(v666_report),
         ]
         ok_report = run_gate(parse_args(common_args), emit=False)
         if ok_report["ok"] is not True:
@@ -1589,7 +1710,7 @@ def self_test() -> None:
         local_only_row_weight_launcher = root / "launcher_local_only_row_weight.py"
         local_only_row_weight_launcher.write_text(
             _self_test_launcher_text(train_sha, val_sha).replace(
-                "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight",
+                "python scripts/audit_v478_training_objective_alignment.py --use-row-loss-weight --require-row-loss-weight --require-validation-row-loss-weight",
                 "python scripts/audit_v478_training_objective_alignment.py",
                 1,
             ),

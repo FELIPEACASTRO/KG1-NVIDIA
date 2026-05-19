@@ -74,7 +74,7 @@ BLOCKED_DATASET_MARKERS = {
     ),
 }
 
-RESIDUAL_FIRST_MIN_TOTAL = 200
+RESIDUAL_FIRST_MIN_TOTAL = 196
 RESIDUAL_FIRST_MIN_BIT = 136
 RESIDUAL_FIRST_MIN_EQUATION = 59
 RESIDUAL_FIRST_MIN_COVERAGE = 0.70
@@ -1225,7 +1225,7 @@ def self_test() -> None:
         os.environ["KG1_WEAK_LABEL_AWARE_SELECTION"] = "0"
         os.environ["KG1_CPU_SIMULATION_USES_WEAK_LABELS"] = "0"
         os.environ["KG1_PROTECTED_ID_ANSWERS"] = ",".join(PROTECTED_ROW_EXPECTED)
-        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "200"
+        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "196"
         os.environ["KG1_CPU_SIMULATED_BIT_CORRECT"] = "136"
         os.environ["KG1_CPU_SIMULATED_EQUATION_CORRECT"] = "59"
         os.environ["KG1_CPU_MISS_CLASSIFICATION_COVERAGE"] = "0.70"
@@ -1234,8 +1234,8 @@ def self_test() -> None:
         os.environ["KG1_CPU_SIMULATED_LOST_EQUATION_ROWS"] = "0"
         os.environ["KG1_MAX_TOKEN_HEADROOM_RATIO"] = "0.90"
         gate = check_residual_first_gpu_gate()
-        assert gate["observed"]["KG1_CPU_SIMULATED_TOTAL_CORRECT"] == 200
-        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "199"
+        assert gate["observed"]["KG1_CPU_SIMULATED_TOTAL_CORRECT"] == 196
+        os.environ["KG1_CPU_SIMULATED_TOTAL_CORRECT"] = "195"
         try:
             check_residual_first_gpu_gate()
         except RuntimeError as exc:

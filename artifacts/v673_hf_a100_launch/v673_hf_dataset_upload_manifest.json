@@ -1,0 +1,32 @@
+{
+  "data_repo": "felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts",
+  "generated_at_utc": "2026-05-19T17:52:16.845115+00:00",
+  "hf_train_file": "v673-guarded-equation-bit-transfer-20260519T174833Z/v673_guarded_equation_bit_transfer_train.jsonl",
+  "hf_val_file": "v673-guarded-equation-bit-transfer-20260519T174833Z/v673_guarded_equation_bit_transfer_val.jsonl",
+  "local_report": {
+    "checks": {
+      "integrity_status": "datasets_pass_integrity_audit",
+      "learnability_blocker_count": 0,
+      "learnability_status": "passed_cpu_structure_only",
+      "learnability_warning_count": 0,
+      "objective_hf_gpu_allowed": true,
+      "tokenization_status": "tokenization_gate_passed"
+    },
+    "integrity_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v509_integrity\\v673_guarded_equation_bit_transfer_manifest.json",
+    "learnability_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v513_learnability\\v513_trace_learnability_gate_manifest.json",
+    "manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v673_guarded_equation_bit_transfer_manifest.json",
+    "objective_alignment_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v478_objective_alignment\\v673_v478_objective_alignment.json",
+    "tokenization_manifest_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json",
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+    "train_rows": 720,
+    "train_sha256": "cdf85573584c2bb965f8fb19bb8b698e7b03a7231013d39a74ff0410e0d76343",
+    "val_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+    "val_rows": 180,
+    "val_sha256": "858c02fcc046d130c4405aac942c102aaf0ded38c347479734c5339d6960e057"
+  },
+  "mode": "uploaded",
+  "path_in_repo": "v673-guarded-equation-bit-transfer-20260519T174833Z",
+  "schema_version": "kg1_v673_hf_dataset_upload_v1",
+  "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts/commit/bb5459dc70434087ffc731da79333bf26b1a45ab",
+  "uploaded_at_utc": "2026-05-19T17:52:19.413293+00:00"
+}

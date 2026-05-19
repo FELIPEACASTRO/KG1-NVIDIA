@@ -1,0 +1,153 @@
+{
+  "blockers": [],
+  "checks": [
+    {
+      "details": {
+        "direct_usable_counts": {
+          "bit_residual_miss": 10,
+          "equation_numeric_miss": 4
+        },
+        "gpu_gate": "allow_a100_large_equation_transfer_probe_guarded",
+        "gpu_recommendation": "Use a100-large only for a cheap transfer probe, not H200, because the ledger now has direct no-loss candidates.",
+        "trainability_decision_counts": {
+          "drop": 7,
+          "needs_rule_proof": 15,
+          "trainable": 12,
+          "trainable_guarded": 2
+        }
+      },
+      "name": "v672_residual_miss_ledger",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v672_residual_miss_ledger\\20260519T173138Z\\v672_residual_miss_ledger_manifest.json"
+    },
+    {
+      "details": {
+        "status": "tokenization_gate_passed",
+        "top_level_keys": [
+          "blocked_actions",
+          "config",
+          "dataset_manifest_json",
+          "dataset_manifest_sha256",
+          "decision",
+          "generated_at_utc",
+          "model_name",
+          "model_revision",
+          "outputs",
+          "schema_version",
+          "tokenization",
+          "tokenizer_info",
+          "validation"
+        ]
+      },
+      "name": "v286_tokenization_no_truncation_overlap",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\tokenization_gate_real\\v286_generic_tokenization_gate_manifest.json"
+    },
+    {
+      "details": {
+        "blocked_dataset_count": 0,
+        "dataset_count": 2,
+        "status": "datasets_pass_integrity_audit"
+      },
+      "name": "v509_dataset_integrity",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v509_integrity\\v673_guarded_equation_bit_transfer_manifest.json"
+    },
+    {
+      "details": {
+        "finding_counts": {
+          "blocker": 0,
+          "info": 2,
+          "warning": 0
+        },
+        "status": "passed_cpu_structure_only"
+      },
+      "name": "v513_learnability_zero_warning",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v513_learnability\\v513_trace_learnability_gate_manifest.json"
+    },
+    {
+      "details": {
+        "findings": [],
+        "hf_gpu_allowed": true,
+        "thresholds": {
+          "max_any_family_effective_share": 0.9,
+          "max_equation_effective_share": 0.9,
+          "min_bit_effective_share": 0.1,
+          "require_row_loss_weight": true,
+          "require_validation_row_loss_weight": true,
+          "use_row_loss_weight": true
+        },
+        "train_effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.148936,
+            "weight": 84.0
+          },
+          "equation_transform": {
+            "share": 0.851064,
+            "weight": 480.0
+          }
+        },
+        "validation_effective_share_by_family": {
+          "bit_manipulation": {
+            "share": 0.148936,
+            "weight": 21.0
+          },
+          "equation_transform": {
+            "share": 0.851064,
+            "weight": 120.0
+          }
+        }
+      },
+      "name": "v478_objective_alignment_row_weighted",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v478_objective_alignment\\v673_v478_objective_alignment.json"
+    },
+    {
+      "details": {
+        "blockers": [],
+        "ok": true,
+        "train_final_loss_eos_rate": 1.0,
+        "train_no_loss_rows": 0,
+        "validation_final_loss_eos_rate": 1.0,
+        "validation_no_loss_rows": 0
+      },
+      "name": "loss_mask_eos_contract",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_hf_a100_launch\\v673_loss_mask_eos_contract.json"
+    },
+    {
+      "details": {
+        "mode": "uploaded",
+        "train_sha256": "cdf85573584c2bb965f8fb19bb8b698e7b03a7231013d39a74ff0410e0d76343",
+        "upload_info": "https://huggingface.co/datasets/felipesp1983/kg1-v673-guarded-equation-bit-transfer-artifacts/commit/bb5459dc70434087ffc731da79333bf26b1a45ab",
+        "val_sha256": "858c02fcc046d130c4405aac942c102aaf0ded38c347479734c5339d6960e057"
+      },
+      "name": "hf_dataset_upload",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_hf_a100_launch\\v673_hf_dataset_upload_manifest.json"
+    },
+    {
+      "details": {
+        "decision": "surface_gate_passed",
+        "environment": null
+      },
+      "name": "v619_module_surface",
+      "ok": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v619_nemotron_module_surface_gate\\v619_module_surface_report.json"
+    }
+  ],
+  "decision": "gpu_allowed",
+  "finding_counts": {
+    "blocker": 0,
+    "failed_checks": 0,
+    "passed_checks": 8
+  },
+  "generated_at_utc": "2026-05-19T18:06:23.753095+00:00",
+  "gpu_allowed": true,
+  "next_action": "launch bounded V673 A100 train only; first checkpoint weak eval required before any longer run or submit",
+  "ok": true,
+  "repo_root": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree",
+  "route": "v673_guarded_equation_bit_transfer_a100",
+  "schema_version": "kg1_v666_cpu_gate_stack_v1"
+}

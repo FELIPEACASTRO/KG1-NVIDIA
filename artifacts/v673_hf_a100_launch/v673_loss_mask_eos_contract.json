@@ -1,0 +1,200 @@
+{
+  "blockers": [],
+  "generated_at_utc": "2026-05-19T18:03:55.215484+00:00",
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "ok": true,
+  "schema_version": "kg1_loss_mask_eos_contract_v1",
+  "tokenizer_info": {
+    "class": "TokenizersBackend",
+    "eos_token": "<|im_end|>",
+    "eos_token_id": 11,
+    "is_fast": true
+  },
+  "train": {
+    "final_loss_eos_rate": 1.0,
+    "final_loss_eos_rows": 720,
+    "loss_contains_eos_rate": 1.0,
+    "loss_contains_eos_rows": 720,
+    "no_loss_rows": 0,
+    "no_offset_rows": 0,
+    "offset_mask_rows": 720,
+    "path": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+    "rows_checked": 720,
+    "samples": [
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{37}<|im_end|>",
+        "id": "v673_train_eq_00439_919a9d6a6e",
+        "loss_contains_eos": true,
+        "loss_token_count": 115
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{10}<|im_end|>",
+        "id": "v673_train_eq_00219_b7b661f65d",
+        "loss_contains_eos": true,
+        "loss_token_count": 105
+      },
+      {
+        "family": "bit_manipulation",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "011}<|im_end|>",
+        "id": "v673_train_bit_00191_25f7476770",
+        "loss_contains_eos": true,
+        "loss_token_count": 75
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "ed{-5}<|im_end|>",
+        "id": "v673_train_eq_00308_d857c0db41",
+        "loss_contains_eos": true,
+        "loss_token_count": 112
+      },
+      {
+        "family": "bit_manipulation",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "111}<|im_end|>",
+        "id": "v673_train_bit_00230_7d58372d81",
+        "loss_contains_eos": true,
+        "loss_token_count": 74
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{-45}<|im_end|>",
+        "id": "v673_train_eq_00326_be2addb861",
+        "loss_contains_eos": true,
+        "loss_token_count": 115
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{-10}<|im_end|>",
+        "id": "v673_train_eq_00392_f538958be3",
+        "loss_contains_eos": true,
+        "loss_token_count": 113
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "ed{-6}<|im_end|>",
+        "id": "v673_train_eq_00444_301d1d6c11",
+        "loss_contains_eos": true,
+        "loss_token_count": 112
+      }
+    ]
+  },
+  "validation": {
+    "final_loss_eos_rate": 1.0,
+    "final_loss_eos_rows": 180,
+    "loss_contains_eos_rate": 1.0,
+    "loss_contains_eos_rows": 180,
+    "no_loss_rows": 0,
+    "no_offset_rows": 0,
+    "offset_mask_rows": 180,
+    "path": "artifacts\\v673_guarded_equation_bit_transfer_dataset\\20260519T174833Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+    "rows_checked": 180,
+    "samples": [
+      {
+        "family": "bit_manipulation",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "111}<|im_end|>",
+        "id": "v673_validation_bit_00032_0c9611a85c",
+        "loss_contains_eos": true,
+        "loss_token_count": 74
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{10}<|im_end|>",
+        "id": "v673_validation_eq_00056_a22eabf425",
+        "loss_contains_eos": true,
+        "loss_token_count": 104
+      },
+      {
+        "family": "bit_manipulation",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "010}<|im_end|>",
+        "id": "v673_validation_bit_00006_b48239d777",
+        "loss_contains_eos": true,
+        "loss_token_count": 69
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "153}<|im_end|>",
+        "id": "v673_validation_eq_00017_9a0209fbfb",
+        "loss_contains_eos": true,
+        "loss_token_count": 93
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{-13}<|im_end|>",
+        "id": "v673_validation_eq_00096_2744f50898",
+        "loss_contains_eos": true,
+        "loss_token_count": 115
+      },
+      {
+        "family": "bit_manipulation",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "110}<|im_end|>",
+        "id": "v673_validation_bit_00017_147a3316b6",
+        "loss_contains_eos": true,
+        "loss_token_count": 64
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{-43}<|im_end|>",
+        "id": "v673_validation_eq_00068_bb06b8c9be",
+        "loss_contains_eos": true,
+        "loss_token_count": 115
+      },
+      {
+        "family": "equation_transform",
+        "final_loss_token_id": 11,
+        "final_loss_token_is_eos": true,
+        "final_loss_token_text": "<|im_end|>",
+        "final_loss_window_text": "{20}<|im_end|>",
+        "id": "v673_validation_eq_00059_a304471ca4",
+        "loss_contains_eos": true,
+        "loss_token_count": 104
+      }
+    ]
+  }
+}
