@@ -123,6 +123,13 @@ def validate_gpu() -> None:
     cuda_runtime = str(status.get("cuda") or "")
     cuda_major = int(cuda_runtime.split(".", 1)[0]) if cuda_runtime[:1].isdigit() else 0
     flavor = env_str("KG1_HF_FLAVOR", "")
+    max_cuda_major = env_int("KG1_MAX_TORCH_CUDA_MAJOR", 0)
+    if max_cuda_major and cuda_major > max_cuda_major:
+        raise RuntimeError(
+            "Blocked torch CUDA runtime above weak-eval driver gate: "
+            f"runtime={cuda_runtime!r} max_major={max_cuda_major} flavor={flavor!r}. "
+            "Use a CUDA 12-compatible vLLM/torch image on HF A100."
+        )
     if (
         "a100" in flavor.lower()
         and cuda_major >= 13

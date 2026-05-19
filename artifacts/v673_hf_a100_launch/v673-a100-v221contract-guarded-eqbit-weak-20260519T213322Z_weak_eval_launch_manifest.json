@@ -1,0 +1,85 @@
+{
+  "active_job_blockers": [],
+  "adapter_repo": "felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6",
+  "adapters": [
+    {
+      "name": "v673_guarded_eqbit_checkpoint_10_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6",
+      "subfolder": "checkpoint-10"
+    },
+    {
+      "name": "v673_guarded_eqbit_checkpoint_20_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6",
+      "subfolder": "checkpoint-20"
+    },
+    {
+      "name": "v673_guarded_eqbit_final_v221_contract",
+      "repo": "felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6",
+      "subfolder": "final"
+    }
+  ],
+  "branch": "v230-v226-complementarity",
+  "expected_commit": "5452cc25404d102e664a62c0245a59664bd3d4da",
+  "finops_policy": "A100-large only; do not launch while another paid KG1 job is active.",
+  "flavor": "a100-large",
+  "generated_at_utc": "2026-05-19T21:33:23.993617+00:00",
+  "hardware": {
+    "accelerator_model": "A100",
+    "accelerator_quantity": "1",
+    "accelerator_vram": "80 GB",
+    "cpu": "12 vCPU",
+    "name": "a100-large",
+    "pretty_name": "Nvidia A100 - large",
+    "ram": "142 GB",
+    "unit_cost_usd": 0.041667,
+    "unit_label": "minute"
+  },
+  "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+  "job_id": "",
+  "job_status": "not_launched",
+  "job_url": "",
+  "missing_optional_adapters": [],
+  "mode": "debug_only_no_job_launched",
+  "namespace": "felipesp1983",
+  "output_path_in_repo": "evals/v673-a100-v221contract-guarded-eqbit-weak-20260519T213322Z",
+  "output_repo": "felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6",
+  "promotion_gate": {
+    "baseline_bit_manipulation": 136,
+    "baseline_equation_transform": 56,
+    "baseline_total": 192,
+    "blocked_actions": [
+      "package",
+      "kaggle_submit",
+      "h200_fallback"
+    ],
+    "promote_if_bit_gte": 136,
+    "promote_if_equation_gte": 60,
+    "promote_if_total_gte": 196,
+    "reject_if_boxed_rate_lt": 1.0,
+    "reject_if_label_aware_delta_gt": 0,
+    "reject_if_no_box_fallback_gt": 0,
+    "reject_if_truncated_gt": 0,
+    "requires_full_eval_before_package_or_submit": true
+  },
+  "run_id": "v673-a100-v221contract-guarded-eqbit-weak-20260519T213322Z",
+  "runtime_image_gate": {
+    "allow_cuda13_on_a100": false,
+    "flavor": "a100-large",
+    "image": "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel",
+    "known_bad_a100_cuda13_images": [
+      "vllm/vllm-openai:v0.20.1"
+    ],
+    "known_good_a100_cuda12_images": [
+      "pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel"
+    ],
+    "max_torch_cuda_major": 12,
+    "name": "a100_cuda12_weak_eval_runtime_gate",
+    "passed": true,
+    "pytorch_cuda_index_url": "https://download.pytorch.org/whl/cu129",
+    "reason": "CUDA12-compatible PyTorch runtime selected with official vLLM 0.20.1 cu129 wheel.",
+    "vllm_cuda_flavor": "cu129",
+    "vllm_version": "0.20.1",
+    "vllm_wheel_url": "https://github.com/vllm-project/vllm/releases/download/v0.20.1/vllm-0.20.1%2Bcu129-cp38-abi3-manylinux_2_31_x86_64.whl"
+  },
+  "version": "v673_a100_guarded_eqbit_v221_weak_eval"
+}

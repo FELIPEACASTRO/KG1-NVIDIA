@@ -1,11 +1,23 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-19 20:36 UTC. V672/V673/V674/V675 substitui o plano ativo V671. A decisao
+Atualizado: 2026-05-19 21:30 UTC. V672/V673/V674/V675 substitui o plano ativo V671. A decisao
 de hoje vem de cinco fontes: consulta OpenRouter V670, evidencias CPU locais
 V541/V612, sinais no-loss V350/V366, auditoria completa das discussions Kaggle
 V671 e consenso OpenRouter V672. Objetivo de hoje continua: sair de `192/315` mantendo
 `bit_manipulation>=136/160` e levando `equation_transform>=60/155`, sem
 backfire protegido, sem ganho falso e sem treino cego.
+
+Plano ativo agora:
+
+1. Usar somente `a100-large`; H200 segue bloqueado.
+2. Avaliar V673 por weak eval estrito somente depois do gate de runtime
+   A100/CUDA12 passar. O par `a100-large + vllm/vllm-openai:v0.20.1` fica
+   bloqueado porque expôs Torch CUDA 13 contra driver HF A100 CUDA 12.09.
+3. Promover apenas se `total>=196`, `bit_manipulation>=136`,
+   `equation_transform>=60`, `truncated=0`, `boxed_rate=1.0`,
+   `label_aware_delta=0`, `no_box_fallback=0` e sem backfire protegido.
+4. Se o weak eval não passar, não empacotar, não submeter e gerar nova
+   consulta OpenRouter com o resultado real do treino/eval, conforme regra.
 
 Artefatos novos:
 
@@ -62,7 +74,47 @@ Artefatos novos:
 - gate pre-paid depois do carregamento manual/drop de `lm_head`:
   `artifacts/v675_v673_prelaunch_hardening/v675_pre_paid_job_integration_gate_after_lmhead_drop_manual_v2.json`;
 - log da falha preflight A100 V673:
-  `artifacts/v673_hf_a100_launch/v673_hf_job_6a0cc7a93aba298b21d14393_failed_preflight_lmhead_mismatch_logs.txt`.
+  `artifacts/v673_hf_a100_launch/v673_hf_job_6a0cc7a93aba298b21d14393_failed_preflight_lmhead_mismatch_logs.txt`;
+- log do treino V673 concluido:
+  `artifacts/v673_hf_a100_launch/v673_hf_job_6a0ccbae3aba298b21d143b1_logs.txt`;
+- gates V485 post-upload V673:
+  `artifacts/v675_v673_prelaunch_hardening/v675_v485_v673_checkpoint10_postupload.json`,
+  `artifacts/v675_v673_prelaunch_hardening/v675_v485_v673_checkpoint20_postupload.json`,
+  `artifacts/v675_v673_prelaunch_hardening/v675_v485_v673_final_postupload.json`;
+- log da falha weak eval A100 por runtime CUDA13:
+  `artifacts/v673_hf_a100_launch/v673_hf_job_6a0cd42c2dc5b1243da50485_logs.txt`;
+- manifesto debug V675/V673 com runtime A100/CUDA12 aceito:
+  `artifacts/v673_hf_a100_launch/v673-a100-v221contract-guarded-eqbit-weak-20260519T213322Z_weak_eval_launch_manifest.json`;
+- manifesto debug V675/V673 provando bloqueio do runtime A100/CUDA13 antigo:
+  `artifacts/v673_hf_a100_launch/v673-a100-v221contract-guarded-eqbit-weak-20260519T212713Z_weak_eval_launch_manifest.json`.
+
+Status V673 treino e weak-eval runtime, 2026-05-19 21:30 UTC:
+
+- Treino A100 `felipesp1983/6a0ccbae3aba298b21d143b1` completou sem OOM e
+  sem traceback. O output repo ativo e
+  `felipesp1983/kg1-nemotron-lora-v673-a100-guarded-eqbit-v290ckpt6`.
+- Checkpoints disponiveis para weak eval: `checkpoint-10`, `checkpoint-20`,
+  `final`. V485 post-upload passou nos tres: `r=32`, `alpha=32`,
+  `modules_to_save=[]`, target modules sem `lm_head`, target parameters
+  `mlp.experts.gate_up_proj` e `mlp.experts.down_proj`.
+- Loss real do treino: baseline `1.6199`, step 10 `1.5982`, step 20/final
+  `1.5887`. Isto nao e ganho submetivel ate o weak ACC estrito passar.
+- Tentativa weak eval A100 `felipesp1983/6a0cd42c2dc5b1243da50485` falhou
+  antes de qualquer avaliacao por infraestrutura: container
+  `vllm/vllm-openai:v0.20.1` trouxe Torch `2.11.0+cu130`; HF A100 reportou
+  driver CUDA `12.09`, entao `torch.cuda.is_available()` ficou `false`.
+- Correcao aplicada: `scripts/hf_job_weak_eval_v245.py` agora aceita
+  `KG1_MAX_TORCH_CUDA_MAJOR` e aborta se o runtime Torch exceder o limite;
+  o launcher V673 define `KG1_MAX_TORCH_CUDA_MAJOR=12`,
+  `KG1_ALLOW_CUDA13_ON_A100=0`, usa
+  `pytorch/pytorch:2.8.0-cuda12.8-cudnn9-devel` por padrao e instala o wheel
+  oficial `vllm-0.20.1+cu129` antes do eval. Isso preserva a versao de vLLM
+  que ja suporta o avaliador/modelo, mas evita Torch CUDA 13. O launcher
+  registra `runtime_image_gate` no manifesto. O runtime antigo
+  `vllm/vllm-openai:v0.20.1` fica bloqueado para `a100-large`.
+- Proxima acao obrigatoria: commitar/pushar esta validacao, regenerar o
+  manifesto com o novo `EXPECTED_COMMIT` e lancar weak eval A100 curto. Nao
+  usar H200, nao empacotar e nao submeter antes do weak gate.
 
 Hardening V675 prelaunch, 2026-05-19 20:14 UTC:
 

@@ -1,0 +1,214 @@
+{
+  "dataset_manifest_json": "",
+  "findings": [],
+  "generated_at_utc": "2026-05-19T20:43:23.884556+00:00",
+  "hf_gpu_allowed": true,
+  "schema_version": "kg1_v478_training_objective_alignment_gate_v1",
+  "source_weights": {
+    "v673_guarded_equation_bit_transfer_dataset": 1.0
+  },
+  "subcategory_weights": {
+    "bit_exact_global_binary_replay": 1.0,
+    "bit_exact_global_ternary_replay": 1.0,
+    "bit_fullbyte_ternary_v366_new": 1.0,
+    "equation_numeric_add_direct": 1.0,
+    "equation_numeric_colon_trailing_zero": 1.0,
+    "equation_numeric_minus_signed": 1.0
+  },
+  "thresholds": {
+    "max_any_family_effective_share": 0.9,
+    "max_equation_effective_share": 0.9,
+    "min_bit_effective_share": 0.1,
+    "require_row_loss_weight": true,
+    "require_validation_row_loss_weight": true,
+    "use_row_loss_weight": true
+  },
+  "train": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.148936,
+        "weight": 84.0
+      },
+      "equation_transform": {
+        "share": 0.851064,
+        "weight": 480.0
+      }
+    },
+    "effective_share_by_source": {
+      "v673_guarded_equation_bit_transfer_dataset": {
+        "share": 1.0,
+        "weight": 564.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_exact_global_binary_replay": {
+        "share": 0.029787,
+        "weight": 16.8
+      },
+      "bit_exact_global_ternary_replay": {
+        "share": 0.059574,
+        "weight": 33.6
+      },
+      "bit_fullbyte_ternary_v366_new": {
+        "share": 0.059574,
+        "weight": 33.6
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.212766,
+        "weight": 120.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.212766,
+        "weight": 120.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.425532,
+        "weight": 240.0
+      }
+    },
+    "effective_total_weight": 564.0,
+    "explicit_row_weight_rows": 720,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 240,
+        "share": 0.333333
+      },
+      "equation_transform": {
+        "rows": 480,
+        "share": 0.666667
+      }
+    },
+    "physical_share_by_source": {
+      "v673_guarded_equation_bit_transfer_dataset": {
+        "rows": 720,
+        "share": 1.0
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_exact_global_binary_replay": {
+        "rows": 48,
+        "share": 0.066667
+      },
+      "bit_exact_global_ternary_replay": {
+        "rows": 96,
+        "share": 0.133333
+      },
+      "bit_fullbyte_ternary_v366_new": {
+        "rows": 96,
+        "share": 0.133333
+      },
+      "equation_numeric_add_direct": {
+        "rows": 120,
+        "share": 0.166667
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 120,
+        "share": 0.166667
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 240,
+        "share": 0.333333
+      }
+    },
+    "require_row_loss_weight": true,
+    "rows": 720,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0,
+    "use_row_loss_weight": true
+  },
+  "train_jsonl": "\\\\?\\C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_hf_a100_launch\\downloaded_debug\\v673-a100-guarded-eqbit-v290ckpt6-20260519T204322Z\\v673-guarded-equation-bit-transfer-20260519T190246Z\\v673_guarded_equation_bit_transfer_train.jsonl",
+  "val_jsonl": "\\\\?\\C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v673_hf_a100_launch\\downloaded_debug\\v673-a100-guarded-eqbit-v290ckpt6-20260519T204322Z\\v673-guarded-equation-bit-transfer-20260519T190246Z\\v673_guarded_equation_bit_transfer_val.jsonl",
+  "validation": {
+    "effective_share_by_family": {
+      "bit_manipulation": {
+        "share": 0.148936,
+        "weight": 21.0
+      },
+      "equation_transform": {
+        "share": 0.851064,
+        "weight": 120.0
+      }
+    },
+    "effective_share_by_source": {
+      "v673_guarded_equation_bit_transfer_dataset": {
+        "share": 1.0,
+        "weight": 141.0
+      }
+    },
+    "effective_share_by_subcategory": {
+      "bit_exact_global_binary_replay": {
+        "share": 0.029787,
+        "weight": 4.2
+      },
+      "bit_exact_global_ternary_replay": {
+        "share": 0.059574,
+        "weight": 8.4
+      },
+      "bit_fullbyte_ternary_v366_new": {
+        "share": 0.059574,
+        "weight": 8.4
+      },
+      "equation_numeric_add_direct": {
+        "share": 0.212766,
+        "weight": 30.0
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "share": 0.212766,
+        "weight": 30.0
+      },
+      "equation_numeric_minus_signed": {
+        "share": 0.425532,
+        "weight": 60.0
+      }
+    },
+    "effective_total_weight": 141.0,
+    "explicit_row_weight_rows": 180,
+    "physical_share_by_family": {
+      "bit_manipulation": {
+        "rows": 60,
+        "share": 0.333333
+      },
+      "equation_transform": {
+        "rows": 120,
+        "share": 0.666667
+      }
+    },
+    "physical_share_by_source": {
+      "v673_guarded_equation_bit_transfer_dataset": {
+        "rows": 180,
+        "share": 1.0
+      }
+    },
+    "physical_share_by_subcategory": {
+      "bit_exact_global_binary_replay": {
+        "rows": 12,
+        "share": 0.066667
+      },
+      "bit_exact_global_ternary_replay": {
+        "rows": 24,
+        "share": 0.133333
+      },
+      "bit_fullbyte_ternary_v366_new": {
+        "rows": 24,
+        "share": 0.133333
+      },
+      "equation_numeric_add_direct": {
+        "rows": 30,
+        "share": 0.166667
+      },
+      "equation_numeric_colon_trailing_zero": {
+        "rows": 30,
+        "share": 0.166667
+      },
+      "equation_numeric_minus_signed": {
+        "rows": 60,
+        "share": 0.333333
+      }
+    },
+    "require_row_loss_weight": true,
+    "rows": 180,
+    "unknown_source_rows": 0,
+    "unknown_subcategory_rows": 0,
+    "use_row_loss_weight": true
+  }
+}
