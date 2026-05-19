@@ -29,6 +29,9 @@ IMAGE = os.environ.get("KG1_V673_WEAK_EVAL_IMAGE", "pytorch/pytorch:2.8.0-cuda12
 FLAVOR = "a100-large"
 MAX_UNIT_COST_USD = 0.05
 MAX_TORCH_CUDA_MAJOR = 12
+WEAK_EVAL_TIMEOUT_S = 2400
+WEAK_GENERATION_TIMEOUT_S = 900
+WEAK_MAX_TOKENS = 2048
 VLLM_VERSION = "0.20.1"
 VLLM_CUDA_FLAVOR = "cu129"
 PYTORCH_CUDA_INDEX_URL = "https://download.pytorch.org/whl/cu129"
@@ -237,9 +240,10 @@ def build_job_env(hardware: dict[str, object], specs: list[dict[str, str]]) -> d
         "KG1_ALLOW_CUDA13_ON_A100": "0",
         "KG1_BRANCH": REPO_BRANCH,
         "KG1_CATASTROPHIC_EVAL_GUARD": "1",
-        "KG1_DISABLE_THINKING": "0",
+        "KG1_DISABLE_THINKING": "1",
+        "KG1_ENFORCE_WEAK_RUNTIME_POLICY": "1",
         "KG1_EVAL_CANDIDATE_BY_CANDIDATE": "1",
-        "KG1_EVAL_TIMEOUT_S": "7200",
+        "KG1_EVAL_TIMEOUT_S": str(WEAK_EVAL_TIMEOUT_S),
         "KG1_EXPECTED_ADAPTER_BASE_MODEL_NAME_OR_PATH": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
         "KG1_EXPECTED_COMMIT": EXPECTED_COMMIT,
         "KG1_EXPECTED_LORA_ALPHA": "32",
@@ -248,18 +252,23 @@ def build_job_env(hardware: dict[str, object], specs: list[dict[str, str]]) -> d
         "KG1_HF_MAX_UNIT_COST_USD": str(MAX_UNIT_COST_USD),
         "KG1_HF_UNIT_COST_USD": str(hardware["unit_cost_usd"]),
         "KG1_LABEL_PREFIX": "v673_hf_weak",
+        "KG1_GENERATION_TIMEOUT_S": str(WEAK_GENERATION_TIMEOUT_S),
         "KG1_LLM_INIT_TIMEOUT_S": "1800",
         "KG1_MAX_MODEL_LEN": "8192",
         "KG1_MAX_NUM_SEQS": "8",
-        "KG1_MAX_TOKENS": "7680",
+        "KG1_MAX_TOKENS": str(WEAK_MAX_TOKENS),
         "KG1_MAX_TORCH_CUDA_MAJOR": str(MAX_TORCH_CUDA_MAJOR),
         "KG1_MIN_GPU_TOTAL_GIB": "70",
         "KG1_MODEL_NAME": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
         "KG1_NO_PROMPT_SUFFIX": "0",
         "KG1_OUTPUT_PATH_IN_REPO": OUTPUT_PATH_IN_REPO,
         "KG1_OUTPUT_REPO": OUTPUT_REPO,
+        "KG1_PROTECTED_BASELINE_CSV": "artifacts/v516_label_free_weak_baseline/v516_label_free_v290_checkpoint6_baseline.csv",
+        "KG1_PROTECTED_ID_ANSWERS": "8740ed31=01101000,59bee375=10010101,55d834d1=00111111",
+        "KG1_PROTECTED_ROW_GUARD": "1",
         "KG1_PYTORCH_CUDA_INDEX_URL": PYTORCH_CUDA_INDEX_URL,
         "KG1_PROMPT_SUFFIX": "\nReturn only one line: `\\boxed{answer}`. No reasoning. No explanation.",
+        "KG1_REQUIRE_DISABLE_THINKING": "1",
         "KG1_REQUIRE_CUDA": "1",
         "KG1_REQUIRED_GPU_NAME_REGEX": "A100",
         "KG1_RUN_ID": RUN_ID,
@@ -280,6 +289,55 @@ def build_job_env(hardware: dict[str, object], specs: list[dict[str, str]]) -> d
         "KG1_WEAK_PROMOTE_TOTAL_MIN": "196",
         "KG1_WEAK_PROMOTE_TRUNC_MAX": "0",
     }
+
+
+def validate_weak_runtime_policy(job_env: dict[str, str]) -> dict[str, Any]:
+    max_tokens = int(job_env["KG1_MAX_TOKENS"])
+    generation_timeout_s = int(job_env["KG1_GENERATION_TIMEOUT_S"])
+    eval_timeout_s = int(job_env["KG1_EVAL_TIMEOUT_S"])
+    promote_max_completion = int(job_env["KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX"])
+    disable_thinking = job_env["KG1_DISABLE_THINKING"] == "1"
+    required = {
+        "KG1_ENFORCE_WEAK_RUNTIME_POLICY": "1",
+        "KG1_REQUIRE_DISABLE_THINKING": "1",
+        "KG1_EVAL_CANDIDATE_BY_CANDIDATE": "1",
+        "KG1_PROTECTED_ROW_GUARD": "1",
+        "KG1_CATASTROPHIC_EVAL_GUARD": "1",
+    }
+    mismatched = {
+        key: {"expected": value, "observed": job_env.get(key)}
+        for key, value in required.items()
+        if job_env.get(key) != value
+    }
+    gate = {
+        "name": "v673_weak_runtime_policy_gate",
+        "passed": True,
+        "max_tokens": max_tokens,
+        "generation_timeout_s": generation_timeout_s,
+        "eval_timeout_s": eval_timeout_s,
+        "promote_max_completion_tokens": promote_max_completion,
+        "disable_thinking": disable_thinking,
+        "required_env": required,
+        "mismatched_env": mismatched,
+        "reason": "Weak eval is bounded so runaway generations cannot consume A100 budget or create non-promotable results.",
+    }
+    blockers: list[str] = []
+    if mismatched:
+        blockers.append("required_env_mismatch")
+    if max_tokens != WEAK_MAX_TOKENS or max_tokens > promote_max_completion:
+        blockers.append("max_tokens_exceeds_promotion_completion_gate")
+    if generation_timeout_s != WEAK_GENERATION_TIMEOUT_S or generation_timeout_s <= 0:
+        blockers.append("generation_timeout_not_bounded")
+    if eval_timeout_s != WEAK_EVAL_TIMEOUT_S or eval_timeout_s <= 0:
+        blockers.append("eval_timeout_not_bounded")
+    if not disable_thinking:
+        blockers.append("disable_thinking_required_for_v673_weak_eval")
+    if blockers:
+        gate["passed"] = False
+        gate["blockers"] = blockers
+        raise RuntimeError("Weak runtime policy gate blocked launch: " + json.dumps(gate, sort_keys=True))
+    gate["blockers"] = []
+    return gate
 
 
 def main() -> int:
@@ -312,6 +370,7 @@ def main() -> int:
         raise RuntimeError(f"No complete V673 adapters found in {ADAPTER_REPO}. Missing={missing_adapters}")
     specs = [{"repo": ADAPTER_REPO, "subfolder": subfolder, "name": name} for subfolder, name in existing_adapters]
     job_env = build_job_env(hardware, specs)
+    weak_runtime_policy_gate = validate_weak_runtime_policy(job_env)
     active = active_paid_jobs(api)
     if args.launch and active:
         raise RuntimeError("Active paid KG1 jobs block V673 weak eval launch: " + json.dumps(active, sort_keys=True))
@@ -328,6 +387,12 @@ def main() -> int:
         "A100",
         "KG1_WEAK_PROMOTE_EQUATION_MIN",
         "KG1_WEAK_PROMOTE_TOTAL_MIN",
+        "KG1_ENFORCE_WEAK_RUNTIME_POLICY",
+        "KG1_PROTECTED_ID_ANSWERS",
+        "KG1_PROTECTED_ROW_GUARD",
+        "KG1_GENERATION_TIMEOUT_S",
+        "KG1_MAX_TOKENS",
+        "KG1_DISABLE_THINKING",
         ADAPTER_REPO,
     ]
     missing_snippets = [item for item in required_snippets if item not in serialized]
@@ -367,8 +432,18 @@ def main() -> int:
             "reject_if_boxed_rate_lt": 1.0,
             "requires_full_eval_before_package_or_submit": True,
             "blocked_actions": ["package", "kaggle_submit", "h200_fallback"],
+            "runaway_cost_guard": {
+                "max_tokens": WEAK_MAX_TOKENS,
+                "generation_timeout_s": WEAK_GENERATION_TIMEOUT_S,
+                "disable_thinking": True,
+                "reason": (
+                    "Weak promotion rejects max_completion_tokens >2048 and any truncation; "
+                    "therefore 7680-token runaway generations are non-promotable and should fail fast."
+                ),
+            },
         },
         "runtime_image_gate": runtime_gate,
+        "weak_runtime_policy_gate": weak_runtime_policy_gate,
         "finops_policy": "A100-large only; do not launch while another paid KG1 job is active.",
     }
     if args.launch:

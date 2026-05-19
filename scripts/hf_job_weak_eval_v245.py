@@ -12,8 +12,11 @@ import argparse
 import hashlib
 import json
 import os
+import queue
 import subprocess
 import sys
+import threading
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -775,10 +778,36 @@ def run_cmd(cmd: list[str], cwd: Path, log_path: Path, timeout_s: int) -> int:
             bufsize=1,
         )
         assert proc.stdout is not None
-        for line in proc.stdout:
+        line_queue: queue.Queue[str | None] = queue.Queue()
+
+        def reader() -> None:
+            try:
+                for output_line in proc.stdout or []:
+                    line_queue.put(output_line)
+            finally:
+                line_queue.put(None)
+
+        thread = threading.Thread(target=reader, name="kg1-run-cmd-stdout-reader", daemon=True)
+        thread.start()
+        deadline = time.monotonic() + timeout_s if timeout_s > 0 else None
+        stream_done = False
+        while not stream_done:
+            if deadline is not None and time.monotonic() > deadline:
+                proc.kill()
+                thread.join(timeout=5)
+                raise TimeoutError(f"command timed out after {timeout_s}s: {printable}")
+            try:
+                line = line_queue.get(timeout=0.5)
+            except queue.Empty:
+                if proc.poll() is not None and not thread.is_alive():
+                    break
+                continue
+            if line is None:
+                stream_done = True
+                continue
             print(line, end="", flush=True)
             handle.write(line)
-        rc = proc.wait(timeout=timeout_s)
+        rc = proc.wait(timeout=5)
     print("returncode =", rc, flush=True)
     print("--- COMMAND END ---", flush=True)
     if rc:
@@ -796,6 +825,40 @@ def replace_cmd_arg(cmd: list[str], arg_name: str, value: str) -> list[str]:
         raise RuntimeError(f"internal command has no value after {arg_name}")
     updated[index + 1] = value
     return updated
+
+
+def validate_weak_runtime_policy(disable_thinking: bool) -> dict[str, Any]:
+    enforced = env_bool("KG1_ENFORCE_WEAK_RUNTIME_POLICY", False)
+    max_tokens = env_int("KG1_MAX_TOKENS", 7680)
+    generation_timeout_s = env_int("KG1_GENERATION_TIMEOUT_S", 0)
+    eval_timeout_s = env_int("KG1_EVAL_TIMEOUT_S", 1800)
+    promote_max_completion = env_int("KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX", 2048)
+    require_disable_thinking = env_bool("KG1_REQUIRE_DISABLE_THINKING", False)
+    blockers: list[str] = []
+    if max_tokens > promote_max_completion:
+        blockers.append("max_tokens_gt_promotion_max_completion_tokens")
+    if generation_timeout_s <= 0:
+        blockers.append("generation_timeout_missing")
+    if eval_timeout_s <= 0:
+        blockers.append("eval_timeout_missing")
+    if require_disable_thinking and not disable_thinking:
+        blockers.append("disable_thinking_required")
+    gate = {
+        "schema_version": "kg1_v245_weak_runtime_policy_gate_v1",
+        "enforced": enforced,
+        "passed": not blockers,
+        "max_tokens": max_tokens,
+        "generation_timeout_s": generation_timeout_s,
+        "eval_timeout_s": eval_timeout_s,
+        "promote_max_completion_tokens": promote_max_completion,
+        "disable_thinking": disable_thinking,
+        "require_disable_thinking": require_disable_thinking,
+        "blockers": blockers,
+    }
+    log_json("weak_runtime_policy_gate", gate)
+    if enforced and blockers:
+        raise RuntimeError("weak runtime policy gate blocked eval: " + json.dumps(gate, sort_keys=True))
+    return gate
 
 
 def run_eval(args: argparse.Namespace) -> dict[str, Any]:
@@ -895,6 +958,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
     candidate_json.write_text(json.dumps(candidate_payload, indent=2, sort_keys=True), encoding="utf-8")
     eval_out = output_dir / "eval"
     disable_thinking = env_bool("KG1_DISABLE_THINKING", False)
+    weak_runtime_policy = validate_weak_runtime_policy(disable_thinking)
     no_prompt_suffix = env_bool("KG1_NO_PROMPT_SUFFIX", False)
     prompt_suffix = os.environ.get("KG1_PROMPT_SUFFIX", DEFAULT_PROMPT_SUFFIX)
     log_json(
@@ -1127,6 +1191,7 @@ def run_eval(args: argparse.Namespace) -> dict[str, Any]:
             "no_prompt_suffix": no_prompt_suffix,
             "prompt_suffix": "" if no_prompt_suffix else prompt_suffix,
         },
+        "weak_runtime_policy_gate": weak_runtime_policy,
         "blocked_actions": ["full_eval", "package", "kaggle_submit"],
     }
     final_manifest_path = output_dir / "v245_hf_weak_eval_manifest.json"
@@ -1274,13 +1339,37 @@ def self_test() -> int:
             "KG1_CATASTROPHIC_TRUNCATED_MIN",
             "KG1_CATASTROPHIC_MIN_ROWS",
             "KG1_CATASTROPHIC_BIT_CORRECT_MAX",
+            "KG1_DISABLE_THINKING",
+            "KG1_ENFORCE_WEAK_RUNTIME_POLICY",
+            "KG1_EVAL_TIMEOUT_S",
+            "KG1_GENERATION_TIMEOUT_S",
+            "KG1_MAX_TOKENS",
+            "KG1_REQUIRE_DISABLE_THINKING",
             "KG1_WEAK_PROMOTE_NO_BOX_FALLBACK_MAX",
             "KG1_WEAK_PROMOTE_FIRST_BOXED_CORRECT_MIN",
             "KG1_WEAK_PROMOTE_BOXED_RATE_MIN",
+            "KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX",
         ]
     }
     os.environ.pop("KG1_ENFORCE_WEAK_PROMOTION_GATE", None)
     os.environ.pop("KG1_WEAK_EVAL_DIAGNOSTIC_ONLY", None)
+    os.environ["KG1_ENFORCE_WEAK_RUNTIME_POLICY"] = "1"
+    os.environ["KG1_REQUIRE_DISABLE_THINKING"] = "1"
+    os.environ["KG1_MAX_TOKENS"] = "2048"
+    os.environ["KG1_GENERATION_TIMEOUT_S"] = "900"
+    os.environ["KG1_EVAL_TIMEOUT_S"] = "2400"
+    os.environ["KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX"] = "2048"
+    runtime_ok = validate_weak_runtime_policy(disable_thinking=True)
+    assert runtime_ok["passed"] is True
+    os.environ["KG1_MAX_TOKENS"] = "7680"
+    try:
+        validate_weak_runtime_policy(disable_thinking=True)
+    except RuntimeError as exc:
+        if "max_tokens_gt_promotion_max_completion_tokens" not in str(exc):
+            raise
+    else:
+        raise RuntimeError("self-test expected weak runtime policy to block runaway max_tokens")
+    os.environ["KG1_MAX_TOKENS"] = "2048"
     blocked = weak_promotion_gate(
         {
             "rows": [
