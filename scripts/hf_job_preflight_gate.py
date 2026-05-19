@@ -1014,11 +1014,38 @@ def check_hub_artifacts() -> None:
                 f"Init adapter alpha mismatch: {config.get('lora_alpha')} != LORA_ALPHA={env_int('LORA_ALPHA')}"
             )
         configured_target_modules = sorted(parse_csv_env("LORA_TARGET_MODULES"))
-        if target_modules and configured_target_modules != target_modules:
+        dropped_init_target_modules = sorted(parse_csv_env("DROP_INIT_ADAPTER_TARGET_MODULES"))
+        forbidden_dropped_modules = [
+            item
+            for item in dropped_init_target_modules
+            if item not in {"lm_head", "embed_tokens", "word_embeddings"}
+        ]
+        if forbidden_dropped_modules:
+            raise RuntimeError(
+                "DROP_INIT_ADAPTER_TARGET_MODULES may only remove output/embedding targets: "
+                + json.dumps(forbidden_dropped_modules, sort_keys=True)
+            )
+        missing_dropped_modules = [
+            item for item in dropped_init_target_modules if item not in set(target_modules)
+        ]
+        if missing_dropped_modules:
+            raise RuntimeError(
+                "DROP_INIT_ADAPTER_TARGET_MODULES requested modules absent from init adapter: "
+                + json.dumps(missing_dropped_modules, sort_keys=True)
+            )
+        effective_init_target_modules = sorted(
+            item for item in target_modules if item not in set(dropped_init_target_modules)
+        )
+        if target_modules and configured_target_modules != effective_init_target_modules:
             raise RuntimeError(
                 "Init adapter target_modules mismatch: "
                 + json.dumps(
-                    {"adapter": target_modules, "env": configured_target_modules},
+                    {
+                        "adapter": target_modules,
+                        "dropped_init_target_modules": dropped_init_target_modules,
+                        "effective_adapter": effective_init_target_modules,
+                        "env": configured_target_modules,
+                    },
                     sort_keys=True,
                 )
             )
@@ -1035,7 +1062,11 @@ def check_hub_artifacts() -> None:
             raise RuntimeError(
                 "Init adapter has target_parameters but REQUIRE_LORA_TARGET_PARAMETER_MATCH is disabled."
             )
-        if target_parameters and env_str("INIT_ADAPTER_LOAD_MODE", "peft").strip().lower() == "manual":
+        if (
+            target_parameters
+            and env_str("INIT_ADAPTER_LOAD_MODE", "peft").strip().lower() == "manual"
+            and not env_bool("KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD", False)
+        ):
             raise RuntimeError(
                 "INIT_ADAPTER_LOAD_MODE=manual is blocked for adapters with target_parameters. "
                 "Use the PEFT-native PeftModel.from_pretrained path or run a dedicated CPU "

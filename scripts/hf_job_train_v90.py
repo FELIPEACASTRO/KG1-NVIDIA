@@ -269,6 +269,7 @@ INIT_ADAPTER_REPO = env_str("INIT_ADAPTER_REPO", "")
 INIT_ADAPTER_REVISION = env_str("INIT_ADAPTER_REVISION", "")
 INIT_ADAPTER_SUBFOLDER = env_str("INIT_ADAPTER_SUBFOLDER", "")
 INIT_ADAPTER_LOAD_MODE = env_str("INIT_ADAPTER_LOAD_MODE", "peft")
+DROP_INIT_ADAPTER_TARGET_MODULES = env_str("DROP_INIT_ADAPTER_TARGET_MODULES", "")
 PEFT_MANUAL_LOAD_METHOD = env_str("PEFT_MANUAL_LOAD_METHOD", "auto")
 REQUIRE_OFFSET_MASK = env_bool("REQUIRE_OFFSET_MASK", True)
 DRY_RUN_VALIDATE_ONLY = env_bool("DRY_RUN_VALIDATE_ONLY", False)
@@ -354,6 +355,37 @@ def target_parameter_name_matches(target_parameter: str, tensor_name: str) -> bo
 
 def parse_csv_items(value: str) -> list[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def adapter_key_matches_target_module(key: str, module: str) -> bool:
+    return f".{module}." in key or key.endswith(f".{module}")
+
+
+def filter_dropped_init_adapter_weights(weights: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
+    dropped_modules = sorted(set(parse_csv_items(DROP_INIT_ADAPTER_TARGET_MODULES)))
+    if not dropped_modules:
+        return weights
+
+    kept: dict[str, torch.Tensor] = {}
+    dropped_keys: list[str] = []
+    for key, tensor in weights.items():
+        if any(adapter_key_matches_target_module(key, module) for module in dropped_modules):
+            dropped_keys.append(key)
+        else:
+            kept[key] = tensor
+
+    print(
+        "Initial adapter target-module filter: "
+        f"drop_modules={dropped_modules} dropped_keys={len(dropped_keys)} kept_keys={len(kept)}",
+        flush=True,
+    )
+    if not dropped_keys:
+        raise RuntimeError(
+            "DROP_INIT_ADAPTER_TARGET_MODULES was set but no init adapter tensors matched: "
+            + ",".join(dropped_modules)
+        )
+    print("Initial adapter dropped key sample: " + json.dumps(dropped_keys[:20], sort_keys=True), flush=True)
+    return kept
 
 
 def canonical_example_subcategory(example: dict[str, Any]) -> str:
@@ -515,6 +547,7 @@ def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
         if INIT_ADAPTER_LOAD_MODE.strip().lower() == "manual":
             loaded_model = create_lora_model(model)
             weights = load_peft_weights(str(adapter_dir), device="cpu")
+            weights = filter_dropped_init_adapter_weights(weights)
             print(f"Manual local adapter load: tensors={len(weights)}")
             load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
             return loaded_model
@@ -564,6 +597,7 @@ def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
                 token=HF_TOKEN or None,
                 device="cpu",
             )
+            weights = filter_dropped_init_adapter_weights(weights)
             print(f"Manual HF adapter load: tensors={len(weights)}")
             load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
             return loaded_model
@@ -1804,6 +1838,7 @@ def make_manifest(
             "dropout": LORA_DROPOUT,
             "target_modules": LORA_TARGET_MODULES,
             "target_parameters": LORA_TARGET_PARAMETERS,
+            "drop_init_adapter_target_modules": parse_csv_items(DROP_INIT_ADAPTER_TARGET_MODULES),
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "trainable_lora_name_substrings": TRAINABLE_LORA_NAME_SUBSTRINGS,
             "require_lora_target_parameter_match": REQUIRE_LORA_TARGET_PARAMETER_MATCH,
@@ -2125,6 +2160,7 @@ def train() -> None:
                 "target_modules": LORA_TARGET_MODULES,
                 "target_parameters": LORA_TARGET_PARAMETERS,
                 "parsed_target_modules": parse_target_modules(LORA_TARGET_MODULES),
+                "drop_init_adapter_target_modules": parse_csv_items(DROP_INIT_ADAPTER_TARGET_MODULES),
                 "init_adapter_dir": INIT_ADAPTER_DIR,
                 "init_adapter_repo": INIT_ADAPTER_REPO,
                 "init_adapter_revision": INIT_ADAPTER_REVISION,
@@ -2279,6 +2315,7 @@ def train() -> None:
                 "target_modules": LORA_TARGET_MODULES,
                 "target_parameters": LORA_TARGET_PARAMETERS,
                 "parsed_target_modules": target_modules,
+                "drop_init_adapter_target_modules": parse_csv_items(DROP_INIT_ADAPTER_TARGET_MODULES),
                 "init_adapter_dir": INIT_ADAPTER_DIR,
                 "init_adapter_repo": INIT_ADAPTER_REPO,
                 "init_adapter_revision": INIT_ADAPTER_REVISION,

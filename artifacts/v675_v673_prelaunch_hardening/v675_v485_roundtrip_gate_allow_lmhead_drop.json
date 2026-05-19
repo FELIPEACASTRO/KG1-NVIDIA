@@ -1,0 +1,94 @@
+{
+  "file_info": {
+    "adapter_model_size": 4259063856,
+    "config_filename": "checkpoint-6/adapter_config.json",
+    "repo_id": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "resolved_revision": "75909c9b40d8b7fa846d379d9d764fa33daeb9e2",
+    "revision": "75909c9b40d8b7fa846d379d9d764fa33daeb9e2",
+    "weights_filename": "checkpoint-6/adapter_model.safetensors"
+  },
+  "generated_at_utc": "2026-05-19T20:35:17.762726+00:00",
+  "summary": {
+    "config": {
+      "adapter_config_sha256": "4dfe5ec8ca33dade558c27af9a2f2f542f1f0d05ff0ee9d85bb5e5a57f12aae4",
+      "allowed_extra_target_modules": [
+        "lm_head"
+      ],
+      "effective_target_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "o_proj",
+        "out_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "lora_alpha": 32,
+      "modules_to_save": [],
+      "r": 32,
+      "target_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "lm_head",
+        "o_proj",
+        "out_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "target_parameters": [
+        "mlp.experts.down_proj",
+        "mlp.experts.gate_up_proj"
+      ]
+    },
+    "coverage": {
+      "allowed_non_lora_tensor_keys": [
+        "base_model.model.lm_head.base_layer.weight"
+      ],
+      "module_lora_params": {
+        "down_proj": 432791552,
+        "in_proj": 9562112,
+        "k_proj": 565248,
+        "o_proj": 1302528,
+        "out_proj": 4993024,
+        "q_proj": 1302528,
+        "up_proj": 432791552,
+        "v_proj": 565248
+      },
+      "module_lora_tensors": {
+        "down_proj": 5934,
+        "in_proj": 46,
+        "k_proj": 12,
+        "o_proj": 12,
+        "out_proj": 46,
+        "q_proj": 12,
+        "up_proj": 5934,
+        "v_proj": 12
+      },
+      "modules_to_save_key_count": 0,
+      "non_lora_tensor_key_count": 0,
+      "target_parameter_lora_params": {
+        "mlp.experts.down_proj": 432791552,
+        "mlp.experts.gate_up_proj": 432791552
+      },
+      "target_parameter_lora_tensors": {
+        "mlp.experts.down_proj": 5934,
+        "mlp.experts.gate_up_proj": 5934
+      }
+    },
+    "errors": [],
+    "hf_gpu_allowed": true,
+    "safetensors": {
+      "dtype_counts": {
+        "BF16": 1,
+        "F32": 12010
+      },
+      "key_shape_dtype_sha256": "fc540b014aaba5eeef5098abbb638b70e639f5e7ba04386535012f54b8d98a95",
+      "tensor_count": 12011,
+      "total_parameters": 1240475648
+    }
+  },
+  "version": "V485_PEFT_ROUNDTRIP_GATE"
+}

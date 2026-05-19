@@ -136,6 +136,7 @@ def audit_adapter(
     expected_target_modules: list[str],
     expected_target_parameters: list[str],
     require_target_parameter_match: bool,
+    allowed_extra_target_modules: list[str] | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     errors: list[str] = []
     config_target_modules = sorted(str(item) for item in (config.get("target_modules") or []))
@@ -143,15 +144,43 @@ def audit_adapter(
     modules_to_save = sorted(str(item) for item in (config.get("modules_to_save") or []))
     expected_modules_sorted = sorted(expected_target_modules)
     expected_parameters_sorted = sorted(expected_target_parameters)
+    allowed_extra_modules_sorted = sorted(set(allowed_extra_target_modules or []))
+    disallowed_extra_modules = [
+        item for item in allowed_extra_modules_sorted if item not in {"lm_head", "embed_tokens", "word_embeddings"}
+    ]
+    if disallowed_extra_modules:
+        errors.append(
+            "allowed extra target_modules may only be output/embedding modules: "
+            + json.dumps(disallowed_extra_modules, sort_keys=True)
+        )
+    effective_config_target_modules = sorted(
+        item for item in config_target_modules if item not in set(allowed_extra_modules_sorted)
+    )
+    missing_allowed_extra_modules = [
+        item for item in allowed_extra_modules_sorted if item not in set(config_target_modules)
+    ]
+    if missing_allowed_extra_modules:
+        errors.append(
+            "allowed extra target_modules absent from adapter config: "
+            + json.dumps(missing_allowed_extra_modules, sort_keys=True)
+        )
 
     if int(config.get("r", -1)) != expected_r:
         errors.append(f"adapter r mismatch: {config.get('r')} != {expected_r}")
     if int(config.get("lora_alpha", -1)) != expected_alpha:
         errors.append(f"adapter lora_alpha mismatch: {config.get('lora_alpha')} != {expected_alpha}")
-    if expected_modules_sorted and config_target_modules != expected_modules_sorted:
+    if expected_modules_sorted and effective_config_target_modules != expected_modules_sorted:
         errors.append(
             "adapter target_modules mismatch: "
-            + json.dumps({"adapter": config_target_modules, "expected": expected_modules_sorted}, sort_keys=True)
+            + json.dumps(
+                {
+                    "adapter": config_target_modules,
+                    "allowed_extra_target_modules": allowed_extra_modules_sorted,
+                    "effective_adapter": effective_config_target_modules,
+                    "expected": expected_modules_sorted,
+                },
+                sort_keys=True,
+            )
         )
     if expected_parameters_sorted and config_target_parameters != expected_parameters_sorted:
         errors.append(
@@ -218,6 +247,8 @@ def audit_adapter(
             "r": config.get("r"),
             "lora_alpha": config.get("lora_alpha"),
             "target_modules": config_target_modules,
+            "effective_target_modules": effective_config_target_modules,
+            "allowed_extra_target_modules": allowed_extra_modules_sorted,
             "target_parameters": config_target_parameters,
             "modules_to_save": modules_to_save,
             "adapter_config_sha256": stable_json_sha256(config),
@@ -324,6 +355,7 @@ def run_self_test() -> int:
         expected_target_modules=DEFAULT_TARGET_MODULES,
         expected_target_parameters=DEFAULT_TARGET_PARAMETERS,
         require_target_parameter_match=True,
+        allowed_extra_target_modules=[],
     )
     if errors or not summary["hf_gpu_allowed"]:
         print(json.dumps(summary, indent=2, sort_keys=True), flush=True)
@@ -339,6 +371,7 @@ def run_self_test() -> int:
         expected_target_modules=DEFAULT_TARGET_MODULES,
         expected_target_parameters=DEFAULT_TARGET_PARAMETERS,
         require_target_parameter_match=True,
+        allowed_extra_target_modules=[],
     )
     if not bad_errors or bad_summary["hf_gpu_allowed"]:
         print("self-test failed to block modules_to_save", flush=True)
@@ -371,6 +404,11 @@ def parse_args() -> argparse.Namespace:
         not in {"0", "false", "no", "off"},
     )
     parser.add_argument("--output-json", type=Path, default=Path("artifacts/v485_peft_roundtrip_gate_manifest.json"))
+    parser.add_argument(
+        "--allowed-extra-target-modules",
+        default=os.environ.get("DROP_INIT_ADAPTER_TARGET_MODULES", ""),
+        help="Adapter config target_modules allowed in the initial adapter but dropped from the effective train config.",
+    )
     parser.add_argument("--self-test", action="store_true")
     return parser.parse_args()
 
@@ -403,6 +441,7 @@ def main() -> int:
         expected_target_modules=parse_csv(args.expected_target_modules),
         expected_target_parameters=parse_csv(args.expected_target_parameters),
         require_target_parameter_match=bool(args.require_target_parameter_match),
+        allowed_extra_target_modules=parse_csv(args.allowed_extra_target_modules),
     )
     payload = {
         "version": "V485_PEFT_ROUNDTRIP_GATE",

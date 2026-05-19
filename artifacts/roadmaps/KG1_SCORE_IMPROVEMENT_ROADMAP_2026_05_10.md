@@ -1,6 +1,6 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-19 20:14 UTC. V672/V673/V674/V675 substitui o plano ativo V671. A decisao
+Atualizado: 2026-05-19 20:36 UTC. V672/V673/V674/V675 substitui o plano ativo V671. A decisao
 de hoje vem de cinco fontes: consulta OpenRouter V670, evidencias CPU locais
 V541/V612, sinais no-loss V350/V366, auditoria completa das discussions Kaggle
 V671 e consenso OpenRouter V672. Objetivo de hoje continua: sair de `192/315` mantendo
@@ -54,7 +54,15 @@ Artefatos novos:
 - gate V619 module surface V675:
   `artifacts/v675_v673_prelaunch_hardening/v675_v619_surface_gate_after_no_lmhead.json`;
 - manifesto debug A100 V673 sem launch pago:
-  `artifacts/v673_hf_a100_launch/v673-a100-guarded-eqbit-v290ckpt6-20260519T201206Z_launch_manifest.json`.
+  `artifacts/v673_hf_a100_launch/v673-a100-guarded-eqbit-v290ckpt6-20260519T201206Z_launch_manifest.json`;
+- gate V485 permitindo drop controlado do `lm_head` do adapter inicial:
+  `artifacts/v675_v673_prelaunch_hardening/v675_v485_roundtrip_gate_allow_lmhead_drop.json`;
+- gate static depois do carregamento manual/drop de `lm_head`:
+  `artifacts/v675_v673_prelaunch_hardening/v675_static_safety_gate_after_lmhead_drop_manual_v2.json`;
+- gate pre-paid depois do carregamento manual/drop de `lm_head`:
+  `artifacts/v675_v673_prelaunch_hardening/v675_pre_paid_job_integration_gate_after_lmhead_drop_manual_v2.json`;
+- log da falha preflight A100 V673:
+  `artifacts/v673_hf_a100_launch/v673_hf_job_6a0cc7a93aba298b21d14393_failed_preflight_lmhead_mismatch_logs.txt`.
 
 Hardening V675 prelaunch, 2026-05-19 20:14 UTC:
 
@@ -90,6 +98,49 @@ Hardening V675 prelaunch, 2026-05-19 20:14 UTC:
   hardening V675. Proxima acao obrigatoria e commitar/pushar as correcoes,
   regenerar o manifesto e so entao lancar A100 curto. Nao lancar job pago com
   manifesto que espera commit antigo.
+
+F2/backfire corrigido apos falha A100 V673, 2026-05-19 20:36 UTC:
+
+- Job A100 `felipesp1983/6a0cc7a93aba298b21d14393` falhou antes do treino,
+  durante `hf_job_preflight_gate.py --phase artifacts`, sem checkpoint e sem
+  adapter novo. Causa: o adapter inicial V290 `checkpoint-6` tem
+  `lm_head` em `adapter_config.target_modules`, mas o contrato efetivo V675
+  remove `lm_head` de `LORA_TARGET_MODULES`. O preflight antigo comparava o
+  adapter inicial bruto com o contrato efetivo e abortou por mismatch.
+- O erro era util: se continuasse via `PeftModel.from_pretrained`, o modelo
+  carregaria a configuracao original do adapter com `lm_head`. Isso violaria a
+  decisao V674/V675 de adapter-only estrito e poderia recriar o risco de
+  salvar `lm_head.base_layer.weight`/embeddings.
+- Correcao aplicada:
+  `INIT_ADAPTER_LOAD_MODE=manual`,
+  `DROP_INIT_ADAPTER_TARGET_MODULES=lm_head`,
+  `KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD=1`.
+  O treino agora cria o PEFT com os target modules efetivos sem `lm_head` e
+  filtra os tensores `lm_head` do adapter inicial antes do load manual.
+- `scripts/run_v485_peft_roundtrip_gate.py` agora aceita
+  `--allowed-extra-target-modules lm_head` para validar o adapter inicial
+  bruto enquanto confirma que o contrato efetivo remove esse alvo. Resultado:
+  `v485_peft_roundtrip_gate=ok`, `hf_gpu_allowed=True`,
+  target_parameters com cobertura `5934/5934` para `down_proj` e
+  `gate_up_proj`, e module LoRA presente para todos os alvos efetivos.
+- `scripts/hf_job_preflight_gate.py` agora calcula
+  `effective_adapter = adapter.target_modules - DROP_INIT_ADAPTER_TARGET_MODULES`
+  e compara isso com `LORA_TARGET_MODULES`; so permite drops de
+  `lm_head/embed_tokens/word_embeddings`.
+- `scripts/kg1_static_safety_gate.py` continua bloqueando manual-load MoE, mas
+  libera este caso somente quando existem `DROP_INIT_ADAPTER_TARGET_MODULES`,
+  `KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD`, `--allowed-extra-target-modules`
+  e gate V485 dedicado.
+- Gates apos a correcao:
+  `hf_job_train_v90.py --self-test` OK,
+  `hf_job_preflight_gate.py --self-test` OK,
+  `run_v485_peft_roundtrip_gate.py --self-test` OK,
+  V485 real com drop `lm_head` OK,
+  static `ok=true/findings=[]`,
+  pre-paid `ok=true/findings=[]`,
+  `py_compile` OK.
+- Proxima acao obrigatoria: commitar/pushar esta correcao, regenerar o
+  manifesto A100 com novo `EXPECTED_COMMIT` e relancar somente `a100-large`.
 
 Atualizacao F2/backfire pre-job, 2026-05-19 18:31 UTC:
 

@@ -699,6 +699,12 @@ def audit_text(path: Path, text: str) -> list[Finding]:
         and not is_archived_fail_closed(text)
         and ("mlp.experts.gate_up_proj" in text or "KG1_LORA_TARGET_PARAMETERS" in text)
         and MANUAL_INIT_ADAPTER_LOAD_RE.search(text)
+        and not (
+            "KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD" in text
+            and "DROP_INIT_ADAPTER_TARGET_MODULES" in text
+            and "--allowed-extra-target-modules" in text
+            and "run_v485_peft_roundtrip_gate.py" in text
+        )
     ):
         findings.append(
             Finding(

@@ -1,0 +1,14 @@
+{
+  "file_count": 6,
+  "files": [
+    "artifacts/v673_hf_a100_launch/launch_v673_hf_a100_guarded_eqbit.py",
+    "scripts/hf_job_preflight_gate.py",
+    "scripts/hf_job_train_v90.py",
+    "scripts/kg1_pre_paid_job_integration_gate.py",
+    "scripts/kg1_static_safety_gate.py",
+    "scripts/run_v485_peft_roundtrip_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

@@ -72,6 +72,9 @@ REQUIRE_ROW_LOSS_WEIGHT = "1"
 ROW_LOSS_WEIGHT_REDUCTION = "scale_mean"
 LOSS_MASK_STOP_AFTER_EOS = "1"
 SAVE_EMBEDDING_LAYERS = "0"
+INIT_ADAPTER_LOAD_MODE = "manual"
+DROP_INIT_ADAPTER_TARGET_MODULES = "lm_head"
+ALLOW_MANUAL_TARGET_PARAMETERS_LOAD = "1"
 
 SOURCE_WEIGHTS = "v673_guarded_equation_bit_transfer_dataset=1.00"
 SUBCATEGORY_WEIGHTS = (
@@ -133,6 +136,8 @@ KG1_STATIC_GATE_CONTRACT = {
     "KG1_EXPECTED_LOSS_NORMALIZATION_MODE": KG1_EXPECTED_LOSS_NORMALIZATION_MODE,
     "KG1_SAVE_EMBEDDING_LAYERS": SAVE_EMBEDDING_LAYERS,
     "KG1_ROW_LOSS_WEIGHT_REDUCTION": ROW_LOSS_WEIGHT_REDUCTION,
+    "KG1_DROP_INIT_ADAPTER_TARGET_MODULES": DROP_INIT_ADAPTER_TARGET_MODULES,
+    "KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD": ALLOW_MANUAL_TARGET_PARAMETERS_LOAD,
     "KG1_REQUIRED_TRAIN_FAMILIES": KG1_REQUIRED_TRAIN_FAMILIES,
     "KG1_REQUIRED_VAL_FAMILIES": KG1_REQUIRED_VAL_FAMILIES,
     "KG1_REQUIRED_TRAIN_SUBCATEGORIES": REQUIRED_SUBCATEGORIES,
@@ -159,6 +164,9 @@ KG1_STATIC_GATE_CONTRACT = {
 # export ROW_LOSS_WEIGHT_REDUCTION=scale_mean
 # export LOSS_MASK_STOP_AFTER_EOS=1
 # export SAVE_EMBEDDING_LAYERS=0
+# export INIT_ADAPTER_LOAD_MODE=manual
+# export DROP_INIT_ADAPTER_TARGET_MODULES=lm_head
+# export KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD=1
 # export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
 # export TRAINABLE_LORA_NAME_SUBSTRINGS=''
 # export REQUIRED_TRAINABLE_LORA_NAME_SUBSTRINGS='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'
@@ -241,7 +249,9 @@ export UPLOAD_TO_HF=1
 export UPLOAD_CHECKPOINTS_DURING_TRAINING=1
 export INIT_ADAPTER_REPO="$KG1_INIT_ADAPTER_REPO"
 export INIT_ADAPTER_SUBFOLDER="$KG1_INIT_ADAPTER_SUBFOLDER"
-export INIT_ADAPTER_LOAD_MODE='peft'
+export INIT_ADAPTER_LOAD_MODE='manual'
+export DROP_INIT_ADAPTER_TARGET_MODULES="$KG1_DROP_INIT_ADAPTER_TARGET_MODULES"
+export KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD="$KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD"
 export PEFT_MANUAL_LOAD_METHOD='auto'
 export FAIL_ON_MISSING_ADAPTER_KEYS=1
 export LORA_R=32
@@ -302,6 +312,7 @@ $PYBIN scripts/run_v485_peft_roundtrip_gate.py \
   --expected-r 32 \
   --expected-alpha 32 \
   --expected-target-modules 'down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj' \
+  --allowed-extra-target-modules "$KG1_DROP_INIT_ADAPTER_TARGET_MODULES" \
   --expected-target-parameters "$KG1_LORA_TARGET_PARAMETERS" \
   --output-json /tmp/kg1_v485_peft_roundtrip_gate_manifest.json
 $PYBIN - <<'PY'
@@ -503,6 +514,8 @@ def build_job_env(hardware: dict[str, object]) -> dict[str, str]:
         "KG1_ROW_LOSS_WEIGHT_REDUCTION": ROW_LOSS_WEIGHT_REDUCTION,
         "KG1_LOSS_MASK_STOP_AFTER_EOS": LOSS_MASK_STOP_AFTER_EOS,
         "KG1_SAVE_EMBEDDING_LAYERS": SAVE_EMBEDDING_LAYERS,
+        "KG1_DROP_INIT_ADAPTER_TARGET_MODULES": DROP_INIT_ADAPTER_TARGET_MODULES,
+        "KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD": ALLOW_MANUAL_TARGET_PARAMETERS_LOAD,
         "KG1_SOURCE_WEIGHTS": SOURCE_WEIGHTS,
         "KG1_SUBCATEGORY_WEIGHTS": SUBCATEGORY_WEIGHTS,
         "KG1_REQUIRE_MAMBA_IMPORTS": "1",
@@ -610,6 +623,9 @@ def local_debug(api: HfApi, token: str) -> tuple[dict[str, object], dict[str, st
         "export VAL_FILE=\"$KG1_VAL_FILE\"",
         "cuda13_a100_driver_gate_ok",
         "export LORA_TARGET_MODULES='down_proj,in_proj,k_proj,o_proj,out_proj,q_proj,up_proj,v_proj'",
+        "export INIT_ADAPTER_LOAD_MODE='manual'",
+        "export DROP_INIT_ADAPTER_TARGET_MODULES=\"$KG1_DROP_INIT_ADAPTER_TARGET_MODULES\"",
+        "export KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD=\"$KG1_ALLOW_MANUAL_TARGET_PARAMETERS_LOAD\"",
         "export LORA_TARGET_PARAMETERS=\"$KG1_LORA_TARGET_PARAMETERS\"",
         "export TRAINABLE_LORA_MODULES='q_proj,k_proj,v_proj,o_proj,up_proj,down_proj'",
         "export TRAINABLE_LORA_NAME_SUBSTRINGS=''",
@@ -712,6 +728,7 @@ def manifest_payload(
             "lora_r": 32,
             "lora_alpha": 32,
             "target_modules": LORA_TARGET_MODULES,
+            "dropped_init_adapter_target_modules": DROP_INIT_ADAPTER_TARGET_MODULES,
             "target_parameters": INIT_ADAPTER_TARGET_PARAMETERS,
             "trainable_lora_modules": TRAINABLE_LORA_MODULES,
             "trainable_lora_name_substrings": TRAINABLE_LORA_NAME_SUBSTRINGS,
