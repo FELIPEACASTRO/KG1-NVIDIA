@@ -308,7 +308,8 @@ def audit_decoding_vs_adapter_drift_gate(text: str, findings: list[Finding]) -> 
     """Require the V568 decoding-vs-adapter drift evidence before paid training."""
 
     status_value = parse_launcher_env_value(text, "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS")
-    if status_value.lower() == "deferred_post_checkpoint":
+    if status_value.lower() in {"deferred_post_checkpoint", "checkpoint5_eval_required"}:
+        guarded_checkpoint_mode = status_value.lower() == "checkpoint5_eval_required"
         observed = {
             "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS": status_value,
             "KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT": parse_launcher_env_value(
@@ -335,7 +336,7 @@ def audit_decoding_vs_adapter_drift_gate(text: str, findings: list[Finding]) -> 
             "on",
         }
         max_steps = observed["MAX_STEPS"] or observed["KG1_EXPECTED_MAX_STEPS"]
-        if not allow_defer:
+        if not guarded_checkpoint_mode and not allow_defer:
             findings.append(
                 Finding(
                     "error",
@@ -374,11 +375,11 @@ def audit_decoding_vs_adapter_drift_gate(text: str, findings: list[Finding]) -> 
                 )
         return {
             "required": {
-                "mode": "deferred_post_checkpoint",
+                "mode": "checkpoint5_eval_required" if guarded_checkpoint_mode else "deferred_post_checkpoint",
                 "max_steps_lte": max_steps_limit,
                 "checkpoint_every_steps_lte": checkpoint_limit,
                 "first_checkpoint_weak_eval_required": True,
-                "purpose": "allow one tiny smoke when V568 can only be measured after a new checkpoint exists",
+                "purpose": "allow one tiny smoke only when checkpoint-5 weak eval and protected-row guards are mandatory",
                 "v618_surface_route": v618_surface,
             },
             "observed": observed,
@@ -576,6 +577,114 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         else audit_decoding_vs_adapter_drift_gate(text, findings)
     )
     v666_launcher_report = audit_v666_launcher_contract(text, findings)
+    first_checkpoint_weak_eval_required = is_truthy_launcher_value(
+        parse_launcher_env_value(text, "KG1_FIRST_CHECKPOINT_WEAK_EVAL_REQUIRED")
+    ) or parse_launcher_env_value(text, "KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS").lower() in {
+        "deferred_post_checkpoint",
+        "checkpoint5_eval_required",
+    }
+    first_checkpoint_weak_eval_controls: dict[str, str] = {}
+    if first_checkpoint_weak_eval_required:
+        required_weak_eval_controls = {
+            "KG1_WEAK_EVAL_HARNESS": "scripts/hf_job_weak_eval_v245.py",
+            "KG1_MAX_TOKENS": "7680",
+            "KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX": "512",
+            "KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX": "7680",
+            "KG1_ENFORCE_WEAK_RUNTIME_POLICY": "1",
+            "KG1_GENERATION_TIMEOUT_S": "900",
+            "KG1_EVAL_TIMEOUT_S": "4200",
+            "KG1_NO_PROMPT_SUFFIX": "0",
+            "KG1_MAX_MODEL_LEN": "8192",
+            "KG1_MAX_NUM_SEQS": "64",
+            "KG1_DISABLE_THINKING": "0",
+            "KG1_REQUIRE_DISABLE_THINKING": "0",
+            "KG1_PROTECTED_ROW_GUARD": "1",
+            "KG1_STOP_ON_PROTECTED_BACKFIRE": "1",
+            "KG1_EVAL_CANDIDATE_BY_CANDIDATE": "1",
+        }
+        for name, expected in required_weak_eval_controls.items():
+            value = parse_launcher_env_value(text, name)
+            first_checkpoint_weak_eval_controls[name] = value
+            if value != expected:
+                findings.append(
+                    Finding(
+                        "error",
+                        "launcher_first_checkpoint_weak_eval_control_mismatch",
+                        f"{name} expected {expected!r}, got {value or '<missing>'!r}",
+                    )
+                )
+        require_text(
+            text,
+            "scripts/hf_job_weak_eval_v245.py",
+            "launcher_missing_first_checkpoint_weak_eval_harness_path",
+            findings,
+        )
+        require_regex(
+            text,
+            r"^\s*\$PYBIN\s+scripts/hf_job_weak_eval_v245\.py\s*$",
+            "launcher_missing_first_checkpoint_weak_eval_command",
+            findings,
+        )
+        require_text(
+            text,
+            "scripts/evaluate_lora_adapter.py",
+            "launcher_missing_weak_eval_single_evaluator_dependency",
+            findings,
+        )
+        require_text(
+            text,
+            "weak_eval_import_gate_ok",
+            "launcher_missing_weak_eval_import_gate",
+            findings,
+        )
+        require_text(
+            text,
+            "scripts_package_gate",
+            "launcher_missing_scripts_package_import_gate",
+            findings,
+        )
+        required_weak_eval_command_exports = {
+            "launcher_missing_first_checkpoint_weak_eval_data_repo": [
+                "KG1_WEAK_EVAL_DATA_REPO",
+                "export KG1_DATA_REPO='{KG1_WEAK_EVAL_DATA_REPO}'",
+            ],
+            "launcher_missing_first_checkpoint_weak_csv_file": [
+                "KG1_WEAK_CSV_FILE",
+                "export KG1_WEAK_CSV_FILE='{KG1_WEAK_CSV_FILE}'",
+            ],
+            "launcher_missing_first_checkpoint_weak_manifest_file": [
+                "KG1_WEAK_MANIFEST_FILE",
+                "export KG1_WEAK_MANIFEST_FILE='{KG1_WEAK_MANIFEST_FILE}'",
+            ],
+            "launcher_missing_first_checkpoint_adapter_repo": [
+                'export KG1_ADAPTER_REPO="$KG1_OUTPUT_REPO"',
+            ],
+            "launcher_missing_first_checkpoint_adapter_subfolder": [
+                "KG1_WEAK_EVAL_REQUIRED_CHECKPOINT",
+                "export KG1_ADAPTER_SUBFOLDERS='{KG1_WEAK_EVAL_REQUIRED_CHECKPOINT}'",
+            ],
+            "launcher_missing_first_checkpoint_promotion_gate": [
+                "export KG1_ENFORCE_WEAK_PROMOTION_GATE=1",
+                "export KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=0",
+            ],
+            "launcher_missing_first_checkpoint_weak_hashes": [
+                "KG1_EXPECTED_WEAK_CSV_SHA256",
+                "KG1_EXPECTED_SHARED_ROW_CONTRACT_SHA256",
+                "export KG1_EXPECTED_WEAK_CSV_SHA256='{KG1_EXPECTED_WEAK_CSV_SHA256}'",
+                "export KG1_EXPECTED_SHARED_ROW_CONTRACT_SHA256='{KG1_EXPECTED_SHARED_ROW_CONTRACT_SHA256}'",
+            ],
+        }
+        for code, snippets in required_weak_eval_command_exports.items():
+            missing = [snippet for snippet in snippets if snippet not in text]
+            if missing:
+                findings.append(
+                    Finding(
+                        "error",
+                        code,
+                        "first-checkpoint weak eval command is missing required exports: "
+                        + ", ".join(missing),
+                    )
+                )
     if args.require_crisis_guards:
         require_regex(
             text,
@@ -906,6 +1015,8 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
         "residual_first_gpu_gate": residual_first_report,
         "decoding_vs_adapter_drift_gate": decoding_vs_adapter_drift_report,
         "v666_cpu_gate_launcher_contract": v666_launcher_report,
+        "first_checkpoint_weak_eval_required": first_checkpoint_weak_eval_required,
+        "first_checkpoint_weak_eval_controls": first_checkpoint_weak_eval_controls,
     }
 
 

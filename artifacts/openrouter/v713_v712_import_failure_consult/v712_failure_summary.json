@@ -1,0 +1,96 @@
+{
+  "schema_version": "kg1_v713_v712_import_failure_summary_v1",
+  "generated_at_utc": "2026-05-20T23:10:00Z",
+  "job": {
+    "id": "6a0e3565ac8efd7fbbb2aa06",
+    "url": "https://huggingface.co/jobs/felipesp1983/6a0e3565ac8efd7fbbb2aa06",
+    "status": "ERROR",
+    "flavor": "a100-large",
+    "h200_used": false,
+    "output_repo": "felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal"
+  },
+  "training_result": {
+    "phase": "completed",
+    "baseline_eval_loss": 2.6376,
+    "checkpoint_10_eval_loss": 2.6363,
+    "checkpoint_10_is_best_loss": true,
+    "checkpoint_20_eval_loss": 2.6373,
+    "final_eval_loss": 2.6373,
+    "weak_accuracy_available": false,
+    "train_rows_raw": 852,
+    "train_rows_tokenized": 852,
+    "validation_rows_raw": 195,
+    "validation_rows_tokenized": 195,
+    "train_truncated": 0,
+    "validation_truncated": 0,
+    "fallback_masks": 0,
+    "train_offset_masks": 852,
+    "validation_offset_masks": 195
+  },
+  "adapter_contract": {
+    "base_model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+    "base_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+    "init_adapter_repo": "felipesp1983/kg1-nemotron-lora-v290-rank19-micro-patch-smoke",
+    "init_adapter_subfolder": "checkpoint-6",
+    "lora_r": 32,
+    "lora_alpha": 32,
+    "effective_trainable_modules": ["q_proj", "v_proj"],
+    "trainable_lora_params": 1867776,
+    "frozen_lora_params": 882006016,
+    "target_parameters": ["mlp.experts.gate_up_proj", "mlp.experts.down_proj"],
+    "target_parameters_trainability_mode": "frozen_active",
+    "target_parameter_trainable_lora_params": 0,
+    "lm_head_excluded": true,
+    "modules_to_save_expected": []
+  },
+  "failure": {
+    "phase": "weak_eval_after_training",
+    "exception_type": "ModuleNotFoundError",
+    "message": "No module named 'scripts.evaluate_lora_adapter'",
+    "importing_script": "scripts/evaluate_lora_adapters_batch.py",
+    "root_cause_hypothesis": "Remote container resolved `scripts` as a different regular package or could not treat repo scripts as a regular package because repo scripts/ had no __init__.py.",
+    "classification": "silent packaging/import bug; not model or loss failure; no ACC evidence produced"
+  },
+  "fix_applied_locally": {
+    "files_changed": [
+      "scripts/__init__.py",
+      "artifacts/v284_official_gate_worktree/scripts/__init__.py",
+      "artifacts/v284_official_gate_worktree/artifacts/v712_hf_a100_equation_signal_launch/launch_v712_hf_a100_equation_signal.py",
+      "artifacts/v284_official_gate_worktree/scripts/kg1_pre_paid_job_integration_gate.py",
+      "artifacts/v284_official_gate_worktree/scripts/kg1_static_safety_gate.py"
+    ],
+    "launcher_import_preflight": [
+      "scripts_package_gate",
+      "weak_eval_import_gate_ok",
+      "py_compile scripts/evaluate_lora_adapter.py",
+      "py_compile scripts/evaluate_lora_adapters_batch.py"
+    ],
+    "validated": {
+      "py_compile": true,
+      "local_import_root_workspace": true,
+      "local_import_official_worktree": true,
+      "static_safety_gate_ok": true,
+      "pre_paid_integration_gate_ok": true,
+      "static_safety_gate_self_test_ok": true,
+      "pre_paid_integration_gate_self_test_ok": true
+    }
+  },
+  "requested_panel_decision": {
+    "budget_policy": "Do not rerun training if weak-eval-only can reuse uploaded checkpoints.",
+    "hardware_policy": "Use A100-large only; H200 forbidden.",
+    "candidate_next_actions": [
+      "Launch a weak-eval-only A100 job for V712 checkpoint-10 after the import fix is available remotely.",
+      "If checkpoint-10 passes import and weak eval but fails score/backfire, consult again before more GPU spend.",
+      "Only evaluate checkpoint-20 after checkpoint-10 if checkpoint-10 result shows a plausible ACC path."
+    ],
+    "promotion_thresholds": {
+      "total_correct_min": 196,
+      "bit_manipulation_min": 136,
+      "equation_transform_min": 60,
+      "truncated_max": 0,
+      "boxed_rate_min": 1.0,
+      "no_box_fallback_max": 0,
+      "protected_backfire_max": 0
+    }
+  }
+}

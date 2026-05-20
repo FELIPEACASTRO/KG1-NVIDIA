@@ -1,0 +1,31 @@
+{
+  "api_key_present_without_value": true,
+  "execute": true,
+  "generated_at_utc": "2026-05-20T23:15:49.205971+00:00",
+  "hf_metadata_ok_count": 6,
+  "hf_metadata_path": "artifacts\\openrouter\\v713_v712_import_failure_consult\\huggingface_metadata_track.json",
+  "hf_metadata_status": "ok",
+  "hf_models": [
+    "openai/gpt-oss-120b",
+    "Qwen/Qwen3-32B",
+    "Qwen/QwQ-32B",
+    "Qwen/Qwen2.5-Coder-32B-Instruct",
+    "deepseek-ai/DeepSeek-R1-0528",
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+  ],
+  "in_progress": false,
+  "models": [
+    "openai/gpt-oss-120b:free",
+    "google/gemini-2.5-flash-lite",
+    "anthropic/claude-3-haiku",
+    "deepseek/deepseek-v4-flash",
+    "qwen/qwen3-235b-a22b-2507"
+  ],
+  "ok_count": 5,
+  "prompt_path": "artifacts\\openrouter\\v713_v712_import_failure_consult\\KG1_POST_TRAIN_OPENROUTER_PROMPT.md",
+  "raw_results_path": "artifacts\\openrouter\\v713_v712_import_failure_consult\\openrouter_raw_results.json",
+  "responses_path": "artifacts\\openrouter\\v713_v712_import_failure_consult\\openrouter_responses.md",
+  "result_count": 5,
+  "run_id": "v713-v712-import-failure-after-a100-train",
+  "schema_version": "kg1_post_train_openrouter_consult_v1"
+}

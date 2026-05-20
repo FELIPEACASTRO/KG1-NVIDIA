@@ -1,0 +1,376 @@
+{
+  "generated_at_utc": "2026-05-20T23:13:06.534176+00:00",
+  "models": [
+    "openai/gpt-oss-120b",
+    "Qwen/Qwen3-32B",
+    "Qwen/QwQ-32B",
+    "Qwen/Qwen2.5-Coder-32B-Instruct",
+    "deepseek-ai/DeepSeek-R1-0528",
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+  ],
+  "ok_count": 6,
+  "result_count": 6,
+  "results": [
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "cerebras",
+          "provider_id": "gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "novita",
+          "provider_id": "openai/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "together",
+          "provider_id": "openai/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "fireworks-ai",
+          "provider_id": "accounts/fireworks/models/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "groq",
+          "provider_id": "openai/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "nscale",
+          "provider_id": "openai/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "featherless-ai",
+          "provider_id": "openai/gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "sambanova",
+          "provider_id": "gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "scaleway",
+          "provider_id": "gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "openai/gpt-oss-120b",
+          "isModelAuthor": false,
+          "provider": "ovhcloud",
+          "provider_id": "gpt-oss-120b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        }
+      ],
+      "library_name": null,
+      "likes": null,
+      "model_id": "openai/gpt-oss-120b",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    },
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen3-32B",
+          "isModelAuthor": false,
+          "provider": "novita",
+          "provider_id": "qwen/qwen3-32b-fp8",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen3-32B",
+          "isModelAuthor": false,
+          "provider": "groq",
+          "provider_id": "qwen/qwen3-32b",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen3-32B",
+          "isModelAuthor": false,
+          "provider": "nscale",
+          "provider_id": "Qwen/Qwen3-32B",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen3-32B",
+          "isModelAuthor": false,
+          "provider": "featherless-ai",
+          "provider_id": "Qwen/Qwen3-32B",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen3-32B",
+          "isModelAuthor": false,
+          "provider": "ovhcloud",
+          "provider_id": "Qwen3-32B",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        }
+      ],
+      "library_name": null,
+      "likes": null,
+      "model_id": "Qwen/Qwen3-32B",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    },
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/QwQ-32B",
+          "isModelAuthor": false,
+          "provider": "nscale",
+          "provider_id": "Qwen/QwQ-32B",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/QwQ-32B",
+          "isModelAuthor": false,
+          "provider": "featherless-ai",
+          "provider_id": "Qwen/QwQ-32B",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        }
+      ],
+      "library_name": null,
+      "likes": null,
+      "model_id": "Qwen/QwQ-32B",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    },
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "isModelAuthor": false,
+          "provider": "nscale",
+          "provider_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "isModelAuthor": false,
+          "provider": "featherless-ai",
+          "provider_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+          "isModelAuthor": false,
+          "provider": "scaleway",
+          "provider_id": "qwen2.5-coder-32b-instruct",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        }
+      ],
+      "library_name": null,
+      "likes": null,
+      "model_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    },
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "deepseek-ai/DeepSeek-R1-0528",
+          "isModelAuthor": false,
+          "provider": "novita",
+          "provider_id": "deepseek/deepseek-r1-0528",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "deepseek-ai/DeepSeek-R1-0528",
+          "isModelAuthor": false,
+          "provider": "featherless-ai",
+          "provider_id": "deepseek-ai/DeepSeek-R1-0528",
+          "status": "live",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "deepseek-ai/DeepSeek-R1-0528",
+          "isModelAuthor": false,
+          "provider": "together",
+          "provider_id": "deepseek-ai/DeepSeek-R1-0528",
+          "status": "error",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "deepseek-ai/DeepSeek-R1-0528",
+          "isModelAuthor": false,
+          "provider": "hyperbolic",
+          "provider_id": "deepseek-ai/DeepSeek-R1-0528",
+          "status": "error",
+          "task": "conversational",
+          "type": null
+        },
+        {
+          "adapter": null,
+          "adapter_weights_path": null,
+          "hf_model_id": "deepseek-ai/DeepSeek-R1-0528",
+          "isModelAuthor": false,
+          "provider": "sambanova",
+          "provider_id": "DeepSeek-R1-0528",
+          "status": "error",
+          "task": "conversational",
+          "type": null
+        }
+      ],
+      "library_name": null,
+      "likes": null,
+      "model_id": "deepseek-ai/DeepSeek-R1-0528",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    },
+    {
+      "downloads": null,
+      "gated": null,
+      "inference_provider_mapping": [],
+      "library_name": null,
+      "likes": null,
+      "model_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "pipeline_tag": null,
+      "private": null,
+      "sha": null,
+      "status": "ok",
+      "tags": []
+    }
+  ],
+  "schema_version": "kg1_hf_metadata_review_track_v1",
+  "skip": false,
+  "status": "ok"
+}

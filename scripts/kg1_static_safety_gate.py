@@ -70,6 +70,11 @@ CRITICAL_SNIPPETS = {
         "v666 launcher status gate": "launcher_v666_cpu_gate_stack_not_passed",
         "v666 report arg required": "--v666-cpu-gate-report-json",
         "validation row loss remote gate": "--require-validation-row-loss-weight",
+        "first checkpoint weak eval controls": "launcher_first_checkpoint_weak_eval_control_mismatch",
+        "first checkpoint weak eval harness": "launcher_missing_first_checkpoint_weak_eval_harness_path",
+        "first checkpoint weak eval command": "launcher_missing_first_checkpoint_weak_eval_command",
+        "weak eval single evaluator dependency": "launcher_missing_weak_eval_single_evaluator_dependency",
+        "weak eval import gate": "launcher_missing_weak_eval_import_gate",
     },
     "scripts/kg1_v666_cpu_gate_stack.py": {
         "v666 schema": "kg1_v666_cpu_gate_stack_v1",
@@ -78,10 +83,20 @@ CRITICAL_SNIPPETS = {
         "v614 blocker": "v614_protected_or_length_or_score_failed",
         "a100 next action": "A100-large may be considered only after cost/preflight gates",
     },
+    "scripts/kg1_post_train_openrouter_consult.py": {
+        "openrouter hf consult docstring": "OpenRouter + Hugging Face consult",
+        "hf default model list": "DEFAULT_HF_MODELS",
+        "hf metadata schema": "kg1_hf_metadata_review_track_v1",
+        "hf metadata output": "huggingface_metadata_track.json",
+        "post correction rule": "After any failed train/eval/job/gate and after any correction for that failure",
+        "hf manifest fields": "hf_metadata_ok_count",
+    },
     "scripts/kg1_weak_backfire_row_guard.py": {
         "known bit backfire id": "8740ed31=01101000",
         "known second bit backfire id": "59bee375=10010101",
+        "known missing required gain id": "55d834d1=00111111",
         "protected id blocker": "protected_id_backfire",
+        "missing required gain blocker": "protected_id_missing_required_gain",
         "loss not promotion comment": "Loss movement alone is not actionable",
         "self test ok marker": "kg1_weak_backfire_row_guard_self_test=ok",
     },
@@ -473,6 +488,15 @@ def is_hf_job_or_notebook(path: Path, text: str) -> bool:
 
 
 def is_archived_fail_closed(text: str) -> bool:
+    blocked_after_v676 = [
+        "ROUTE_BLOCKED_AFTER_V676_REASON",
+        "raise RuntimeError(ROUTE_BLOCKED_AFTER_V676_REASON)",
+        "blocked_actions",
+        "paid_launch",
+        "V673",
+    ]
+    if all(snippet in text for snippet in blocked_after_v676):
+        return True
     generic_archive = [
         "Archived KG1 launcher",
         "raise RuntimeError(",
@@ -784,11 +808,47 @@ def audit_text(path: Path, text: str) -> list[Finding]:
 
     if (
         job_or_notebook
+        and not is_archived_fail_closed(text)
+        and ("api.run_job(" in text or "HfApi(" in text)
+        and re.search(r"\bFLAVOR\s*=\s*[\"']h200[\"']", text)
+    ):
+        findings.append(
+            Finding(
+                rel,
+                "error",
+                "h200_forbidden_by_budget_policy",
+                "Active paid HF launchers must not use H200. Current budget policy allows A100-large only; "
+                "H200 launchers must be archived fail-closed or changed before launch.",
+            )
+        )
+
+    if (
+        job_or_notebook
         and rel != "scripts/hf_job_weak_eval_v245.py"
         and not is_archived_fail_closed(text)
         and "hf_job_weak_eval_v245.py" in text
         and not WEAK_EVAL_DIAGNOSTIC_ONLY_RE.search(text)
     ):
+        weak_eval_command_re = re.compile(
+            r"(?m)^\s*(?:\$PYBIN|python(?:3)?|sys\.executable)\s+"
+            r"(?:[\"']?)scripts/hf_job_weak_eval_v245\.py\b"
+        )
+        imports_known_weak_eval_command = (
+            "base.COMMAND_SCRIPT" in text
+            and "build_retry_command(base.COMMAND_SCRIPT)" in text
+            and 'command=["/bin/bash", "-lc", command_script]' in text
+        )
+        if not weak_eval_command_re.search(text) and not imports_known_weak_eval_command:
+            findings.append(
+                Finding(
+                    rel,
+                    "error",
+                    "weak_eval_harness_referenced_but_not_executed",
+                    "The launcher references hf_job_weak_eval_v245.py but does not execute it as a command. "
+                    "A py_compile-only reference creates false confidence: loss is produced, but weak ACC/backfire "
+                    "and decoding-vs-adapter drift are never measured.",
+                )
+            )
         weak_eval_required_controls = {
             "KG1_DISABLE_THINKING=0": r"[\"']KG1_DISABLE_THINKING[\"']\s*:\s*[\"']0[\"']|export\s+KG1_DISABLE_THINKING\s*=\s*0\b",
             "KG1_NO_PROMPT_SUFFIX=0": r"[\"']KG1_NO_PROMPT_SUFFIX[\"']\s*:\s*[\"']0[\"']|export\s+KG1_NO_PROMPT_SUFFIX\s*=\s*0\b",
@@ -812,6 +872,26 @@ def audit_text(path: Path, text: str) -> list[Finding]:
                     "Set KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1 only for explicit non-promotional sweeps.",
                 )
             )
+        if "evaluate_lora_adapters_batch.py" in text:
+            missing_weak_import_guards = [
+                marker
+                for marker in [
+                    "scripts/evaluate_lora_adapter.py",
+                    "weak_eval_import_gate_ok",
+                    "scripts_package_gate",
+                ]
+                if marker not in text
+            ]
+            if missing_weak_import_guards:
+                findings.append(
+                    Finding(
+                        rel,
+                        "error",
+                        "weak_eval_import_preflight_missing",
+                        "Launcher uses batch weak eval but does not preflight the local scripts package and "
+                        "single-evaluator dependency. Missing: " + ", ".join(missing_weak_import_guards),
+                    )
+                )
 
     if (
         job_or_notebook
@@ -1597,6 +1677,25 @@ def run_self_test() -> int:
         if "weak_eval_not_official_like" in {item.code for item in weak_official_findings}:
             print(json.dumps([item.__dict__ for item in weak_official_findings], indent=2), flush=True)
             return 1
+        weak_eval_blocked_after_v676 = tmp / "launch_weak_blocked_after_v676.py"
+        weak_eval_blocked_after_v676.write_text(
+            "from huggingface_hub import HfApi\n"
+            "ROUTE_BLOCKED_AFTER_V676_REASON='V673 blocked after protected-row backfire'\n"
+            "COMMAND_SCRIPT='python3 scripts/hf_job_weak_eval_v245.py'\n"
+            "FLAVOR = \"a100-large\"\n"
+            "promotion_gate={'blocked_actions':['paid_launch','package','kaggle_submit']}\n"
+            "def main():\n"
+            "    raise RuntimeError(ROUTE_BLOCKED_AFTER_V676_REASON)\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        weak_blocked_findings = audit_text(
+            weak_eval_blocked_after_v676,
+            weak_eval_blocked_after_v676.read_text(encoding="utf-8"),
+        )
+        if weak_blocked_findings:
+            print(json.dumps([item.__dict__ for item in weak_blocked_findings], indent=2), flush=True)
+            return 1
         missing_crisis_guard = tmp / "launch_missing_crisis_guard.py"
         missing_crisis_guard.write_text(
             "from huggingface_hub import HfApi\n"
@@ -1622,6 +1721,30 @@ def run_self_test() -> int:
         with_crisis_findings = audit_text(with_crisis_guard, with_crisis_guard.read_text(encoding="utf-8"))
         if "missing_crisis_mode_backfire_guard" in {item.code for item in with_crisis_findings}:
             print("false positive crisis-mode backfire guard self-test finding", flush=True)
+            return 1
+        h200_active = tmp / "launch_h200_active.py"
+        h200_active.write_text(
+            "from huggingface_hub import HfApi\n"
+            "FLAVOR = \"h200\"\n"
+            "KG1_CRISIS_MODE_BACKFIRE_GUARD=1\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        h200_active_findings = audit_text(h200_active, h200_active.read_text(encoding="utf-8"))
+        if "h200_forbidden_by_budget_policy" not in {item.code for item in h200_active_findings}:
+            print("missing h200 budget policy self-test finding", flush=True)
+            return 1
+        a100_active = tmp / "launch_a100_active.py"
+        a100_active.write_text(
+            "from huggingface_hub import HfApi\n"
+            "FLAVOR = \"a100-large\"\n"
+            "KG1_CRISIS_MODE_BACKFIRE_GUARD=1\n"
+            "HfApi().run_job(command=['true'])\n",
+            encoding="utf-8",
+        )
+        a100_active_findings = audit_text(a100_active, a100_active.read_text(encoding="utf-8"))
+        if "h200_forbidden_by_budget_policy" in {item.code for item in a100_active_findings}:
+            print("false positive h200 budget policy self-test finding", flush=True)
             return 1
         archived_quarantine = tmp / "launch_archived_quarantine.py"
         archived_quarantine.write_text(

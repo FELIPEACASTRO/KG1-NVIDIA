@@ -1,18 +1,397 @@
 # KG1 Score Improvement Roadmap
 
-Atualizado: 2026-05-20 02:35 UTC. V680 foi bloqueado depois do weak eval
-official-like: reduziu loss, mas nao converteu em ACC e gerou backfire
-protegido. Plano ativo substituido por V681 CPU-first/A100-only, com foco em
-rebalancear loss efetivo, remover risco MoE no proximo treino e bloquear cedo
-qualquer drift de decodificacao. Objetivo continua: bater ou preservar o
-baseline atual `196/315`, mantendo `bit_manipulation>=136/160` e
-`equation_transform>=60/155`, sem backfire protegido, sem ganho falso, sem
-treino cego, sem pacote/submissao e sem gastar H200. V681 ja passou gates
-CPU/pre-paid; o primeiro launch falhou corretamente antes de treino por gate
-de drift mal parametrizado, e o segundo launch foi cancelado manualmente antes
-de checkpoint porque revelou contrato LoRA errado: MoE `target_parameters`
-ficaram treinaveis. A correcao agora e bloquear esse caso no script de treino
-e no pre-paid gate antes de novo A100.
+Atualizado: 2026-05-20 23:10 UTC. Fonte de verdade operacional:
+`artifacts/roadmaps/active/KG1_ACTIVE_ROADMAP_2026_05_20.md`.
+
+Atualizacao V713, 2026-05-20 23:17 UTC: consulta OpenRouter/Hugging Face
+pos-falha V712 concluida com `5/5` respostas OpenRouter e `6/6` metadados HF.
+Consenso local aceito:
+`artifacts/openrouter/v713_v712_import_failure_consult/KG1_V713_CONSENSUS_AND_LOCAL_DECISION.md`.
+Decisao: primeiro fazer deploy/push do import fix, depois rodar weak-eval-only
+A100 do checkpoint ja existente `v712 checkpoint-10`; nao rerodar treino.
+Rejeitado para promocao: `KG1_MAX_TOKENS=1024`, remover
+`KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX=512`, novo treino, H200, package,
+full eval, Kaggle submit ou qualquer relaxamento de thresholds antes do weak ACC
+label-free/protected-row existir.
+
+Atualizacao V712 falha de weak eval, 2026-05-20 23:10 UTC: o treino A100
+terminou, mas o job falhou antes de produzir ACC por
+`ModuleNotFoundError: No module named 'scripts.evaluate_lora_adapter'` no
+`scripts/evaluate_lora_adapters_batch.py`. Diagnostico aceito: bug silencioso de
+packaging/import remoto, pois `scripts/` nao era pacote regular e podia colidir
+com pacote terceiro chamado `scripts`. Correcao aplicada: `scripts/__init__.py`
+no workspace raiz e no worktree oficial, launcher V712 agora compila
+`scripts/evaluate_lora_adapter.py` e roda `scripts_package_gate` +
+`weak_eval_import_gate_ok` antes de treino/eval; static gate e pre-paid gate
+passaram a bloquear launchers com weak eval sem esse preflight. Gates apos
+correcao:
+`artifacts/v712_hf_a100_equation_signal_launch/v712_static_safety_gate_after_importfix.json`
+e
+`artifacts/v712_hf_a100_equation_signal_launch/v712_pre_paid_job_integration_gate_after_importfix.json`,
+ambos `ok=true`. V712 loss: baseline `2.6376`, checkpoint-10 `2.6363` melhor,
+checkpoint-20/final `2.6373`; tokenizacao limpa, truncation `0`, fallback masks
+`0`, trainable efetivo `q_proj,v_proj`. Decisao: nao rerodar treino. Reusar os
+checkpoints ja enviados em weak-eval-only A100, primeiro `checkpoint-10`, depois
+`checkpoint-20` somente se fizer sentido. Sem package/full eval/Kaggle submit ate
+weak ACC/backfire passar os thresholds oficiais internos.
+
+Atualizacao V712, 2026-05-20 22:31 UTC: V712 A100-large foi lancado apos
+passar sintaxe, static safety, manifest-only, HF dataset validation e pre-paid
+integration gate. Job:
+`https://huggingface.co/jobs/felipesp1983/6a0e3565ac8efd7fbbb2aa06`.
+Launcher:
+`artifacts/v712_hf_a100_equation_signal_launch/launch_v712_hf_a100_equation_signal.py`.
+Manifest:
+`artifacts/v712_hf_a100_equation_signal_launch/v712-a100-equation-signal-v290ckpt6-20260520T222638Z_launch_manifest.json`.
+Gates:
+`artifacts/v712_hf_a100_equation_signal_launch/v712_static_safety_gate.json`
+e
+`artifacts/v712_hf_a100_equation_signal_launch/v712_pre_paid_job_integration_gate.json`,
+ambos sem findings. V712 usa A100-only, sem H200, dataset equation-only V708
+train `852`/val `195`, `max_steps=20`, `save_every_steps=10`,
+`eval_every_steps=10`, LR `2e-6 -> 5e-7`, LoRA `r=32 alpha=32`,
+trainavel efetivo `q_proj,v_proj`, MoE target parameters congelados, `lm_head`
+ausente, weak eval obrigatoria em `checkpoint-20`. A proposta inicial de `50`
+steps foi reduzida para `20` para respeitar o gate de drift/backfire
+`deferred_post_checkpoint` sem enfraquecer regras. Nao promover, empacotar,
+rodar full eval ou submeter ate a weak eval do proprio job passar thresholds
+inalterados: total `>=196`, bit `>=136`, equation `>=60`, truncation `0`,
+boxed rate `1.0`, no-box fallback `0`, protected backfire `0`.
+
+Atualizacao V710, 2026-05-20 22:20 UTC: V710 terminou e foi bloqueado
+corretamente pelo weak promotion gate. Nao ha jobs HF ativos agora (`hf jobs ps`:
+`No jobs found`). O job era weak-eval-only, A100-large, sem treino, sem full
+eval, sem package, sem Kaggle submit e sem H200. URL:
+`https://huggingface.co/jobs/felipesp1983/6a0e25bc3fef25139d6c9fd0`.
+Resultado real: `191/315`, `bit_manipulation=135/160`,
+`equation_transform=56/155`, `truncated=1`, `boxed_rows=314/315`,
+`no_box_fallback_rows=1`, avg completion `4775.58`, max completion `7680`.
+Blockers: `correct_lt_196`, `equation_lt_60`, `bit_lt_136`,
+`truncated_gt_0`, `avg_completion_tokens_gt_512`, `no_box_fallback_gt_0`,
+`boxed_rate_lt_1.0`, `protected_row_backfire_guard_failed`. Protected rows:
+`8740ed31` e `59bee375` backfire real de baseline correto; `55d834d1` ainda
+nao aprendeu ganho obrigatorio. Unico ganho vs V703: `4ada9150`.
+Decisao: V710 nao e promotable/submittable; consultar OpenRouter/Hugging Face
+com esses fatos antes de qualquer novo gasto. Ledger:
+`artifacts/v710_hf_a100_v708_checkpoint5_weak_eval/KG1_V710_FAILURE_ANALYSIS.md`.
+
+Atualizacao V711, 2026-05-20 23:00 UTC: consulta OpenRouter/HF executada e
+audit local de parametros concluido. Consenso externo inicial apontou possivel
+drift de contrato LoRA, mas o manifesto final V708 provou que a superficie
+ativa ampla do `adapter_config` e de carregamento/heranca, enquanto o filtro
+treinavel efetivo foi `q_proj,v_proj`: `1,867,776` LoRA params treinaveis,
+`882,006,016` LoRA params congelados, MoE target parameters com `0` params
+treinaveis, `lm_head` ausente. Gate novo:
+`artifacts/v710_hf_a100_v708_checkpoint5_weak_eval/v711_lora_trainability_manifest_gate.json`,
+`passed=true`. Portanto, a hipotese "treinou todos os modulos" foi resolvida
+como falsa suspeita para V708. Causa mais provavel agora: sinal de treino fraco
+(`5` steps, batch `2`, LR `5e-7 -> 1e-7`, loss `+0.0018`) combinado com
+decoding runaway/protected backfire (`59bee375` truncado/no-box; `8740ed31` e
+`55d834d1` boxed mas raciocinaram para bit errado). Artefatos:
+`artifacts/v710_hf_a100_v708_checkpoint5_weak_eval/KG1_V711_PARAMETER_AUDIT.md`
+e
+`artifacts/openrouter/v711_v710_failure_consult/KG1_V711_CONSENSUS_AND_LOCAL_DECISION.md`.
+
+Atualizacao V708, 2026-05-20 19:26 UTC: concluido quadruple check/falso ganho
+com as oticas senior ML engineer, senior data engineer, senior data scientist e
+seguranca operacional. Artefato:
+`artifacts/v708_equation_single_family_dataset/20260520T_v708_cpu_gate/KG1_V708_QUADRUPLE_FALSE_GAIN_AUDIT.md`.
+V708 e o dataset CPU ativo de uma familia: train `852`, validation `195`, todos
+`equation_transform`; `bit_manipulation` fica apenas como guarda de nao
+regressao. Hashes atuais: train
+`a329115d11cd9dc708822d8978f1e6b68711c1c01c63df3440de336ab16edc5d`, validation
+`f3c8160c982283b42f5930f2cf1fad87e7d644112d792cc5fb6f92e0843b2bba`, manifest
+`1840bb56c251b64661ec671eb84602e068c855d00c5699f00cc2ce6da47d2101`. Correcoes:
+sufixo official-like agora falha fechado se aparecer fora do fim, familia/tarefa
+original e preservada antes da normalizacao, V478 nao pode mais autorizar GPU no
+modo objective-only, e os defaults de protected rows agora incluem
+`8740ed31=01101000`, `59bee375=10010101`, `55d834d1=00111111`. Gates passaram:
+V509 train/val, V286 tokenization, loss/EOS, rule-text, label-free/control,
+V478 objective-only com `hf_gpu_allowed=false`, e static safety. Gate composto:
+`artifacts/v708_equation_single_family_dataset/20260520T_v708_cpu_gate/v708_pre_a100_readiness_gate.json`.
+Resultado: `cpu_dataset_ready=true`, `a100_launch_allowed=false`; bloqueador
+restante e intencional: `missing_v708_a100_launch_manifest`. Portanto, dataset
+pronto nao autoriza GPU. Proximo passo limpo: criar manifesto de launch V708
+A100-only com `disable_thinking=0`, `max_tokens=7680`, protected rows, thresholds
+`total>=196`, `bit>=136`, `equation>=60`, sem H200, sem submit/package/full eval.
+
+Historico: V703 weak eval de V689 `checkpoint-5`
+em `a100-large` terminou e foi bloqueado pelo gate:
+`https://huggingface.co/jobs/felipesp1983/6a0de4798229e585f969c787`.
+Resultado real: `190/315`, `bit_manipulation=134/160`,
+`equation_transform=56/155`, `truncated=1`,
+`boxed_rate=0.9968253968253968`, `no_box_fallback_rows=1`,
+avg completion `4775.320634920635`, max completion `7680`,
+protected-row backfire em `8740ed31` e `59bee375`, missing required gain em
+`55d834d1`. Baseline-relative contra V516: net `-1`, bit `-2`,
+equation `+1`. Decisao: V689 checkpoint-5 esta bloqueado para promocao,
+pacote, submissao e continuacao cega. Ledger:
+`artifacts/v703_v689_weak_eval_failure/KG1_V703_V689_CHECKPOINT5_WEAK_EVAL_FAILURE.md`.
+Prompt de consulta:
+`artifacts/openrouter/v703_v689_checkpoint5_failure_consult/KG1_V703_OPENROUTER_PROMPT.md`.
+Consulta externa e trilha Hugging Face concluidas:
+`artifacts/openrouter/v703_v689_checkpoint5_failure_consult/KG1_V703_CONSENSUS_AND_LOCAL_DECISION.md`
+e `artifacts/v703_v689_weak_eval_failure/KG1_V703_HF_METADATA_TRACK.md`.
+Segunda checagem OpenRouter pedida pelo usuario adicionou mais 5 modelos:
+Claude Opus 4.7, Gemini 3.1 Pro Preview, GPT-5.5, GPT-OSS-120B free e
+GLM-4.5. Ledger das respostas:
+`artifacts/openrouter/v703_v689_checkpoint5_failure_consult/KG1_V703_OPENROUTER_RESPONSES.md`.
+Decisao aceita: `INVESTIGATE_DECODING_FIRST` com `STOP_BROAD_LORA` aplicado.
+Sintese local dos 7 modelos: Qwen, Claude, GPT-OSS, GLM e a parte aceita de
+Gemini apontam para diagnostico de decoding/contrato primeiro; DeepSeek bloqueia
+LoRA amplo; GPT-5.5 sugere package solver, mas isso fica diferido ate existir
+gate proprio de pacote e nao pode contornar weak eval. Caminho ativo: isolar
+`raw_output -> extract -> verify_answer`, truncation/no-box e protected-row
+backfire antes de qualquer novo treino ou promocao.
+Proximo passo obrigatorio: preflight local para V704 bounded decode eval-only
+em A100, com `max_tokens=512`, antes de qualquer novo gasto GPU. Esse proximo
+job, se lancado, e diagnostico-only; nao promove nem submete.
+
+Atualizacao V704/V705, 2026-05-20 17:45 UTC: implementado e debugado o
+launcher V704 bounded-decode eval-only:
+`artifacts/v704_hf_a100_bounded_decode_eval/launch_v704_hf_a100_bounded_decode_eval.py`.
+Manifest de debug:
+`artifacts/v704_hf_a100_bounded_decode_eval/v704-a100-bounded-decode-ckpt5-20260520T173237Z_bounded_decode_launch_manifest.json`.
+Decisao de preflight:
+`artifacts/v704_hf_a100_bounded_decode_eval/KG1_V704_PREFLIGHT_DECISION.md`.
+V704 e A100-only, `diagnostic_only=1`, `max_tokens=512`, mesmo checkpoint-5,
+mesmo sufixo official-like `\boxed{}`, sem promocao, package, Kaggle submit,
+full eval ou H200 fallback. Replay offline do V703 reproduziu correctness:
+`190/315`, `correctness_mismatches=0`, `label_aware_delta=0`; ha `9`
+diferencas de string em linhas equation ja erradas, rastreadas como warning de
+simbolos/extracao.
+V704 A100 diagnostic lancado:
+`https://huggingface.co/jobs/felipesp1983/6a0df33eccb6cd133d158c8d`.
+Run id: `v704-a100-bounded-decode-ckpt5-20260520T174426Z`. Manifest:
+`artifacts/v704_hf_a100_bounded_decode_eval/v704-a100-bounded-decode-ckpt5-20260520T174426Z_bounded_decode_launch_manifest.json`.
+Este job continua diagnostico-only e nao pode promover, empacotar ou submeter.
+
+Atualizacao V706, 2026-05-20 18:10 UTC: V704 terminou e foi bloqueado pelo
+catastrophic eval guard. Resultado real: `3/315`,
+`bit_manipulation=0/160`, `equation_transform=3/155`,
+`truncated=288/315`, `boxed_rate=0.08571428571428572`,
+`no_box_fallback_rows=288`, avg completion `509.84761904761905`, max
+completion `512`. Diagnostico: o limite `max_tokens=512` com
+`disable_thinking=false` cortou o raciocinio antes do `\boxed{}`; isso e
+falha de decoding/runtime, nao sinal de ganho/perda do adapter. Artefatos
+baixados para:
+`artifacts/v704_hf_a100_bounded_decode_eval/downloaded_job_artifacts/`.
+Consulta OpenRouter/HF:
+`artifacts/openrouter/v706_v704_catastrophic_decode_failure/KG1_V706_CONSENSUS_AND_DECISION.md`.
+Novo launcher V706:
+`artifacts/v706_hf_a100_disable_thinking_decode_eval/launch_v706_hf_a100_disable_thinking_decode_eval.py`.
+Gate local de renderizacao:
+`artifacts/v706_hf_a100_disable_thinking_decode_eval/KG1_V706_PROMPT_RENDER_GATE.md`.
+V706 e o unico proximo diagnostico pago permitido: A100-only, eval-only,
+mesmo weak CSV, mesmo checkpoint-5, mesmo sufixo official-like, mas com
+`KG1_DISABLE_THINKING=1` e `KG1_REQUIRE_DISABLE_THINKING=1`. Continua sem
+promocao, package, full eval, Kaggle submit ou H200. Se V706 nao restaurar
+`truncated=0`, `boxed_rate=1.0`, `bit>=136`, `equation>=56` e `total>=191`,
+parar GPU e consultar OpenRouter/HF novamente antes de qualquer novo gasto.
+V706 lancado:
+`https://huggingface.co/jobs/felipesp1983/6a0df97a8229e585f969ca75`.
+Run id: `v706-a100-disable-thinking-ckpt5-20260520T181102Z`. Manifest:
+`artifacts/v706_hf_a100_disable_thinking_decode_eval/v706-a100-disable-thinking-ckpt5-20260520T181102Z_disable_thinking_launch_manifest.json`.
+V706 terminou. Resultado: `17/315`, `bit_manipulation=7/160`,
+`equation_transform=10/155`, `truncated=0`, `boxed_rate=1.0`,
+`no_box_fallback_rows=0`, `avg_completion_tokens=11.263492063492064`,
+`max_completion_tokens=14`, e `175` backfires contra linhas corretas do
+baseline V516. Protected-row guard falhou em `8740ed31`, `59bee375` e
+`55d834d1`. Conclusao: `disable_thinking=1` corrige formato/termination, mas
+destroi raciocinio e esta bloqueado como rota de score, package, full eval ou
+submit.
+
+Atualizacao V707, 2026-05-20 18:50 UTC: consulta OpenRouter/HF pos-V706
+concluida. Prompt:
+`artifacts/openrouter/v707_v706_disable_thinking_failure_consult/KG1_V707_OPENROUTER_PROMPT.md`.
+Consenso:
+`artifacts/openrouter/v707_v706_disable_thinking_failure_consult/KG1_V707_CONSENSUS_AND_DECISION.md`.
+Respostas brutas:
+`artifacts/openrouter/v707_v706_disable_thinking_failure_consult/openrouter_results.jsonl`
+e retry Gemini:
+`artifacts/openrouter/v707_v706_disable_thinking_failure_consult/gemini_retry/openrouter_results.jsonl`.
+Decisao aceita: `CPU_FIRST_THEN_ONE_A100_PROBE_IF_GATED`. O proximo passo nao
+e GPU: construir residual CPU V516/V703/V706 e microdataset
+`equation_transform` minimo. Arquivos:
+`artifacts/v707_v706_disable_thinking_failure/KG1_V707_V706_DISABLE_THINKING_FAILURE_ANALYSIS.md`,
+`artifacts/v707_v706_disable_thinking_failure/v707_v516_v703_v706_row_residual.csv`
+e `artifacts/v707_v706_disable_thinking_failure/v707_residual_summary.json`.
+V707 row diff: V703 teve `1` ganho equation (`4bb8c6cd`) e `2` backfires bit
+(`8740ed31`, `59bee375`); V706 teve `1` ganho equation (`ea6d926a`), mas
+`175` backfires. Proxima rota aceita: partir do baseline limpo V516/V290
+checkpoint-6, nao do V689 checkpoint-5; foco positivo somente em
+`equation_transform`; `bit_manipulation` vira replay/guard com piso `136/160`;
+production weak eval continua `disable_thinking=0`, `max_tokens=7680`.
+
+Consulta V705 para foco em uma familia concluida. Prompt:
+`artifacts/openrouter/v705_single_family_equation_focus/KG1_V705_SINGLE_FAMILY_EQUATION_FOCUS_PROMPT.md`.
+Consenso:
+`artifacts/openrouter/v705_single_family_equation_focus/KG1_V705_CONSENSUS_AND_ROADMAP_PATCH.md`.
+Respostas:
+`artifacts/openrouter/v705_single_family_equation_focus/KG1_V705_OPENROUTER_RESPONSES.md`.
+Trilha HF:
+`artifacts/v705_hf_single_family_metadata_track/KG1_V705_HF_METADATA_TRACK.md`.
+Votos OpenRouter: `5/5` para `DECODE_FIRST_THEN_EQUATION`. Plano ativo:
+primeiro V704 para estabilizar decoding/bit; depois trabalhar somente
+`equation_transform`. `bit_manipulation` fica como guarda de nao regressao
+com piso `136/160`, nao como alvo de otimizacao. Ganho necessario depois de
+um estado limpo `bit=136`, `equation=56` e `+4` equation liquido para chegar
+em `equation=60` e total `196`.
+
+Atualizacao anterior: V686 weak eval `official_like` bounded em
+`a100-large` terminou e foi bloqueado pelo gate:
+`https://huggingface.co/jobs/felipesp1983/6a0da2df8229e585f969c3e5`.
+Resultado real: `190/315`, `bit_manipulation=134/160`,
+`equation_transform=56/155`, `truncated=1`, `boxed_rate=0.9968253968253968`,
+`no_box_fallback_rows=1`, avg completion `4775.396825396825`, max completion
+`7680`, protected-row backfire em `8740ed31` e `59bee375`, missing required
+gain em `55d834d1`. Baseline-relative contra V516: net `-1`, bit `-2`,
+equation `+1`. Decisao: V684 checkpoint-10 esta bloqueado para promocao,
+pacote, submissao e continuacao cega.
+
+Fonte de verdade do plano ativo:
+`artifacts/roadmaps/active/KG1_ACTIVE_ROADMAP_2026_05_20.md`.
+
+Atualizacao V696, 2026-05-20 16:10 UTC: foi corrigido um bug real no contrato
+de weak-eval do checkpoint-5 V689. O launcher combinava
+`KG1_DISABLE_THINKING=0` com `KG1_REQUIRE_DISABLE_THINKING=1`, o que tornaria
+o runtime policy inconsistente com o modo official-like. Estado atual:
+`KG1_DISABLE_THINKING=0`, `KG1_REQUIRE_DISABLE_THINKING=0`,
+`KG1_WEAK_PROMOTE_AVG_COMPLETION_TOKENS_MAX=512` e
+`KG1_WEAK_PROMOTE_MAX_COMPLETION_TOKENS_MAX=7680`. Foi criado o launcher
+eval-only `artifacts/v689_hf_a100_launch/launch_v689_hf_a100_checkpoint5_weak_eval.py`
+para avaliar apenas `checkpoint-5` depois do treino. Gates locais passaram:
+`artifacts/v689_hf_a100_launch/v696_static_safety_gate.json` e
+`artifacts/v689_hf_a100_launch/v696_pre_paid_job_integration_gate.json`.
+Analise Gemini incorporada em
+`artifacts/openrouter/v696_gemini_artifact_review/KG1_V696_GEMINI_RESPONSE_ANALYSIS.md`:
+sem GPU por narrativa; exigir artefatos de loss/mask, extracao, protected rows
+e runtime A100. Decisao HF Local Apps: `vLLM` segue como backend ativo,
+`SGLang` e apenas diagnostico futuro, demais apps locais fora do plano ativo.
+
+Atualizacao V697, 2026-05-20 16:25 UTC: auditados os dumps locais de
+discussion/forum previamente baixados para identificar produtos/modelos de IA
+mais citados. Resultado em
+`artifacts/v697_kaggle_discussion_ai_products_audit/KG1_V697_KAGGLE_DISCUSSION_AI_PRODUCTS_AUDIT.md`.
+Top citacoes: Qwen, NVIDIA/Nemotron, Hugging Face, DeepSeek/R1,
+GPT/OpenAI/gpt-oss, OpenRouter, Gemini e vLLM. Impacto no plano: usar essa
+lista para escolher modelos de consulta externa; nao mudar backend de execucao.
+`vLLM` continua runtime ativo, `SGLang` fica diagnostico-only, apps locais nao
+sao caminho ativo para score.
+
+Analise do export OpenRouter + V686:
+`artifacts/openrouter/v687_v686_failure_user_export_analysis/KG1_V687_OPENROUTER_EXPORT_AND_V686_FAILURE_ANALYSIS.md`.
+
+Nao ha jobs HF ativos no momento da atualizacao. Proximo passo obrigatorio:
+analise CPU-first dos artefatos V686 e consulta OpenRouter pos-V686 com os
+artefatos reais antes de qualquer novo gasto de GPU.
+
+Atualizacao V687, 2026-05-20 13:05 UTC: consulta OpenRouter pos-V686 concluida
+com DeepSeek/Qwen e CPU drift report criado. Decisao combinada:
+`no_gpu_now`, V684 lineage bloqueada, diagnostico CPU primeiro. Arquivos:
+`artifacts/openrouter/v687_v686_failure_user_export_analysis/KG1_V687_CONSENSUS.md`
+e `artifacts/v687_v686_cpu_drift_report/v686_cpu_drift_report.json`.
+
+Atualizacao V688, 2026-05-20 13:35 UTC: catalogo Hugging Face do usuario
+analisado. Nova regra operacional: toda consulta externa critica deve usar
+OpenRouter com os melhores modelos adequados ao prompt e, quando houver modelo
+relevante vivo/custo-seguro, tambem Hugging Face Router/Inference Provider ou
+metadados HF. Qwen, DeepSeek, OpenAI `gpt-oss`, Gemma e NVIDIA Nemotron podem
+ser candidatos HF; Claude/Gemini fechados nao sao pesos HF. Respostas externas
+sao hipoteses e nao substituem weak ACC, `official_like`, extracao label-free,
+guards de protected rows e bloqueio de ganho falso. Auditoria:
+`artifacts/v688_huggingface_model_catalog_audit/KG1_V688_HUGGINGFACE_MODEL_CATALOG_AUDIT.md`.
+
+Atualizacao V689, 2026-05-20 13:55 UTC: criado e sanitizado o microdataset
+CPU-only para corrigir o bug silencioso V684 de texto de regra. Dataset:
+train `360`, validation `90`, todos `equation_transform`, prompt
+`official_like`, resposta final `\boxed{}`, sem prompt/answer weak no treino.
+IDs fracos foram removidos do metadata linha-a-linha dos JSONL; scan textual
+dos JSONL encontrou zero ocorrencias de `274def88`, `7688e06e`, `d1bd7478` e
+`c5b058d6`. Gate `kg1_v688_rule_text_consistency_gate.py` passou:
+`rows_checked=450`, `blocker_count=0`, `warning_count=0`. V689 nao autoriza GPU
+ainda; proximos gates obrigatorios sao tokenization/mask, loss/EOS, objective
+alignment, static safety, budget, delta weak esperado e kill-switches.
+Relatorio:
+`artifacts/v689_rule_text_corrected_microdataset/KG1_V689_RULE_TEXT_CORRECTED_MICRODATASET.md`.
+
+Regra operacional adicionada em 2026-05-20 13:30 UTC: toda falha de
+treino/eval/job/gate ou valor inseguro exige prompt detalhado com artefatos
+reais e consulta OpenRouter antes de novo gasto. Depois de implementar a
+correcao, deve haver nova revisao externa com OpenRouter e uma trilha Hugging
+Face quando houver modelo/metadado/provider relevante e custo-seguro. Essa
+revisao nao substitui gates KG1 e nao autoriza submit.
+
+Revisao externa V689 executada: DeepSeek/Qwen recomendaram
+`PROCEED_CPU_GATES`; `gpt-oss-120b:free` pediu mais artefatos por risco de ID
+fraco no manifesto. Acao aceita: remover IDs fracos tambem do manifesto
+operacional e deixar apenas arquivo audit-only `DO_NOT_UPLOAD`. Leak audit do
+diretorio operacional V689: `scanned_file_count=4`,
+`weak_ids_present_in_operational_gate_dir=0`,
+`ok=true`. Consenso:
+`artifacts/openrouter/v689_external_review/KG1_V689_EXTERNAL_REVIEW_CONSENSUS.md`.
+
+Gates CPU V689 adicionais concluidos: V286 tokenizer real passou sem overlap,
+sem truncation, sem fallback masks, sem completion drop, offset masks em todas
+as `450` linhas e token max `236`; loss/EOS passou com final loss EOS rate
+`1.0` em treino e validacao; V478 objective alignment passou com
+`findings=[]`; execution dry-run passou com `450/450` final answers extraidos e
+queries recalculadas corretamente, alem de `1000` exemplos same-op verificados;
+static safety passou no script alterado. Plano protected/kill-switch V689 criado
+como audit-only `DO_NOT_UPLOAD`: `4` rows de ganho esperado, `52` rows
+protegidas, incluindo `2` backfires V686. GPU continua bloqueada ate existir
+launcher/upload manifest que exclua arquivos `DO_NOT_UPLOAD` e passe no
+pre-paid gate.
+
+Atualizacao V690/V691, 2026-05-20 14:00 UTC: a regra de consulta externa apos
+falha/correcao foi implementada no script
+`scripts/kg1_post_train_openrouter_consult.py`, agora com trilha Hugging Face
+metadata/provider alem de OpenRouter. Teste V690: HF metadata `6/6`,
+OpenRouter pos-correcao `3/3`, static safety `findings=[]`. Teste V691:
+criado `artifacts/v689_hf_a100_launch/upload_v689_dataset_to_hf.py`, default
+dry-run/no-upload. A primeira execucao falhou por chave errada no leak audit;
+foi corrigida para `weak_ids_present_in_operational_gate_dir`. Pos-correcao:
+upload preflight seco passou, runtime `DO_NOT_UPLOAD` path count `0`, weak IDs
+no diretorio operacional `0`, OpenRouter `1/1`, HF metadata `6/6`. O dataset
+operacional V689 foi enviado para o repo privado HF
+`felipesp1983/kg1-v689-rule-text-corrected-microdataset` no commit
+`fa5ae6e6524f4ef7f66546f7a9b4f8154a62c0f6`; o download-back hash gate passou
+com `ok=true`, `blockers=[]`. Nenhuma GPU foi executada. Plano A100 V689 existe apenas como
+`DO_NOT_EXECUTE`:
+`artifacts/v689_hf_a100_launch/KG1_V689_A100_LAUNCH_PLAN_DO_NOT_EXECUTE.md`.
+Antes de A100 ainda faltam launcher real, static safety, pre-paid integration e
+gate de generation/decoding drift.
+
+V684 A100 smoke foi lancado em
+`a100-large` e gerou checkpoint util no Hub:
+`felipesp1983/kg1-nemotron-lora-v684-a100-trace-source-v290ckpt6/checkpoint-10`.
+O job foi cancelado manualmente depois do upload completo do checkpoint-10
+para preservar credito; isto nao e falha de treino. Resultado de loss:
+baseline `3.3707`, checkpoint-5 `3.3682`, checkpoint-10 `3.3674`.
+V485 PEFT roundtrip do checkpoint-10 passou localmente. Ainda nao ha ACC desse
+adapter; qualquer promocao exige weak eval canonicalizado com
+protected/backfire/format gates.
+V681 treinou corretamente no A100 com MoE
+`target_parameters` frozen-active, mas o weak eval official-like bloqueou o
+checkpoint-15: `191/315`, `bit_manipulation=135/160`,
+`equation_transform=56/155`, `truncated=1`, `boxed_rate=314/315`,
+`no_box_fallback=1`, avg completion `4775.39` e protected backfire em
+`8740ed31`/`59bee375` mais missing required gain em `55d834d1`. Portanto V681
+esta arquivado como nao-promovivel. V682 no-thinking/max384 tambem terminou e
+foi bloqueado: `17/315`, `bit_manipulation=7/160`,
+`equation_transform=10/155`, `truncated=0`, `boxed_rate=1.0`,
+avg completion `11.29`, mas protected backfire em `8740ed31`/`59bee375` e
+missing required gain em `55d834d1`. Conclusao: `disable_thinking=1` corrige
+comprimento/formato, mas destroi raciocinio e nao e rota de ACC. Plano ativo
+agora e CPU-first: V683 consolidou o ledger residual/protected e V684 criou
+um dataset source-only trace-preserving para testar a hipotese oposta ao
+V682: preservar raciocinio e finalizar com `Final answer: \boxed{...}`. Novo
+treino so e permitido se gates locais provarem chance real de ACC sem falso
+ganho.
+Objetivo continua:
+`total>=196/315`, `bit_manipulation>=136/160`,
+`equation_transform>=60/155`, sem truncation, sem fallback, sem backfire,
+sem pacote/submissao e sem H200.
 
 Plano ativo agora:
 
@@ -31,22 +410,68 @@ Plano ativo agora:
    sinteticas verificadas, sem alterar a validation. A auditoria V681 mostrou
    que os targets eram curtos e corretos, mas o loss efetivo ficou
    `equation=0.887097` contra `bit=0.112903`.
-5. Rota ativa V681: dataset balanceado por familia e por peso efetivo. Treino
-   permitido somente em `a100-large`, max 15 steps, probe a cada 5 steps,
-   `lm_head` fora. Como o adapter inicial V290 possui MoE target_parameters,
-   V681 deve manter estes parametros como frozen-active para compatibilidade.
-   O filtro de treino agora aceita `up/down` apenas se nao forem
-   `mlp.experts.gate_up_proj`/`mlp.experts.down_proj`; os obrigatorios
-   treinaveis sao `q/k/v/o`.
-6. Promover qualquer rota futura apenas se `total>=196`,
+5. V681 esta arquivado como nao-promovivel. O balanceamento 50/50 de loss
+   efetivo corrigiu o erro objetivo de V680, mas nao converteu em ACC e ainda
+   gerou drift longo/backfire. Nao relancar, continuar ou subir checkpoint-15.
+   A correcao de frozen-active MoE permanece como hardening obrigatorio para
+   qualquer rota futura.
+6. V682/V706 no-thinking estao arquivados como diagnosticos negativos:
+   formato ficou perfeito (`boxed_rate=1.0`, `truncated=0`,
+   completion tokens curtos), mas ACC caiu para cerca de `17/315`. Bloquear
+   qualquer plano que tente resolver plateau apenas com `disable_thinking=1`
+   ou cap curto de tokens. Se usar cap/decoding no futuro, deve preservar
+   thinking/raciocinio e passar protected rows antes de GPU.
+7. Promover qualquer rota futura apenas se `total>=196`,
    `bit_manipulation>=136`, `equation_transform>=60`, `truncated=0`,
    `boxed_rate=1.0`, `label_aware_delta=0`, `no_box_fallback=0`, sem
    protected-row backfire e sem queda baseline-relative contra `196/136/60`.
-7. Todo final de treino ou falha de weak eval exige OpenRouter post-train
-   consult com prompt completo e artefatos reais antes de novo gasto. V681 ja
-   executou essa consulta e consolidou o consenso em
-   `artifacts/openrouter/v681_v680_weak_eval_failure_consult/KG1_V681_CONSENSUS.md`.
-8. Achados do arquivo externo `ANALISE_DESAFIO_IAS_16.txt` entram como
+8. Todo final de treino ou falha de weak eval exige consulta externa post-train
+   com prompt completo e artefatos reais antes de novo gasto. Usar OpenRouter
+   com os melhores modelos adequados ao prompt e tambem Hugging Face quando
+   houver modelo relevante disponivel/custo-seguro. A
+   consulta V682 pos-falha V681 foi executada com
+   `deepseek/deepseek-v4-pro` e `qwen/qwen3.6-max-preview`; consenso:
+   `artifacts/openrouter/v682_v681_weak_eval_failure_consult/KG1_V682_CONSENSUS.md`.
+   Consulta V685 pos-V684 executada com GPT-5.5, Gemini, Qwen, DeepSeek e
+   Claude; consenso:
+   `artifacts/openrouter/v685_post_v684_loop_consult/KG1_V685_CONSENSUS.md`.
+   Regra operacional consolidada: `execute -> measure -> diagnose ->
+   OpenRouter/HuggingFace -> roadmap -> next bounded step`. Toda falha de
+   treino, weak eval, loss/ACC, formato, truncation, protected row ou gate
+   precisa gerar novo prompt com artefatos reais antes de novo gasto.
+9. Consulta V683 pos-falha V682 executada com `deepseek/deepseek-v4-pro` e
+   `qwen/qwen3.6-max-preview`; consenso consolidado:
+   `artifacts/openrouter/v683_v682_nothink_failure_consult/KG1_V683_CONSENSUS.md`.
+   Decisao: bloquear no-thinking/short-cap, bloquear V681/V682, e exigir
+   ledger CPU de misses + microdataset source-only verificado + extractor
+   parity + protected safety antes de qualquer A100.
+   Ledger V683 concluido em
+   `artifacts/v683_current_residual_ledger/`: `38` linhas, decisao
+   `cpu_only_no_gpu`, `12` source-only trainable, `2` source-only guarded,
+   `14` needs-rule-proof, `7` drop e `3` protected guard. Regra: esses IDs
+   weak sao apenas seletores de regra/proxy, nunca linhas de treino diretas.
+   V684 implementou a variante CPU trace-preserving:
+   `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/`.
+   Dataset: train `640` (`320` bit, `320` equation), validation `160`
+   (`80`/`80`), `loss_weight=1.0`, effective share `50/50`, trace lines
+   `min=5`, `p50=8`, `max=10`. Gates CPU V684 passaram: V679
+   `assistant_contract=boxed_suffix`, V286 real `prompt_truncated=0`,
+   `completion_tokens_dropped=0`, `fallback_masks=0`, token max `332`,
+   loss/EOS `ok=true`, V478 strict `findings=[]`, V513
+   `blocker=0/warning=0`, V564 contract/mask alignment com
+   `protected_mode=absent_required` passou (`mask_ok=640/160`,
+   protected IDs ausentes por desenho source-only), static safety e workspace
+   clean sem findings.
+   V540 extractor parity inicialmente detectou artefato historico stale
+   (`prediction/correct` antigo no baseline), entao foi criado
+   `scripts/canonicalize_prediction_csv_label_free.py` para recomputar
+   `prediction` e `correct` somente de `raw_output -> extract_final_answer ->
+   verify_answer`, preservando `original_prediction/original_correct`.
+   Baseline canonico passou V540 sem blockers: `192/315`, `bit=136/160`,
+   `equation=56/155`, protected rows ok, prompt template parity ok. V682
+   canonico continua arquivado como falha real por protected backfire
+   (`8740ed31`, `59bee375`) e nao autoriza treino.
+10. Achados do arquivo externo `ANALISE_DESAFIO_IAS_16.txt` entram como
    hardening, nao como novo treino cego:
    - aplicar padrao NeMo Curator antes de novo dataset: limpeza, qualidade,
      deduplicacao exata/fuzzy/semantica, source ledger por linha e manifestos;
@@ -58,10 +483,10 @@ Plano ativo agora:
    - usar NeMo Evaluator/Gym apenas como referencia de estrutura de avaliacao:
      rollouts, metricas agregadas e perfis por tarefa. O gate KG1 continua
      label-free e baseado em `raw_output -> extract -> verify_answer`.
-9. Nenhuma URL do arquivo trouxe gabarito novo, score direto ou dataset pronto
+11. Nenhuma URL do arquivo trouxe gabarito novo, score direto ou dataset pronto
    para `bit_manipulation`/`equation_transform`. Datasets Nemotron gerais
    ficam fora do plano curto, exceto como referencia de curadoria/validacao.
-10. Consenso V679 OpenRouter forte (`deepseek/deepseek-v4-pro` e
+12. Consenso V679 OpenRouter forte (`deepseek/deepseek-v4-pro` e
     `qwen/qwen3.6-max-preview`): inserir achados externos apenas como gates e
     experimento condicionado:
     - `G-SYNTH`: todo novo synthetic deve passar verificador Python
@@ -77,11 +502,11 @@ Plano ativo agora:
       linhas `equation_transform` por templates deterministicas, validar 100%,
       deduplicar, e so entao permitir um unico SFT A100-large attention-only se
       os gates CPU nao encontrarem contaminacao.
-11. Excluir explicitamente do plano curto: merge de datasets Nemotron gerais,
+13. Excluir explicitamente do plano curto: merge de datasets Nemotron gerais,
     RAG/agent cookbooks, GRPO/DAPO/RLVR, Brev/Discord/YouTube e qualquer rota
     que nao tenha verificador KG1. Estes itens ficam como referencia, nao como
     acao.
-12. Gate V679 implementado e executado no V677:
+14. Gate V679 implementado e executado no V677:
     `scripts/kg1_v679_dataset_family_gate.py`.
     Resultado final em V677: `decision=pass`, `blockers=[]`, `warnings=[]`.
     O gate cobre `G-SYNTH`, `G-EVAL-FAMILY` e `G-VLLM-LOGPROB`; valida
@@ -287,12 +712,145 @@ Status V681, 2026-05-20 02:05 UTC:
   `artifacts/v681_hf_a100_launch/v681_pre_paid_job_integration_gate_after_target_literal_fix.json`
   (`ok=true`, `findings=[]`, contrato LoRA com
   `freeze_lora_target_parameters=true`).
-- Proximo passo: commitar/pushar `scripts/hf_job_train_v90.py` e
-  `scripts/kg1_pre_paid_job_integration_gate.py` para que o HF job use o
-  codigo corrigido; atualizar `EXPECTED_COMMIT` automaticamente pelo launcher;
-  relancar um unico probe A100 se o debug local ainda passar. No primeiro log
-  remoto, cancelar imediatamente se o filtro nao reportar
-  `target_parameters_trainability_mode=frozen_active`.
+- Commit/push da correcao executado em `67a27bcb2ed6a4e9856adb61ece63516a0b29637`.
+- Terceiro job V681 A100-large concluiu treino com contrato correto:
+  `https://huggingface.co/jobs/felipesp1983/6a0d1c132dc5b1243da509e9`,
+  output repo
+  `felipesp1983/kg1-nemotron-lora-v681-a100-balanced-eqbit-v290ckpt6`.
+  Checkpoints publicados: `checkpoint-5`, `checkpoint-10`, `checkpoint-15`.
+  Loss: baseline `0.2907`, checkpoint-5 `0.2904`, checkpoint-10 `0.2897`,
+  checkpoint-15 `0.2893`. Contrato remoto: `target_parameters_trainability_mode=frozen_active`,
+  `target_parameter_trainable_lora_tensors=0`, q/k/v/o treinaveis, MoE
+  target_parameters preservados mas congelados.
+- Weak eval V681 A100-large concluido e bloqueado:
+  `https://huggingface.co/jobs/felipesp1983/6a0d254d2dc5b1243da50a76`,
+  run id `v681-a100-v221contract-balanced-eqbit-weak-20260520T030548Z`,
+  upload commit `9844327eb28744c05e9eb2294460fe30e4249195`.
+  Resultado real: `191/315`, `bit_manipulation=135/160`,
+  `equation_transform=56/155`, `truncated=1`, `boxed_rate=314/315`,
+  `no_box_fallback_rows=1`, avg completion `4775.39`,
+  completion tokens `1,504,248`. Label-free, first-boxed e label-aware todos
+  iguais a `191`, logo parser/expected-aware nao e a causa principal.
+  Protected guard bloqueou `8740ed31` (`01101000 -> 01111000`),
+  `59bee375` (`10010101 -> 2`) e missing required gain em `55d834d1`
+  (`10111111`, expected `00111111`).
+- Decisao V681 final: nao-promovivel, nao-submetivel, nao continuar por loss
+  menor, nao relancar por LR/steps. V681 provou que balancear loss efetivo
+  sem resolver drift de geracao/formato nao sai do plato.
+- OpenRouter V682 pos-falha V681 executado:
+  `artifacts/openrouter/v682_v681_weak_eval_failure_consult/KG1_V682_OPENROUTER_PROMPT.md`,
+  `artifacts/openrouter/v682_v681_weak_eval_failure_consult/KG1_V682_OPENROUTER_RESPONSES.md`,
+  `artifacts/openrouter/v682_v681_weak_eval_failure_consult/KG1_V682_CONSENSUS.md`.
+  Consenso: bloquear V681, rejeitar mais steps/LR sweep, atacar geracao longa
+  e protected backfire por gates CPU antes de qualquer novo A100.
+- Auditoria V682 CPU dos outputs V681 concluida:
+  `artifacts/v681_hf_a100_launch/v682_cpu_output_audit/v681_checkpoint15_summary.json`
+  e
+  `artifacts/v681_hf_a100_launch/v682_cpu_output_audit/v681_checkpoint15_format_length_audit.json`.
+  Achados: `starts_boxed=0/315`, `starts_final_answer_boxed=0/315`,
+  `boxed_zero_rows=1`, completion tokens p50 `6193`, p95 `7155`, max `7680`.
+  Em bit, completion p50 `6703` e first boxed char p50 `8677`; em equation,
+  completion p50 `707` mas p75 `5743`. Early extraction mostrou
+  `early_512_correct=0`, `early_1024_correct=2`, `early_2048_correct=9`.
+  Conclusao: hard cap simples em `max_tokens` nao resolve; a rota precisa
+  mudar o comportamento para responder mais cedo ou separar explicitamente
+  ganho de decoding/config de ganho de adapter.
+- Auditoria V682/V610 de drift linha-a-linha concluida:
+  `artifacts/v681_hf_a100_launch/v682_cpu_row_drift_audit/v610_adapter_drift_summary.json`
+  e `artifacts/v681_hf_a100_launch/v682_cpu_row_drift_audit/v610_row_drift.csv`.
+  Resultado: baseline CSV `191/315` (`bit=136`, `equation=55`) contra V681
+  `191/315` (`bit=135`, `equation=56`), net `0`, ganhos `2`, perdas `2`.
+  Perdas: `8740ed31` e `59bee375`; ganhos: `4ef88f92` e `4bb8c6cd`.
+  Bloqueadores: abaixo do piso submit-safe `196/136/60`, protected-row guard,
+  `stored_prediction_mismatch_nonzero` e `truncated_rows_nonzero`. Conclusao:
+  V681 e troca de familia com risco, nao ganho real.
+- Gate formal V614 anti-runaway rodado contra V681:
+  `artifacts/v681_hf_a100_launch/v682_v681_v614_anti_runaway_gate.json`.
+  Resultado: `decision=blocked`, `correct=191/315`, `boxed_rate=0.9968`,
+  `truncated=1`, bit p99 `7390`, equation p99 `6397`; blockers incluem
+  `bit_lt_136`, `equation_lt_60`, `total_lt_196`,
+  `finish_reason_length_nonzero`, `no_box_fallback_gt_0`,
+  `protected_failed_8740ed31`, `protected_failed_59bee375` e
+  `protected_failed_55d834d1`.
+- Launcher V682 no-thinking diagnostic implementado e lançado em A100-large:
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/launch_v682_hf_a100_nothink_diagnostic.py`.
+  Job: `https://huggingface.co/jobs/felipesp1983/6a0d324c2dc5b1243da50b05`,
+  run id `v682-a100-nothink-v681ckpt15-diag-20260520T040116Z`.
+  Contrato: `diagnostic_only=true`, `disable_thinking=1`, `max_tokens=384`,
+  `KG1_REQUIRE_DISABLE_THINKING=1`, `KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=1`,
+  `hf_job_timeout_s=3600`, A100-large only, H200 bloqueado. Este job pode
+  diagnosticar se o gargalo e decoding/config, mas nao e ganho de adapter,
+  nao e promotable e nao e submit-safe.
+- V682 final baixado, auditado e bloqueado:
+  upload commit HF
+  `2e2beb0eebedf6ab09e12933a153f91928c406c7`. Resultado:
+  `17/315`, `bit_manipulation=7/160`, `equation_transform=10/155`,
+  `truncated=0`, `boxed_rate=1.0`, `no_box_fallback=0`,
+  `avg_completion_tokens=11.2889`, `max_completion_tokens=14`.
+  V614 local: `decision=blocked` por `total_lt_196`, `bit_lt_136`,
+  `equation_lt_60` e protected failures em `8740ed31`, `59bee375`,
+  `55d834d1`.
+  V610 drift local: baseline `191/315` contra V682 `17/315`, net `-174`,
+  ganhos `1`, perdas `175`, bit losses `129`, equation losses `46`.
+  Conclusao operacional: `disable_thinking=1` e cap curto nao atacam o
+  problema de ACC; eles removem reasoning e causam resposta curta errada.
+- Hardening novo de filesystem/Windows: V614, V610 e
+  `analyze_eval_predictions.py` agora usam long-path-safe open/read/write.
+  Motivo: o CSV V682 baixado existia, mas o caminho longo gerava
+  `FileNotFoundError` em Python no Windows. O gate foi reexecutado pelo caminho
+  longo original e bloqueou corretamente, sem depender do mirror curto.
+- Hardening novo de extractor/simbolos: V682 revelou 4 rows de
+  `equation_transform` com divergencia entre stored prediction remoto e
+  re-extraction local por payloads com `\\{`/`\\}` dentro de `\\boxed{}`. Essas
+  4 rows estavam erradas nos dois caminhos, entao nao houve falso ganho, mas
+  qualquer novo job precisa sincronizar o commit remoto com o extractor local
+  atual antes de gerar novo weak eval. Sem isso, existe risco de drift de
+  simbolos/backslash entre treino, eval local e HF.
+- OpenRouter V683 pos-falha V682 executado:
+  `artifacts/openrouter/v683_v682_nothink_failure_consult/KG1_V683_OPENROUTER_PROMPT.md`,
+  `artifacts/openrouter/v683_v682_nothink_failure_consult/KG1_V683_OPENROUTER_RESPONSES.md`,
+  `artifacts/openrouter/v683_v682_nothink_failure_consult/KG1_V683_DEEPSEEK_RETRY_RESPONSE.md`,
+  `artifacts/openrouter/v683_v682_nothink_failure_consult/KG1_V683_CONSENSUS.md`.
+  Consenso aceito: proximo passo e CPU residual-miss ledger + microdataset
+  source-only verificado + extractor parity + protected safety; sem novo A100
+  ate essas evidencias existirem. Sugestoes agressivas de `r=32`, MoE/MLP e
+  LR `2e-4` foram marcadas como condicionais/rejeitadas por enquanto porque
+  V673/V681 ja mostraram regressao com blast radius alto.
+- Ledger V683 atual:
+  `scripts/build_v683_current_residual_ledger.py`,
+  `artifacts/v683_current_residual_ledger/v683_current_residual_ledger.csv`,
+  `artifacts/v683_current_residual_ledger/v683_current_residual_ledger_manifest.json`,
+  `artifacts/v683_current_residual_ledger/KG1_V683_CURRENT_RESIDUAL_LEDGER.md`.
+  Decisao `cpu_only_no_gpu`; nao usar linhas weak como treino direto.
+- Dataset V684 trace-preserving source-only:
+  `scripts/build_v684_v683_trace_preserving_source_dataset.py`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v683_trace_preserving_source_manifest.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v683_trace_preserving_source_train.jsonl`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v683_trace_preserving_source_val.jsonl`.
+  Gates: V679
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v679_dataset_family_gate/v684.json`,
+  V286
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v286_tokenization_real/v286_generic_tokenization_gate_manifest.json`,
+  loss/EOS
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_loss_mask_eos_contract.json`,
+  V478
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v478_objective_alignment.json`,
+  V513
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v513_trace_learnability/v513_trace_learnability_gate_manifest.json`,
+  V564 contract/mask alignment
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v564_contract_mask_alignment_absent_required.json`,
+  static/workspace clean
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_static_safety_gate.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_workspace_clean_gate.json`.
+  Extractor/canonical CSV:
+  `scripts/canonicalize_prediction_csv_label_free.py`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/canonical_prediction_csvs/v516_baseline_current_extractor_manifest.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/canonical_prediction_csvs/v516_baseline_current_extractor.csv`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_extractor_parity_canonical_baseline/v684_extractor_parity_canonical_baseline_summary.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_extractor_static_safety_gate.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_v564_extractor_static_safety_gate.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_workspace_clean_gate_after_extractor.json`,
+  `artifacts/v684_v683_trace_preserving_source_dataset/20260520T_v684_cpu_gate/v684_workspace_clean_gate_after_v564.json`.
 - Artefatos V681:
   `scripts/build_v681_balanced_eqbit_dataset.py`,
   `artifacts/v681_balanced_eqbit_dataset/20260520T0205Z_cpu_gate/v681_balanced_eqbit_manifest.json`,
@@ -302,7 +860,30 @@ Status V681, 2026-05-20 02:05 UTC:
   `artifacts/v681_hf_a100_launch/v681_static_safety_gate_after_reference_resolution_fix.json`,
   `artifacts/v681_hf_a100_launch/v681-a100-balanced-eqbit-v290ckpt6-20260520T020150Z_launch_manifest.json`,
   `artifacts/v681_hf_a100_launch/v681_hf_job_6a0d15503aba298b21d14601_logs.txt`,
-  `artifacts/v681_hf_a100_launch/v681_hf_job_6a0d16502dc5b1243da50981_logs.txt`.
+  `artifacts/v681_hf_a100_launch/v681_hf_job_6a0d16502dc5b1243da50981_logs.txt`,
+  `artifacts/v681_hf_a100_launch/v681_hf_job_6a0d1c132dc5b1243da509e9_logs.txt`,
+  `artifacts/v681_hf_a100_launch/v681_weak_eval_job_6a0d254d2dc5b1243da50a76_logs.txt`,
+  `artifacts/v681_hf_a100_launch/v681_weak_eval_failure_analysis.json`,
+  `artifacts/v681_hf_a100_launch/v681_weak_eval_wrong_rows_sample.csv`,
+  `artifacts/v681_hf_a100_launch/v682_cpu_output_audit/v681_checkpoint15_summary.json`,
+  `artifacts/v681_hf_a100_launch/v682_cpu_output_audit/v681_checkpoint15_format_length_audit.json`,
+  `artifacts/v681_hf_a100_launch/v682_cpu_row_drift_audit/v610_adapter_drift_summary.json`,
+  `artifacts/v681_hf_a100_launch/v682_cpu_row_drift_audit/v610_row_drift.csv`,
+  `artifacts/v681_hf_a100_launch/v682_v681_v614_anti_runaway_gate.json`,
+  `artifacts/v681_hf_a100_launch/downloaded_weak_eval_v681_final/`;
+  mirror curto dos CSVs em `C:/kg1_v681_eval/`.
+- Artefatos V682:
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/launch_v682_hf_a100_nothink_diagnostic.py`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682-a100-nothink-v681ckpt15-diag-20260520T040116Z_launch_manifest.json`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682-a100-nothink-v681ckpt15-diag-20260520T040116Z_remote_command.sh`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/downloaded_eval/`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/short_eval/v682_predictions.csv`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_v614_anti_runaway_gate.json`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_v614_longpath_verified.json`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_output_audit/`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_output_audit_longpath_verified/`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_row_drift_audit/`,
+  `artifacts/v682_hf_a100_nothink_diagnostic_launch/v682_final_row_drift_audit_longpath_verified/`.
 
 Status V677, 2026-05-19 23:05 UTC:
 
@@ -1160,6 +1741,10 @@ Promocao do V664:
 - inferencia oficial-like: `max_tokens=7680`, `temperature=0.0`,
   `top_p=1.0`, `max_num_seqs=64`, `gpu_memory_utilization=0.85`,
   `max_model_len=8192`;
+- excecao atual: V706 pode usar `max_tokens=512` somente como diagnostico
+  eval-only com `disable_thinking=true` para validar o fechamento do bloco de
+  raciocinio apos a falha V704. Essa excecao nao altera o contrato oficial, nao
+  autoriza promocao, nao autoriza pacote e nao autoriza submit;
 - resposta final em `\boxed{}`;
 - extractor label-free deve priorizar `\boxed{}` e registrar fallback;
 - metrica principal e ACC por geracao completa + `verify_answer`;
@@ -1176,11 +1761,9 @@ Promocao do V664:
 - especificacao HF observada:
   - `a100-large`: 1x A100, 80 GB VRAM, 142 GB RAM, `0.041667 USD/min`;
   - `h200`: 1x H200, 141 GB VRAM, 256 GB RAM, `0.083333 USD/min`;
-- H200 so pode ser usado quando for realmente necessario:
-  - treino/eval Nemotron 30B BF16 com gate `MIN_GPU_TOTAL_GIB > 80`;
-  - vLLM official-like com `max_tokens=7680` que nao passa em A100;
-  - A100 falhou por OOM/preflight de capacidade e o job continua necessario;
-  - o motivo deve aparecer no launcher, manifesto e roadmap;
+- H200 esta bloqueado pela regra operacional atual do usuario. Somente A100
+  pode ser usado para novos jobs; qualquer excecao futura exige pedido humano
+  explicito e um motivo tecnico registrado no launcher, manifesto e roadmap;
 - o job V663 executado permaneceu em H200 porque o launcher aprovado exigia
   `MIN_GPU_TOTAL_GIB=130` e carrega `Nemotron-3-Nano-30B-A3B-BF16` em BF16;
 - proximos launchers devem tentar `a100-large` primeiro quando o gate de
@@ -2062,10 +2645,18 @@ Nao executar como caminho principal:
 - attention visualization antes dos gates de formato/loss/ACC;
 - synthetic/equation externo como gold sem dedupe, weak exclusion,
   byte-equality, origem auditada e gate de contradicao.
+- continuar V681 checkpoint-15 por loss menor;
+- relancar V681 50/50 uniforme com mais steps, LR sweep ou mais dados sem nova
+  hipotese testavel;
+- aumentar LoRA para `r=64/alpha=128`, destravar router, destravar MoE
+  `target_parameters` ou adicionar `lm_head` como resposta ao backfire V681;
+- usar `enable_thinking=False` ou `max_new_tokens` menor como ganho de adapter
+  sem classificar separadamente como efeito de decoding/config;
 
 ## Proxima Acao Executavel
 
-1. Manter congeladas V653/V660/V661/V662/V663/V664 como rotas ativas:
+1. Manter congeladas V653/V660/V661/V662/V663/V664/V680/V681 como rotas
+   ativas:
    - V653 falhou por output policy/backfire;
    - V660 answer-only foi bloqueado por learnability;
    - V661 checkpoint-2 caiu para `191/315`, `bit=135`, `equation=56`,
@@ -2077,31 +2668,134 @@ Nao executar como caminho principal:
      backfire e net `-2` vs baseline.
    - V664 checkpoint-2 ficou em `192/315`, `bit=136`, `equation=56`, com
      protected backfire e geracao longa.
-2. Rodar somente gates locais V666 antes de qualquer novo GPU:
-   - V478 com `--use-row-loss-weight --require-row-loss-weight
-     --require-validation-row-loss-weight`;
-   - V286 com `0` truncation, `0` dropped completion tokens, `0` fallback masks
-     e EOS-stop mask;
-   - `scripts/audit_loss_mask_eos_contract.py` com `final_loss_eos_rate=1.0`;
-   - protected-row smoke para `8740ed31`, `59bee375`, `55d834d1`;
-   - length gate: `avg_completion_tokens<=128`, `max_completion_tokens<=512`;
-   - static/pre-paid gates com findings/warnings `0`;
-   - pre-paid gate deve receber `--v666-cpu-gate-report-json` apontando para
-     relatorio V666 `gpu_allowed`; relatorio `gpu_blocked` bloqueia qualquer
-     gasto de HF.
-   - nao gastar mais analise em parser/extractor para V664: o diagnostico V666
-     provou `0` mismatch de corretude. A proxima hipotese precisa atacar
-     diretamente geracao longa e backfire real do adapter.
-3. Depois de cada treino concluido ou falho:
-   - executar `scripts/kg1_post_train_openrouter_consult.py` com o manifest,
-     resumo de falha, roadmap e resultados atuais;
-   - salvar prompt, raw results, responses e manifest em `artifacts/openrouter`;
+   - V680 caiu para `191/315`, `bit=134`, `equation=57`, com geracao longa e
+     protected backfire.
+   - V681 caiu para `191/315`, `bit=135`, `equation=56`, com `truncated=1`,
+     `no_box_fallback=1`, `boxed_rate=314/315`, avg completion `4775.39` e
+     protected backfire.
+2. Executar V682 CPU-only e fechar diagnostico no-thinking antes de qualquer novo GPU:
+   - feito: parsear `C:/kg1_v681_eval/predictions.csv` e gerar auditoria de
+     comprimento/formato. Resultado: `starts_boxed=0/315`, bit first boxed
+     muito tardio, `early_512_correct=0`; hard cap simples nao e rota de
+     ganho;
+   - feito: rodar drift baseline-relative V610. Resultado: V681 tem net `0`
+     contra baseline, com troca `bit -1` por `equation +1` e protected losses
+     em `8740ed31`/`59bee375`;
+   - feito: rodar V614 anti-runaway promotion gate. Resultado: bloqueado por
+     score, p99 de tokens, truncation, boxed rate, no-box fallback e protected
+     rows;
+   - feito: probe/baseline de decoding sem thinking somente como diagnostico:
+     `disable_thinking=1`, `temperature=0`, `max_tokens=384`, job
+     `6a0d324c2dc5b1243da50b05`. Resultado final `17/315`
+     (`bit=7/160`, `equation=10/155`), `truncated=0`, `boxed_rate=1.0`,
+     avg tokens `11.29`, protected failures em `8740ed31`, `59bee375`,
+     `55d834d1`. Decisao: rota rejeitada; nao usar no-thinking/cap curto como
+     plano de ACC;
+   - rodar overlap/protected-source gate em qualquer dataset V682:
+     weak id/prompt/prompt+answer overlap `0`, protected source `0`,
+     train/val overlap `0`;
+   - construir/auditar dataset curto somente se preservar thinking/raciocinio;
+     V682 provou que targets/decoding curtos sem raciocinio podem ficar
+     format-perfect e mesmo assim destruir ACC. Targets devem ser byte-equal,
+     ter EOS dentro da loss mask, `0` truncation, `0` dropped completion
+     tokens, `0` fallback masks, e passar protected rows em CPU/smoke;
+   - rodar smoke protegido para `8740ed31`, `59bee375`, `55d834d1`; qualquer
+     regressao bloqueia GPU.
+3. Nova frente CPU V683/V684, antes de qualquer treino:
+   - feito: ledger residual V683 dos misses/protected atuais, separando bit,
+     equation, protected rows, ganhos/perdas V681 e colapso V682. Resultado:
+     `38` linhas, `decision=cpu_only_no_gpu`, `12` source-only trainable,
+     `2` source-only guarded, `14` needs-rule-proof, `7` drop, `3`
+     protected guard;
+   - regra obrigatoria: os IDs weak do V683 autorizam somente regra/proxy; nao
+     podem virar exemplo supervisionado direto;
+   - feito: V684 source-only weak-excluded com verificador por row e target
+     trace-preserving (`Final answer: \boxed{...}`), train `640`
+     (`320/320`), validation `160` (`80/80`), effective share `50/50`;
+   - feito: V679 `boxed_suffix`, V286, loss/EOS, V478, V513, V564
+     `protected_mode=absent_required`, static safety e workspace clean
+     passaram sem blocker/warning estrutural;
+   - feito: extractor parity V540 com fixtures `\\{`, `\\}`, braces
+     literais e payloads com backslash. O primeiro audit contra CSVs
+     historicos falhou porque o baseline antigo tinha `prediction/correct`
+     stale em simbolos de equation; a correcao foi canonica, nao label-aware:
+     `scripts/canonicalize_prediction_csv_label_free.py` gerou
+     `canonical_prediction_csvs/v516_baseline_current_extractor.csv` a partir
+     de `raw_output` e preservou as colunas antigas em `original_*`.
+     Resultado canonico: `192/315`, `bit=136/160`, `equation=56/155`,
+     `prediction_changed_from_original=10`, `correct_changed_from_original=1`.
+     O gate V540 canonico passou sem blockers/warnings em
+     `v684_extractor_parity_canonical_baseline/`. Regra nova: todo CSV de eval
+     remoto deve ser canonicalizado ou provar `prediction == extract(raw_output)`
+     antes de comparacao, pacote ou decisao de novo treino;
+   - feito/arquivado: V682 canonico passou paridade de extrator, mas segue
+     bloqueado por protected backfire em `8740ed31` e `59bee375`; nao usar V682
+     como candidato, somente como diagnostico negativo;
+   - feito: dry-run V684 A100 validou upload HF, hashes remoto/local,
+     `a100-large` (`A100 80GB`, `0.041667 USD/min`), gates locais
+     V679/V286/loss-EOS/V478/V513/V540/V564, static safety e objective
+     alignment 50/50. Launcher:
+     `artifacts/v684_hf_a100_launch/launch_v684_hf_a100_trace_source.py`;
+   - primeira tentativa A100
+     `https://huggingface.co/jobs/felipesp1983/6a0d8c378229e585f969c29d`
+     falhou no preflight por bloqueio conservador de CUDA 13 em A100. O
+     driver gate imediatamente anterior ja havia provado `cuda_available=true`,
+     A100 detectada e alocacao CUDA OK;
+   - segunda tentativa A100
+     `https://huggingface.co/jobs/felipesp1983/6a0d8cb6ccb6cd133d158898`
+     falhou cedo porque o launcher ainda nao exportava todo o bloco
+     residual-first V541/V516/stale/protected exigido pelo preflight remoto;
+   - corrigido: launcher V684 agora passa `kg1_static_safety_gate` e
+     `kg1_pre_paid_job_integration_gate` com `findings=[]`, incluindo
+     `v684_cpu_gate_stack.json`, `KG1_V541_*`, `KG1_V516_*`,
+     protected IDs, `KG1_CPU_SIMULATED_TOTAL/BIT/EQUATION=196/136/60`,
+     `KG1_MAX_TOKEN_HEADROOM_RATIO=0.325` e drift gate
+     `deferred_post_checkpoint` limitado a 10 steps;
+   - concluido/cancelado por custo apos checkpoint valido: V684 A100 smoke
+     `https://huggingface.co/jobs/felipesp1983/6a0d8f4bccb6cd133d1588b2`,
+     run id `v684-a100-tracesource-v290ckpt6-20260520T103805Z`.
+     O job passou preinstall/postinstall, CUDA13/A100 driver gate,
+     dependency probe, residual-first V541 e drift-deferred gate, treinou
+     `10/10` steps e publicou `checkpoint-5` e `checkpoint-10`.
+     Loss remoto: baseline `3.3707`, checkpoint-5 `3.3682`, checkpoint-10
+     `3.3674`. O checkpoint-10 contem `adapter_config.json`,
+     `adapter_model.safetensors`, tokenizer e chat template completos. O job
+     foi cancelado manualmente durante eval final repetido, depois do upload,
+     para nao queimar credito. Proibido promover sem weak eval canonicalizado
+     e sem passar protected/backfire/format gates.
+   - feito: V485 PEFT roundtrip local do checkpoint-10 passou:
+     `artifacts/v684_hf_a100_launch/v684_checkpoint10_v485_peft_roundtrip_gate.json`.
+     Contrato observado: `r=32`, `alpha=32`, target_modules
+     `down/in/k/o/out/q/up/v`, target_parameters
+     `mlp.experts.gate_up_proj,mlp.experts.down_proj`,
+     target_parameter_lora_tensors `5934/5934`, e q/k/v/o com tensores LoRA
+     presentes. Isto valida estrutura do adapter, nao ACC.
+   - feito: V685 OpenRouter pos-V684 consult:
+     `artifacts/openrouter/v685_post_v684_loop_consult/KG1_V685_OPENROUTER_PROMPT.md`,
+     `artifacts/openrouter/v685_post_v684_loop_consult/KG1_V685_OPENROUTER_RESPONSES.md`,
+     `artifacts/openrouter/v685_post_v684_loop_consult/KG1_V685_OPENROUTER_GPT_RETRY.md`,
+     `artifacts/openrouter/v685_post_v684_loop_consult/KG1_V685_CONSENSUS.md`.
+     Voto: GPT-5.5/Gemini/Qwen/Claude pedem `run_v684_weak_eval_now`;
+     DeepSeek pediu micro-eval antes, mas tambem em A100. Decisao consolidada:
+     preparar um unico weak eval `official_like` A100 bounded do checkpoint-10,
+     com protected rows/format/canonicalizacao/cost gates e sem promocao por
+     loss.
+4. Parametros permitidos para uma futura tentativa A100, somente apos gates:
+   - hardware: `a100-large`;
+   - LoRA: `q_proj,k_proj,v_proj,o_proj`, MoE frozen-active, `lm_head` fora;
+   - preferir menor blast radius (`r=8/alpha=8` ou `r=16/alpha=32`), rejeitar
+     `r=64`, router treinavel e MoE destravado ate prova local especifica;
+   - checkpoint/probe curto, abortando cedo se `avg_completion_tokens>256`,
+     `max_completion_tokens>512`, `truncated>0`, `boxed_rate<1.0`,
+     `no_box_fallback>0`, ou protected backfire.
+5. Depois de cada treino concluido ou falho:
+   - gerar prompt OpenRouter atualizado com artefatos reais do run;
+   - executar consulta quando `OPENROUTER_API_KEY` estiver disponivel;
+   - salvar prompt, raw results, responses, manifest e consenso em
+     `artifacts/openrouter`;
    - classificar cada sugestao como consenso, hipotese, hardening ou rejeitada
      antes de alterar o roadmap.
-4. Se todos os gates V666 passarem, abrir apenas `a100-large` como primeira
-   tentativa paga; H200 so entra se A100 for tecnicamente impossivel e o gate de
-   custo/preflight registrar essa necessidade.
-5. Promover somente se:
+6. Promover somente se:
    - total `>=196/315`;
    - bit `>=136/160`;
    - equation `>=60/155`;
@@ -2110,6 +2804,68 @@ Nao executar como caminho principal:
    - boxed rate `1.0`;
    - protected backfire `0`;
    - `label-aware - label-free == 0`.
+
+## V697 Post Runtime Assert Consensus
+
+- New local decision artifact:
+  `artifacts/openrouter/v697_post_runtime_assert_review/KG1_V697_CONSENSUS_AND_LOCAL_DECISION.md`
+- Qwen: proceed with one V689 5-step `a100-large` probe after launcher debug.
+- DeepSeek: block due to bit-regression and loss-ACC risks.
+- Local decision:
+  - accept the bit-regression warning;
+  - keep the checkpoint-5 weak-eval launcher as mandatory safety
+    infrastructure;
+  - reject CPU-only 30B gradient surgery and MoE target-parameter unfreeze for
+    this run;
+  - do not change LR or answer-span weights without a new CPU gate/review;
+  - proceed only to launcher debug, then one 5-step A100 probe if clean.
+- Promotion remains impossible without checkpoint-5 weak eval passing
+  `total>=196`, `bit_manipulation>=136`, `equation_transform>=60`,
+  `truncated=0`, `boxed_rate=1.0`, `no_box_fallback=0`,
+  `avg_completion_tokens<=512`, `label_aware_delta=0`, and zero protected-row
+  backfire.
+
+## V689 A100 Probe Launch
+
+- Job:
+  `https://huggingface.co/jobs/felipesp1983/6a0ddc5accb6cd133d158a63`
+- Run id:
+  `v689-a100-ruletext-micro-v290ckpt6-20260520T160645Z`
+- Manifest:
+  `artifacts/v689_hf_a100_launch/v689-a100-ruletext-micro-v290ckpt6-20260520T160645Z_launch_manifest.json`
+- Launch was allowed only after:
+  - static safety gate passed with `findings=[]`;
+  - pre-paid integration gate passed with `findings=[]`;
+  - A100-large live cost was `0.041667 USD/min`;
+  - active paid KG1 jobs were `[]`;
+  - debug fixed two launcher issues before spend: remote f-string braces and
+    missing explicit `KG1_DATA_REPO`/`KG1_DATA_ROOT` env propagation.
+- This is a 5-step probe only. No package, promotion, weak eval promotion, or
+  Kaggle submit is authorized until checkpoint-5 weak eval passes all gates.
+
+## V700 Remote Preflight Correction And Relaunch
+
+- Consensus artifact:
+  `artifacts/openrouter/v700_v689_remote_preflight_failure_review/KG1_V700_CONSENSUS_AND_LOCAL_DECISION.md`
+- The first V689 A100 train launch failed before training in remote preinstall
+  because the remote gate did not accept the local alias
+  `checkpoint5_eval_required`.
+- Correction kept the reviewed experiment frozen and restored the pinned remote
+  contract:
+  `KG1_DECODING_VS_ADAPTER_DRIFT_GATE_STATUS=deferred_post_checkpoint` plus
+  `KG1_ALLOW_DECODING_DRIFT_DEFERRED_FOR_FIRST_CHECKPOINT=1`.
+- Remote preflight-only proof:
+  `https://huggingface.co/jobs/felipesp1983/6a0ddf858229e585f969c728`,
+  run id `v689-a100-ruletext-micro-v290ckpt6-20260520T162015Z`,
+  status `COMPLETED`, marker `remote_preflight_only_ok`.
+- Corrected full V689 train probe:
+  `https://huggingface.co/jobs/felipesp1983/6a0de01b8229e585f969c732`,
+  run id `v689-a100-ruletext-micro-v290ckpt6-20260520T162245Z`,
+  manifest
+  `artifacts/v689_hf_a100_launch/v689-a100-ruletext-micro-v290ckpt6-20260520T162245Z_launch_manifest.json`.
+- No H200, no submit, no package, no promotion by loss. After completion,
+  checkpoint-5 weak eval is mandatory and must pass all ACC/format/protected
+  gates before any promotion decision.
 
 ## Criterio De Submit
 

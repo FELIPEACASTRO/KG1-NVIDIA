@@ -1,0 +1,10 @@
+{
+  "file_count": 2,
+  "files": [
+    "artifacts/v680_hf_a100_launch/launch_v680_hf_a100_weak_eval.py",
+    "artifacts/v714_hf_a100_v712_checkpoint10_weak_eval/launch_v714_hf_a100_v712_checkpoint10_weak_eval.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

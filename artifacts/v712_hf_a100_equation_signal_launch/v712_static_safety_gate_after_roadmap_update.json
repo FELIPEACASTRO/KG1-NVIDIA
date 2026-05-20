@@ -1,0 +1,11 @@
+{
+  "file_count": 3,
+  "files": [
+    "artifacts/v712_hf_a100_equation_signal_launch/launch_v712_hf_a100_equation_signal.py",
+    "scripts/kg1_pre_paid_job_integration_gate.py",
+    "scripts/kg1_static_safety_gate.py"
+  ],
+  "findings": [],
+  "ok": true,
+  "schema_version": "kg1_static_safety_gate_v1"
+}

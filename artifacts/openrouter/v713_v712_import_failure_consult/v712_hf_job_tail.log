@@ -1,0 +1,180 @@
++ KG1_CANDIDATE_NAMES=v712_checkpoint_20
++ export KG1_CANDIDATE_NAME=v712_checkpoint_20
++ KG1_CANDIDATE_NAME=v712_checkpoint_20
++ export KG1_OUTPUT_DIR=/tmp/kg1_v712_weak_eval
++ KG1_OUTPUT_DIR=/tmp/kg1_v712_weak_eval
++ export KG1_OUTPUT_PATH_IN_REPO=evals/v712-a100-equation-signal-v290ckpt6-20260520T222638Z
++ KG1_OUTPUT_PATH_IN_REPO=evals/v712-a100-equation-signal-v290ckpt6-20260520T222638Z
++ export KG1_LABEL_PREFIX=v712_hf_weak
++ KG1_LABEL_PREFIX=v712_hf_weak
++ export KG1_UPLOAD_TO_HF=1
++ KG1_UPLOAD_TO_HF=1
++ export KG1_ENFORCE_WEAK_PROMOTION_GATE=1
++ KG1_ENFORCE_WEAK_PROMOTION_GATE=1
++ export KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=0
++ KG1_WEAK_EVAL_DIAGNOSTIC_ONLY=0
++ export KG1_EXPECTED_LORA_R=32
++ KG1_EXPECTED_LORA_R=32
++ export KG1_EXPECTED_LORA_ALPHA=32
++ KG1_EXPECTED_LORA_ALPHA=32
++ export KG1_EXPECTED_ADAPTER_BASE_MODEL_NAME_OR_PATH=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
++ KG1_EXPECTED_ADAPTER_BASE_MODEL_NAME_OR_PATH=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16
++ export KG1_VLLM_GPU_MEMORY_UTILIZATION=0.86
++ KG1_VLLM_GPU_MEMORY_UTILIZATION=0.86
++ export KG1_ALLOW_VLLM_DEEP_GEMM=0
++ KG1_ALLOW_VLLM_DEEP_GEMM=0
++ export VLLM_USE_DEEP_GEMM=0
++ VLLM_USE_DEEP_GEMM=0
++ export VLLM_MOE_USE_DEEP_GEMM=0
++ VLLM_MOE_USE_DEEP_GEMM=0
++ export VLLM_USE_DEEP_GEMM_E8M0=0
++ VLLM_USE_DEEP_GEMM_E8M0=0
++ export VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES=0
++ VLLM_USE_DEEP_GEMM_TMA_ALIGNED_SCALES=0
++ export VLLM_DEEP_GEMM_WARMUP=skip
++ VLLM_DEEP_GEMM_WARMUP=skip
++ export VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0
++ VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0
++ /opt/venv/bin/python scripts/hf_job_weak_eval_v245.py
+=== V245 HF WEAK EVAL JOB START ===
+generated_at_utc = 2026-05-20T23:02:49.880012+00:00
+torch_gpu_status = {
+  "cuda": "13.0",
+  "cuda_available": true,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "gpu_total_gib": 79.250732421875,
+  "torch": "2.9.0a0+50eac811a6.nv25.09"
+}
+repo_commit = 67a27bcb2ed6a4e9856adb61ece63516a0b29637
+expected_repo_commit = 67a27bcb2ed6a4e9856adb61ece63516a0b29637
+import_ok = vllm
+data_repo = felipesp1983/kg1-nemotron-training
+weak_csv_file = runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv
+weak_manifest_file = runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v245_weak_eval_bridge_manifest.json
+adapter_repo = felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal
+adapter_specs = [
+  {
+    "name": "v712_checkpoint_20",
+    "repo": "felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal",
+    "subfolder": "checkpoint-20"
+  }
+]
+output_repo = felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal
+run_id = v712-a100-equation-signal-v290ckpt6-20260520T222638Z
+output_dir = /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z
+weak_csv_gate = {
+  "family_counts": {
+    "bit_manipulation": 160,
+    "equation_transform": 155
+  },
+  "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+  "path": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "rows": 315,
+  "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+}
+weak_manifest_gate = {
+  "canonical_weak_csv": {
+    "bytes": 118669,
+    "family_counts": {
+      "bit_manipulation": 160,
+      "equation_transform": 155
+    },
+    "observed_shared_row_contract_sha256": "bf055e3b9ebce79d4bfc9e48bce5a305b1d83da882f14afddec80d6afaba5fff",
+    "rows": 315,
+    "sha256": "85da758e14d57ea40270de5747f98726a0ad0b6d1795bff7dd46183005e0f9b6"
+  },
+  "path_in_repo": "runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z",
+  "schema_version": "kg1_v245_weak_eval_bridge_manifest_v1"
+}
+eval_id_subset_gate = {
+  "enabled": false,
+  "eval_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv",
+  "schema_version": "kg1_v245_eval_id_subset_v1",
+  "source_weak_csv": "/root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv"
+}
+snapshot_adapter_repo = felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal
+snapshot_allow_patterns = ["checkpoint-20/*"]
+adapter_gates = {
+  "adapters": [
+    {
+      "adapter_config": "/tmp/kg1_v245_adapter_snapshots/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/02f8793bdef8/checkpoint-20/adapter_config.json",
+      "adapter_dir": "/tmp/kg1_v245_adapter_snapshots/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/02f8793bdef8/checkpoint-20",
+      "adapter_weights": "/tmp/kg1_v245_adapter_snapshots/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/02f8793bdef8/checkpoint-20/adapter_model.safetensors",
+      "adapter_weights_bytes": 3537299144,
+      "base_model_name_or_path": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "candidate_name": "v712_checkpoint_20",
+      "lora_alpha": 32,
+      "modules_to_save": [],
+      "r": 32,
+      "repo": "felipesp1983/kg1-nemotron-lora-v712-a100-equation-signal",
+      "subfolder": "checkpoint-20",
+      "target_modules": [
+        "down_proj",
+        "out_proj",
+        "o_proj",
+        "in_proj",
+        "up_proj",
+        "v_proj",
+        "k_proj",
+        "q_proj"
+      ],
+      "target_parameters": [
+        "mlp.experts.gate_up_proj",
+        "mlp.experts.down_proj"
+      ]
+    }
+  ],
+  "count": 1
+}
+weak_runtime_policy_gate = {
+  "blockers": [],
+  "disable_thinking": false,
+  "enforced": true,
+  "eval_timeout_s": 4200,
+  "generation_timeout_s": 900,
+  "max_tokens": 7680,
+  "passed": true,
+  "promote_max_completion_tokens": 7680,
+  "require_disable_thinking": false,
+  "schema_version": "kg1_v245_weak_runtime_policy_gate_v1"
+}
+eval_prompt_controls = {
+  "disable_thinking": false,
+  "no_prompt_suffix": false,
+  "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`"
+}
+eval_runtime_controls = {
+  "eval_limit": 0,
+  "generation_timeout_s": 900,
+  "gpu_memory_utilization": 0.86,
+  "llm_init_timeout_s": 0,
+  "vllm_enable_chunked_prefill": "",
+  "vllm_enable_prefix_caching": "",
+  "vllm_enforce_eager": "",
+  "vllm_use_v1": ""
+}
+candidate_by_candidate_eval = true
+--- COMMAND START ---
+cwd = /tmp/kg1
++ /opt/venv/bin/python /tmp/kg1/scripts/evaluate_lora_adapters_batch.py --solution-csv /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv --questions-csv /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv --candidates-json /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/candidate_01_4264e906.json --base-model-path nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 --label-prefix v712_hf_weak --seed 42 --limit 0 --output-dir /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/eval/candidate_01_4264e906 --max-tokens 7680 --max-model-len 8192 --max-num-seqs 64 --gpu-memory-utilization 0.86 --llm-init-timeout-s 0 --generation-timeout-s 900 --warmup-rows 0 --continue-on-error --prompt-suffix 
+Please put your final answer inside `\boxed{}`. For example: `\boxed{your answer}`
+timeout_s = 4200
+log_path = /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/candidate_01_4264e906_weak_eval.log
+Traceback (most recent call last):
+  File "/tmp/kg1/scripts/evaluate_lora_adapters_batch.py", line 28, in <module>
+    from scripts.evaluate_lora_adapter import (  # noqa: E402
+ModuleNotFoundError: No module named 'scripts.evaluate_lora_adapter'
+returncode = 1
+--- COMMAND END ---
+Traceback (most recent call last):
+  File "/tmp/kg1/scripts/hf_job_weak_eval_v245.py", line 1640, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/kg1/scripts/hf_job_weak_eval_v245.py", line 1635, in main
+    run_eval(args)
+  File "/tmp/kg1/scripts/hf_job_weak_eval_v245.py", line 1063, in run_eval
+    run_cmd(
+  File "/tmp/kg1/scripts/hf_job_weak_eval_v245.py", line 814, in run_cmd
+    raise RuntimeError(f"command failed rc={rc}: {printable}")
+RuntimeError: command failed rc=1: /opt/venv/bin/python /tmp/kg1/scripts/evaluate_lora_adapters_batch.py --solution-csv /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv --questions-csv /root/.cache/huggingface/hub/datasets--felipesp1983--kg1-nemotron-training/snapshots/af532d34c147545b67d15994931bda865ac6eb74/runtime_artifacts/v245_weak_eval_bridge/v245-weak-bridge-hfonly-20260510T1950Z/v221_weak_315.csv --candidates-json /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/candidate_01_4264e906.json --base-model-path nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 --label-prefix v712_hf_weak --seed 42 --limit 0 --output-dir /tmp/kg1_v712_weak_eval/v712-a100-equation-signal-v290ckpt6-20260520T222638Z/eval/candidate_01_4264e906 --max-tokens 7680 --max-model-len 8192 --max-num-seqs 64 --gpu-memory-utilization 0.86 --llm-init-timeout-s 0 --generation-timeout-s 900 --warmup-rows 0 --continue-on-error --prompt-suffix 
+Please put your final answer inside `\boxed{}`. For example: `\boxed{your answer}`
