@@ -150,10 +150,11 @@ def require_regex(text: str, pattern: str, code: str, findings: list[Finding]) -
 
 def parse_launcher_env_value(text: str, name: str) -> str:
     """Best-effort parser for launcher constants/env literals used by KG1 launchers."""
+    bare_name = rf"(?<![A-Za-z0-9_]){re.escape(name)}"
     patterns = [
-        rf"{re.escape(name)}\s*=\s*[\"']([^\"']+)[\"']",
+        rf"{bare_name}\s*=\s*[\"']([^\"']+)[\"']",
         rf"[\"']{re.escape(name)}[\"']\s*:\s*[\"']([^\"']+)[\"']",
-        rf"{re.escape(name)}\s*=\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\b",
+        rf"{bare_name}\s*=\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\b",
         rf"[\"']{re.escape(name)}[\"']\s*:\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\b",
         rf"export\s+{re.escape(name)}=([^\s\"']+)",
         rf"export\s+{re.escape(name)}=[\"']([^\"']+)[\"']",
@@ -167,6 +168,19 @@ def parse_launcher_env_value(text: str, name: str) -> str:
 
 def parse_csv_set(value: object) -> set[str]:
     return {item.strip() for item in str(value or "").split(",") if item.strip()}
+
+
+def is_truthy_launcher_value(value: str) -> bool:
+    return value.strip().strip("\"'").lower() in {"1", "true", "yes", "on"}
+
+
+def resolve_launcher_env_reference(text: str, value: str) -> str:
+    cleaned = value.strip().strip("\"'")
+    if cleaned.startswith("${") and cleaned.endswith("}"):
+        return parse_launcher_env_value(text, cleaned[2:-1]) or value
+    if cleaned.startswith("$") and len(cleaned) > 1:
+        return parse_launcher_env_value(text, cleaned[1:]) or value
+    return value
 
 
 def parse_launcher_env_float(text: str, name: str) -> float | None:
@@ -488,11 +502,20 @@ def audit_v666_cpu_gate_report(path: Path | None, findings: list[Finding]) -> di
     checks = payload.get("checks", [])
     failed_checks = [check.get("name") for check in checks if not check.get("ok")]
     blockers = payload.get("blockers", [])
+    schema_version = str(payload.get("schema_version") or "")
+    gpu_allowed = payload.get("gpu_allowed")
+    if gpu_allowed is None:
+        gpu_allowed = payload.get("hf_gpu_allowed")
+    payload_ok = payload.get("ok")
+    if payload_ok is None:
+        payload_ok = payload.get("decision") in {"gpu_allowed", "pass"}
+    ok_decision = payload.get("decision") in {"gpu_allowed", "pass"}
     ok = (
-        payload.get("schema_version") == "kg1_v666_cpu_gate_stack_v1"
-        and payload.get("ok") is True
-        and payload.get("gpu_allowed") is True
-        and payload.get("decision") == "gpu_allowed"
+        schema_version.startswith("kg1_v")
+        and schema_version.endswith("_cpu_gate_stack_v1")
+        and payload_ok is True
+        and gpu_allowed is True
+        and ok_decision
         and not blockers
         and not failed_checks
     )
@@ -504,8 +527,11 @@ def audit_v666_cpu_gate_report(path: Path | None, findings: list[Finding]) -> di
                 json.dumps(
                     {
                         "schema_version": payload.get("schema_version"),
-                        "ok": payload.get("ok"),
-                        "gpu_allowed": payload.get("gpu_allowed"),
+                        "ok": payload_ok,
+                        "gpu_allowed": gpu_allowed,
+                        "legacy_ok": payload.get("ok"),
+                        "legacy_gpu_allowed": payload.get("gpu_allowed"),
+                        "hf_gpu_allowed": payload.get("hf_gpu_allowed"),
                         "decision": payload.get("decision"),
                         "blockers": blockers,
                         "failed_checks": failed_checks,
@@ -517,8 +543,8 @@ def audit_v666_cpu_gate_report(path: Path | None, findings: list[Finding]) -> di
     return {
         "path": str(path),
         "schema_version": payload.get("schema_version"),
-        "ok": bool(payload.get("ok", False)),
-        "gpu_allowed": bool(payload.get("gpu_allowed", False)),
+        "ok": bool(payload_ok),
+        "gpu_allowed": bool(gpu_allowed),
         "decision": payload.get("decision"),
         "blockers": blockers,
         "failed_checks": failed_checks,
@@ -708,6 +734,33 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
                 f"observed forbidden modules: {', '.join(forbidden_adapter_only_targets)}",
             )
         )
+    target_parameters_literal = (
+        parse_launcher_env_value(text, "INIT_ADAPTER_TARGET_PARAMETERS")
+        or parse_launcher_env_value(text, "LORA_TARGET_PARAMETERS")
+        or parse_launcher_env_value(text, "KG1_LORA_TARGET_PARAMETERS")
+    )
+    target_parameters_literal = resolve_launcher_env_reference(text, target_parameters_literal)
+    has_lora_target_parameters = bool(
+        target_parameters_literal
+        and target_parameters_literal.strip().lower() not in {"none", "null", "disabled"}
+    )
+    require_target_parameters_trainable = is_truthy_launcher_value(
+        parse_launcher_env_value(text, "REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE")
+        or parse_launcher_env_value(text, "KG1_REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE")
+    )
+    freeze_target_parameters = is_truthy_launcher_value(
+        parse_launcher_env_value(text, "FREEZE_LORA_TARGET_PARAMETERS")
+        or parse_launcher_env_value(text, "KG1_FREEZE_LORA_TARGET_PARAMETERS")
+    )
+    if has_lora_target_parameters and not require_target_parameters_trainable and not freeze_target_parameters:
+        findings.append(
+            Finding(
+                "error",
+                "launcher_lora_target_parameters_not_frozen",
+                "launcher declares LORA_TARGET_PARAMETERS while REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE=0; "
+                "set FREEZE_LORA_TARGET_PARAMETERS=1 so MoE target_parameters remain active but non-trainable.",
+            )
+        )
     observed_max_steps = parse_launcher_env_float(text, "MAX_STEPS")
     max_steps_limit = args.expected_max_steps
     if observed_max_steps is None:
@@ -842,6 +895,12 @@ def audit_launcher(args: argparse.Namespace, findings: list[Finding]) -> dict[st
             "--use-row-loss-weight": text.count("--use-row-loss-weight"),
             "--require-row-loss-weight": text.count("--require-row-loss-weight"),
             "--require-validation-row-loss-weight": text.count("--require-validation-row-loss-weight"),
+        },
+        "lora_target_parameters_contract": {
+            "target_parameters_literal": target_parameters_literal,
+            "has_lora_target_parameters": has_lora_target_parameters,
+            "require_lora_target_parameters_trainable": require_target_parameters_trainable,
+            "freeze_lora_target_parameters": freeze_target_parameters,
         },
         "declared_dataset_schema": declared_schema,
         "residual_first_gpu_gate": residual_first_report,
@@ -1532,6 +1591,9 @@ PREF_VAL_ROWS = 2
 OUTPUT_REPO = "felipesp1983/kg1-self-test-output"
 INIT_ADAPTER_REPO = "felipesp1983/kg1-self-test-init"
 INIT_ADAPTER_SUBFOLDER = "checkpoint-6"
+INIT_ADAPTER_TARGET_PARAMETERS = "mlp.experts.gate_up_proj,mlp.experts.down_proj"
+REQUIRE_LORA_TARGET_PARAMETERS_TRAINABLE = "0"
+FREEZE_LORA_TARGET_PARAMETERS = "1"
 SAVE_EVERY_STEPS = 2
 EVAL_EVERY_STEPS = 2
 MAX_STEPS = 4
@@ -1687,6 +1749,12 @@ def self_test() -> None:
         ok_report = run_gate(parse_args(common_args), emit=False)
         if ok_report["ok"] is not True:
             raise RuntimeError("self-test expected clean launcher/dataset to pass: " + json.dumps(ok_report["findings"]))
+        target_contract = ok_report["launcher"].get("lora_target_parameters_contract", {})
+        if target_contract.get("target_parameters_literal") != "mlp.experts.gate_up_proj,mlp.experts.down_proj":
+            raise RuntimeError(
+                "self-test expected exact LORA target_parameters literal, got "
+                + json.dumps(target_contract, sort_keys=True)
+            )
 
         quarantine_findings: list[Finding] = []
         block_quarantined_identity(
@@ -1713,6 +1781,22 @@ def self_test() -> None:
         bad_codes = {item["code"] for item in bad_protected_report["findings"]}
         if "residual_first_missing_protected_row_guard" not in bad_codes:
             raise RuntimeError("self-test expected missing second protected row to fail")
+
+        unfrozen_target_launcher = root / "launcher_unfrozen_target_parameters.py"
+        unfrozen_target_launcher.write_text(
+            _self_test_launcher_text(train_sha, val_sha).replace(
+                'FREEZE_LORA_TARGET_PARAMETERS = "1"',
+                'FREEZE_LORA_TARGET_PARAMETERS = "0"',
+            ),
+            encoding="utf-8",
+            newline="\n",
+        )
+        unfrozen_target_args = common_args.copy()
+        unfrozen_target_args[unfrozen_target_args.index(str(launcher))] = str(unfrozen_target_launcher)
+        unfrozen_target_report = run_gate(parse_args(unfrozen_target_args), emit=False)
+        unfrozen_target_codes = {item["code"] for item in unfrozen_target_report["findings"]}
+        if "launcher_lora_target_parameters_not_frozen" not in unfrozen_target_codes:
+            raise RuntimeError("self-test expected unfrozen non-trainable target_parameters to fail")
 
         drift_launcher = root / "launcher_bad_drift.py"
         drift_launcher.write_text(
