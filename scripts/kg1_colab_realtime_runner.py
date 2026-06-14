@@ -385,10 +385,26 @@ def main() -> int:
                 proc.kill()
 
     def watchdog_loop(proc: subprocess.Popen[str]) -> None:
+        last_hb = time.monotonic()
+        hb_every = 45.0
         while not stop_event.wait(5.0):
             if proc.poll() is not None:
                 return
             now = time.monotonic()
+            # HEARTBEAT visivel: pulso a cada ~45s mesmo em fase silenciosa (load do 30B).
+            # last_output_age_s mostra travamento CRESCENDO antes do watchdog matar por stall.
+            if now - last_hb >= hb_every:
+                last_hb = now
+                age = now - float(watchdog_state["last_output_at"])
+                elapsed = now - float(watchdog_state["started_at"])
+                hb = (f"KG1_WRAPPER_HEARTBEAT elapsed_s={elapsed:.0f} last_output_age_s={age:.0f} "
+                      f"stall_limit_s={args.watchdog_stale_seconds:.0f} child_alive=true")
+                try:
+                    with open(args.log_path, "a", encoding="utf-8") as _hbf:
+                        _hbf.write(hb + "\n")
+                except Exception:
+                    pass
+                print(hb, flush=True)
             if args.watchdog_max_runtime_seconds > 0:
                 runtime = now - float(watchdog_state["started_at"])
                 if runtime > args.watchdog_max_runtime_seconds:
