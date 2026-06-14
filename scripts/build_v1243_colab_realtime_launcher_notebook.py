@@ -58,6 +58,7 @@ import shutil
 import subprocess
 import sys
 import time
+import traceback
 import urllib.request
 import zipfile
 
@@ -78,6 +79,8 @@ repo_commit = os.environ.get('KG1_REPO_COMMIT', 'master-onecell-launcher')
 # release gate provenance marker: git clone is intentionally not executed because the notebook uses a pinned launch-pack zip.
 PHASE = os.environ.get('KG1_V1243_PHASE', 'bit_specialist')
 WRAPPER_RUN_ID = 'v1243_' + PHASE + '_wrapper_' + time.strftime('%Y%m%d_%H%M%S')
+WRAPPER_EVENTS_LOG = LOG_ROOT / (WRAPPER_RUN_ID + '_events.log')
+WRAPPER_STATUS_PATH = LOG_ROOT / (WRAPPER_RUN_ID + '_status.json')
 TARGET_ACCURACY = os.environ.get('KG1_TARGET_ACCURACY', '0.89')
 RUN_MODEL_DRYRUN = os.environ.get('KG1_V1243_RUN_MODEL_DRYRUN', '0')
 RUN_TRAIN = os.environ.get('KG1_V1243_RUN_TRAIN', '0')
@@ -222,6 +225,37 @@ def upload_wrapper_artifact(local_path, label):
         print('WRAPPER_ARTIFACT_UPLOADED', json.dumps({{'label': label, 'hf_path': remote_path}}, sort_keys=True), flush=True)
     except Exception as exc:
         print('WRAPPER_ARTIFACT_UPLOAD_WARNING', json.dumps({{'label': label, 'error': type(exc).__name__ + ': ' + str(exc)}}, sort_keys=True), flush=True)
+
+def wrapper_event(stage, status, **details):
+    payload = {{
+        'run_id': WRAPPER_RUN_ID,
+        'stage': stage,
+        'status': status,
+        'time_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'details': details,
+    }}
+    line = 'WRAPPER_EVENT ' + json.dumps(payload, sort_keys=True)
+    print(line, flush=True)
+    try:
+        with WRAPPER_EVENTS_LOG.open('a', encoding='utf-8', buffering=1) as handle:
+            handle.write(line + '\\n')
+        WRAPPER_STATUS_PATH.write_text(json.dumps(payload, indent=2, sort_keys=True) + '\\n', encoding='utf-8')
+    except Exception as exc:
+        print('WRAPPER_EVENT_WRITE_WARNING', json.dumps({{'error': type(exc).__name__ + ': ' + str(exc)}}, sort_keys=True), flush=True)
+    upload_wrapper_artifact(WRAPPER_EVENTS_LOG, 'wrapper_events')
+    upload_wrapper_artifact(WRAPPER_STATUS_PATH, 'wrapper_status')
+
+def wrapper_excepthook(exc_type, exc, tb):
+    wrapper_event(
+        'WRAPPER_EXCEPTION',
+        'FAIL',
+        error_type=exc_type.__name__,
+        error=str(exc),
+        traceback_tail=''.join(traceback.format_exception(exc_type, exc, tb))[-4000:],
+    )
+    sys.__excepthook__(exc_type, exc, tb)
+
+sys.excepthook = wrapper_excepthook
 
 def runtime_probe():
     try:
@@ -499,6 +533,18 @@ print('init_adapter_revision_ready =', bool(INIT_ADAPTER_REVISION_VALUE), flush=
 print('mamba_ssm_pip_spec =', MAMBA_SSM_PIP_SPEC, flush=True)
 print('install_causal_conv1d =', INSTALL_CAUSAL_CONV1D, flush=True)
 print('allow_kaggle_submit =', ALLOW_KAGGLE_SUBMIT, flush=True)
+wrapper_event(
+    'WRAPPER_CONFIG',
+    'START',
+    colab_url=COLAB_URL,
+    phase=PHASE,
+    target_accuracy=TARGET_ACCURACY,
+    run_model_dryrun=RUN_MODEL_DRYRUN,
+    run_train=RUN_TRAIN,
+    accept_gpu_spend=ACCEPT_GPU_SPEND,
+    min_gpu_total_gib=MIN_GPU_TOTAL_GIB,
+    require_live_log_upload=REQUIRE_LIVE_LOG_UPLOAD,
+)
 cuda_available, gpu_total_gib, content_free_gib = runtime_probe()
 needs_gpu = RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1'
 if REQUIRE_LIVE_LOG_UPLOAD == '1' and not os.environ.get('HF_TOKEN'):
@@ -529,6 +575,15 @@ with zipfile.ZipFile(PACK_ZIP) as archive:
 print('pack_root =', ROOT, flush=True)
 print('pack_manifest_exists =', (ROOT / 'kg1_v1243_colab_launch_pack_manifest.json').exists(), flush=True)
 refresh_adapter_defaults_from_pack()
+wrapper_event(
+    'PACK_DOWNLOAD',
+    'OK',
+    pack_sha256=observed_pack_sha,
+    zip_members=len(members),
+    pack_root=str(ROOT),
+    init_adapter_repo_ready=bool(INIT_ADAPTER_REPO_VALUE),
+    init_adapter_revision_ready=bool(INIT_ADAPTER_REVISION_VALUE),
+)
 print('=== V1243 AUTO PACK DOWNLOAD END ===', flush=True)
 
 print('=== V1243 DEPENDENCIES START ===', flush=True)
@@ -548,6 +603,7 @@ run_cmd(
     log_path=LOG_ROOT / 'requirements_install.log',
 )
 dependency_versions()
+wrapper_event('DEPENDENCIES', 'OK', requirements_log=str(LOG_ROOT / 'requirements_install.log'))
 print('=== V1243 DEPENDENCIES END ===', flush=True)
 
 print('=== V1243 TOKENIZE DRYRUN START ===', flush=True)
@@ -555,6 +611,7 @@ token_run_id = 'v1243_' + PHASE + '_tokenize_' + time.strftime('%Y%m%d_%H%M%S')
 os.environ['RUN_ID'] = token_run_id
 os.environ['KG1_LIVE_LOG_HF_PATH'] = 'colab/' + token_run_id + '/train.log'
 os.environ['KG1_LIVE_STATUS_HF_PATH'] = 'colab/' + token_run_id + '/status.json'
+wrapper_event('TOKENIZE_DRYRUN', 'START', run_id=token_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
 run_cmd(
     [
         sys.executable,
@@ -570,15 +627,34 @@ run_cmd(
     cwd=ROOT,
     log_path=LOG_ROOT / (token_run_id + '_launcher.log'),
 )
+wrapper_event('TOKENIZE_DRYRUN', 'OK', run_id=token_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
 print('tokenize_monitor_command = python scripts\\\\kg1_colab_live_monitor.py --hf-repo ' + os.environ.get('KG1_LIVE_LOG_HF_REPO', '') + ' --hf-path ' + os.environ['KG1_LIVE_LOG_HF_PATH'] + ' --hf-repo-type dataset --interval 30 --target-accuracy ' + TARGET_ACCURACY, flush=True)
 print('=== V1243 TOKENIZE DRYRUN END ===', flush=True)
 
+wrapper_event(
+    'GPU_PREFLIGHT',
+    'START',
+    needs_gpu=needs_gpu,
+    cuda_available=cuda_available,
+    gpu_total_gib=round(gpu_total_gib, 3),
+    min_gpu_total_gib=MIN_GPU_TOTAL_GIB,
+    init_adapter_repo_ready=bool(INIT_ADAPTER_REPO_VALUE),
+    init_adapter_revision_ready=bool(INIT_ADAPTER_REVISION_VALUE),
+)
 validate_gpu_phase_preconditions(cuda_available, gpu_total_gib)
+wrapper_event('GPU_PREFLIGHT', 'OK', needs_gpu=needs_gpu, gpu_total_gib=round(gpu_total_gib, 3))
 
 print('=== V1243 MODEL DRYRUN START ===', flush=True)
 if RUN_MODEL_DRYRUN != '1':
     print('model_dryrun_skipped=True set KG1_V1243_RUN_MODEL_DRYRUN=1 to enable', flush=True)
+    wrapper_event('MODEL_DRYRUN', 'SKIPPED', reason='KG1_V1243_RUN_MODEL_DRYRUN is not 1')
 else:
+    wrapper_event(
+        'MODEL_DRYRUN',
+        'START',
+        init_adapter_repo=INIT_ADAPTER_REPO_VALUE,
+        init_adapter_revision=INIT_ADAPTER_REVISION_VALUE,
+    )
     verify_initial_adapter_reference()
     ensure_gpu_model_dependencies()
     model_run_id = 'v1243_' + PHASE + '_modeldry_' + time.strftime('%Y%m%d_%H%M%S')
@@ -601,12 +677,14 @@ else:
         cwd=ROOT,
         log_path=LOG_ROOT / (model_run_id + '_launcher.log'),
     )
+    wrapper_event('MODEL_DRYRUN', 'OK', run_id=model_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
     print('model_monitor_command = python scripts\\\\kg1_colab_live_monitor.py --hf-repo ' + os.environ.get('KG1_LIVE_LOG_HF_REPO', '') + ' --hf-path ' + os.environ['KG1_LIVE_LOG_HF_PATH'] + ' --hf-repo-type dataset --interval 30 --target-accuracy ' + TARGET_ACCURACY, flush=True)
 print('=== V1243 MODEL DRYRUN END ===', flush=True)
 
 print('=== V1243 REAL TRAIN START ===', flush=True)
 if RUN_TRAIN != '1':
     print('real_train_skipped=True set KG1_V1243_RUN_TRAIN=1 and OUTPUT_REPO only after dry runs pass', flush=True)
+    wrapper_event('REAL_TRAIN', 'SKIPPED', reason='KG1_V1243_RUN_TRAIN is not 1')
 else:
     if not OUTPUT_REPO:
         raise RuntimeError('OUTPUT_REPO is required for real train.')
@@ -632,7 +710,9 @@ else:
         cwd=ROOT,
         log_path=LOG_ROOT / (real_run_id + '_launcher.log'),
     )
+    wrapper_event('REAL_TRAIN', 'OK', run_id=real_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
 print('=== V1243 REAL TRAIN END ===', flush=True)
+wrapper_event('WRAPPER_END', 'OK')
 print('=== V1243 ONECELL REALTIME LAUNCHER END ===', flush=True)
 """
 
