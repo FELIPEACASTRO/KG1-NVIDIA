@@ -348,6 +348,62 @@ def pip_spec_looks_like_direct_wheel(spec):
     value = str(spec or '').strip().lower()
     return '.whl' in value
 
+def mamba_rmsnorm_import_probe():
+    proc = subprocess.run(
+        [
+            sys.executable,
+            '-c',
+            'from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn; print("mamba_ssm rmsnorm OK")',
+        ],
+        cwd=str(ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+    return proc.returncode == 0, (proc.stdout or '')[-1600:]
+
+def mamba_runtime_compatibility_report():
+    report = {{
+        'python_tag': 'cp' + str(sys.version_info.major) + str(sys.version_info.minor),
+        'mamba_ssm_pip_spec': MAMBA_SSM_PIP_SPEC,
+        'direct_wheel_spec': pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC),
+    }}
+    try:
+        import torch
+        torch_version = str(getattr(torch, '__version__', 'unknown'))
+        cuda_version = str(getattr(torch.version, 'cuda', '') or '')
+        report['torch_version'] = torch_version
+        report['torch_major_minor'] = '.'.join(torch_version.split('+')[0].split('.')[:2])
+        report['torch_cuda'] = cuda_version
+        report['cuda_major_tag'] = 'cu' + cuda_version.split('.')[0] if cuda_version else ''
+    except Exception as exc:
+        report['torch_probe_error'] = type(exc).__name__ + ': ' + str(exc)
+    print('mamba_runtime_compatibility =', json.dumps(report, sort_keys=True), flush=True)
+    return report
+
+def validate_direct_mamba_wheel_compatibility():
+    if not pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC):
+        return
+    report = mamba_runtime_compatibility_report()
+    spec_name = str(MAMBA_SSM_PIP_SPEC).split('?')[0].split('#')[0].replace('\\\\', '/').rsplit('/', 1)[-1].lower()
+    errors = []
+    py_tag = str(report.get('python_tag') or '')
+    torch_tag = 'torch' + str(report.get('torch_major_minor') or '')
+    cuda_major_tag = str(report.get('cuda_major_tag') or '')
+    if py_tag and py_tag not in spec_name:
+        errors.append('wheel python tag mismatch: expected ' + py_tag + ' in ' + spec_name)
+    if 'torch' in spec_name and torch_tag not in spec_name:
+        errors.append('wheel torch tag mismatch: expected ' + torch_tag + ' in ' + spec_name)
+    if '+cu' in spec_name and cuda_major_tag and cuda_major_tag not in spec_name:
+        errors.append('wheel cuda major tag mismatch: expected ' + cuda_major_tag + ' in ' + spec_name)
+    print('mamba_direct_wheel_compatibility =', json.dumps({{
+        'wheel_name': spec_name,
+        'errors': errors,
+        'status': 'PASS' if not errors else 'FAIL',
+    }}, sort_keys=True), flush=True)
+    if errors:
+        raise RuntimeError('KG1_MAMBA_SSM_PIP_SPEC points to an incompatible wheel: ' + '; '.join(errors))
+
 def validate_mamba_finops_policy():
     needs_gpu = RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1'
     direct_wheel = pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC)
@@ -358,6 +414,9 @@ def validate_mamba_finops_policy():
             'KG1_V1243_MAMBA_SOURCE_BUILD_POLICY must be warn, block_for_train, or block_for_gpu; got '
             + repr(policy)
         )
+    installed_ok, installed_tail = mamba_rmsnorm_import_probe()
+    mamba_runtime_compatibility_report()
+    validate_direct_mamba_wheel_compatibility()
     report = {{
         'needs_gpu': needs_gpu,
         'run_model_dryrun': RUN_MODEL_DRYRUN,
@@ -367,8 +426,13 @@ def validate_mamba_finops_policy():
         'source_build_possible': not direct_wheel,
         'policy': policy,
         'allow_source_build_override': allow_source,
+        'mamba_rmsnorm_already_importable': installed_ok,
+        'mamba_import_tail': installed_tail,
     }}
     print('mamba_finops_policy =', json.dumps(report, sort_keys=True), flush=True)
+    if installed_ok:
+        print('mamba_source_build_not_needed=True reason=mamba_ssm rmsnorm import already works in this runtime', flush=True)
+        return
     if not needs_gpu or direct_wheel or allow_source:
         return
     should_block = policy == 'block_for_gpu' or (policy == 'block_for_train' and RUN_TRAIN == '1')
@@ -486,7 +550,15 @@ def ensure_gpu_model_dependencies():
     validate_mamba_finops_policy()
     print('mamba_install_strategy =', 'direct_wheel' if pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC) else 'possible_source_build', flush=True)
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'packaging', 'wheel', 'ninja', 'setuptools'], cwd=ROOT, log_path=LOG_ROOT / 'pip_install_gpu_build_tools.log')
-    run_cmd([sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', MAMBA_SSM_PIP_SPEC], cwd=ROOT, log_path=LOG_ROOT / 'pip_install_mamba_ssm.log')
+    mamba_ok_before_install, mamba_import_tail = mamba_rmsnorm_import_probe()
+    print('mamba_ssm_import_before_install =', json.dumps({{
+        'ok': mamba_ok_before_install,
+        'output_tail': mamba_import_tail,
+    }}, sort_keys=True), flush=True)
+    if mamba_ok_before_install:
+        print('mamba_ssm_install_skipped=True reason=already_importable', flush=True)
+    else:
+        run_cmd([sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', MAMBA_SSM_PIP_SPEC], cwd=ROOT, log_path=LOG_ROOT / 'pip_install_mamba_ssm.log')
     if not verify_import_statement('mamba_ssm.rmsnorm_fn', 'from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn; print(\"mamba_ssm rmsnorm OK\")'):
         raise RuntimeError('mamba_ssm import failed after install; model-load would hit ImportError before training.')
     causal_ok = verify_import_statement('causal_conv1d', 'import causal_conv1d; print(\"causal_conv1d OK\")')
