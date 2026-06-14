@@ -1,0 +1,7 @@
+id,family,source_role,answer,baseline_public_final,baseline_strict_final_boxed,baseline_public_correct,baseline_strict_correct,candidate_public_final,candidate_strict_final_boxed,candidate_public_correct,candidate_strict_correct,improved,regressed,candidate_exact_one_closed_boxed,candidate_no_box,candidate_multi_box,candidate_malformed_boxed,candidate_public_metric_only_false_gain,candidate_strict_metric_only_false_positive,candidate_truncated,candidate_finish_reason,candidate_completion_tokens,candidate_error_tags
+self_bit_a,bit_manipulation,,1010,0000,0000,False,False,1010,NOT_FOUND,True,False,False,False,False,True,False,False,True,False,False,stop,5,no_box;public_metric_only_false_gain;not_exactly_one_closed_boxed
+self_bit_b,bit_manipulation,,1111,1111,1111,True,True,1111,1111,True,True,False,False,True,False,False,False,False,False,False,stop,8,
+self_equation_a,equation_transform,,42,0,0,False,False,42,42,True,True,True,False,True,False,False,False,False,False,False,stop,8,
+self_equation_b,equation_transform,,17,17,17,True,True,17,17,True,True,False,False,True,False,False,False,False,False,False,stop,8,
+self_gravity,gravity_constant,,24.64,24.64,24.64,True,True,24.64,24.64,True,True,False,False,True,False,False,False,False,False,False,stop,8,
+self_unit,unit_conversion,,12,12,12,True,True,12,12,True,True,False,False,True,False,False,False,False,False,False,stop,8,

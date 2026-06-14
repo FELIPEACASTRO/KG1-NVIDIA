@@ -1,0 +1,314 @@
+{
+  "data": {
+    "data_repo": "local-v1243-solver-to-lora-graft",
+    "pretokenized_archive_resolved_path": null,
+    "pretokenized_archive_sha256": null,
+    "pretokenized_archive_zip": "",
+    "pretokenized_exclude_categories": [],
+    "pretokenized_validation_copy_only": false,
+    "pretokenized_validation_examples": 0,
+    "pretokenized_validation_fraction": 0.0,
+    "tokenized_train_records": 724,
+    "tokenized_validation_records": 170,
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+    "train_file_sha256": "3b801f35c8ebb9aeb9d2894639390652710f4f43578f0185ba70a726064f61d7",
+    "train_records": 724,
+    "validation_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
+    "validation_file_sha256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+    "validation_records": 170
+  },
+  "decision": {
+    "full_training_allowed": false,
+    "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+    "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+    "tokenization_contract_passed": true
+  },
+  "lora": {
+    "alpha": 32,
+    "dropout": 0.0,
+    "init_adapter_dir": "",
+    "init_adapter_repo": "felipesp1983/kg1-recovered-v291-v290-checkpoint6-submit086",
+    "init_adapter_revision": "f4134a6d223249d27be2f1c5d94ed59d118d1ce5",
+    "init_adapter_subfolder": "",
+    "parsed_target_modules": [
+      "down_proj",
+      "in_proj",
+      "k_proj",
+      "lm_head",
+      "o_proj",
+      "out_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj"
+    ],
+    "r": 32,
+    "require_init_adapter": true,
+    "require_init_adapter_revision": true,
+    "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+    "target_parameters": "",
+    "trainable_lora_module_filter": {
+      "checked_after_model_load": false,
+      "enabled": true,
+      "requested": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "o_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ]
+    }
+  },
+  "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+  "run_id": "v1243_bit_tokenize_dryrun_current",
+  "runtime": {
+    "cuda_available": false,
+    "tokenize_only_dry_run": true,
+    "torch": "2.12.0+cpu"
+  },
+  "score_contract_runtime": {
+    "examples": {
+      "train": {
+        "assistant_missing": 0,
+        "assistant_not_exact_one_boxed": 0,
+        "assistant_not_terminal_boxed": 0,
+        "assistant_not_verified": 0,
+        "bad_samples": [],
+        "family_counts": {
+          "bit_manipulation": 540,
+          "gravity_constant": 46,
+          "numeral_system": 46,
+          "text_encryption": 46,
+          "unit_conversion": 46
+        },
+        "gate_rows_marked_used_for_training": 0,
+        "label": "train",
+        "prompt_suffix_duplicate": 0,
+        "prompt_suffix_missing": 0,
+        "prompt_suffix_once": 724,
+        "rows": 724
+      },
+      "validation": {
+        "assistant_missing": 0,
+        "assistant_not_exact_one_boxed": 0,
+        "assistant_not_terminal_boxed": 0,
+        "assistant_not_verified": 0,
+        "bad_samples": [],
+        "family_counts": {
+          "bit_manipulation": 90,
+          "equation_transform": 60,
+          "gravity_constant": 5,
+          "numeral_system": 5,
+          "text_encryption": 5,
+          "unit_conversion": 5
+        },
+        "gate_rows_marked_used_for_training": 0,
+        "label": "validation",
+        "prompt_suffix_duplicate": 0,
+        "prompt_suffix_missing": 0,
+        "prompt_suffix_once": 170,
+        "rows": 170
+      }
+    },
+    "model_loaded": false,
+    "official_score_contract": {
+      "inference_config": {
+        "gpu_memory_utilization": 0.85,
+        "max_lora_rank": 32,
+        "max_model_len": 8192,
+        "max_num_seqs": 64,
+        "max_tokens": 7680,
+        "temperature": 0.0,
+        "top_p": 1.0
+      },
+      "loss_is_not_score": true,
+      "metric": "extract_final_answer(raw_output) -> verify_answer(answer, extracted) -> mean(correct)",
+      "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+      "prompt_suffix": "\nPlease put your final answer inside `\\boxed{}`. For example: `\\boxed{your answer}`",
+      "raw_output_required_for_score_claim": true
+    },
+    "phase": "after_tokenization",
+    "readiness": {
+      "errors": [],
+      "hard_fail_enabled": true,
+      "score_ready_for_training": true,
+      "status": "PASS",
+      "warnings": []
+    },
+    "runtime_config": {
+      "boxed_payload_loss_weight": 5.0,
+      "expected_target_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "lm_head",
+        "o_proj",
+        "out_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "expected_trainable_lora_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "o_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "lora_alpha": 32,
+      "lora_dropout": 0.0,
+      "lora_r": 32,
+      "max_length": 2048,
+      "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
+      "require_boxed_payload_weight": true,
+      "require_offset_mask": true,
+      "score_contract_max_prompt_truncation_rate": 0.0,
+      "target_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "lm_head",
+        "o_proj",
+        "out_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ],
+      "trainable_lora_modules": [
+        "down_proj",
+        "in_proj",
+        "k_proj",
+        "o_proj",
+        "q_proj",
+        "up_proj",
+        "v_proj"
+      ]
+    },
+    "sampling": {
+      "mode": "weighted_replacement",
+      "source_weights": {},
+      "subcategory_weights": {},
+      "weighted_share_by_source": {
+        "v1215_objective_train_anchor": 0.33546,
+        "v1240_cpu_generated_bit_sygus": 0.66454
+      },
+      "weighted_share_by_subcategory": {
+        "v1243_bit_solver_verified": 0.66454,
+        "v1243_protected_replay": 0.33546
+      }
+    },
+    "schema_version": "kg1_score_contract_runtime_v1",
+    "target_math": {
+      "additional_rows_required": 20,
+      "baseline_accuracy": 0.869060190074,
+      "baseline_correct": 823,
+      "full_rows": 947,
+      "score_claim_requires_raw_output_gate": "V1241 full947 with baseline and candidate raw_output CSVs",
+      "target_accuracy": 0.89,
+      "target_correct_required": 843
+    },
+    "tokenization": {
+      "train": {
+        "fallback_mask_rows": 0,
+        "fallback_prefix_mismatch_rows": 0,
+        "label": "train",
+        "loss_weighting": {
+          "active_loss_tokens": 11586,
+          "boxed_payload_loss_weight": 5.0,
+          "boxed_payload_weighted_tokens": 5117,
+          "require_boxed_payload_weight": true,
+          "rows": 724,
+          "rows_with_boxed_payload_weight": 724,
+          "rows_without_boxed_payload_weight": 0,
+          "weighted_loss_token_sum": 32054.0
+        },
+        "max_length": 2048,
+        "offset_mask_rows": 724,
+        "prompt_truncated_rows": 0,
+        "prompt_truncation_rate": 0.0,
+        "rows": 724,
+        "rows_at_max_length": 0,
+        "truncated_to_max_length_rows": 0
+      },
+      "validation": {
+        "fallback_mask_rows": 0,
+        "fallback_prefix_mismatch_rows": 0,
+        "label": "validation",
+        "loss_weighting": {
+          "active_loss_tokens": 2478,
+          "boxed_payload_loss_weight": 5.0,
+          "boxed_payload_weighted_tokens": 952,
+          "require_boxed_payload_weight": true,
+          "rows": 170,
+          "rows_with_boxed_payload_weight": 170,
+          "rows_without_boxed_payload_weight": 0,
+          "weighted_loss_token_sum": 6286.0
+        },
+        "max_length": 2048,
+        "offset_mask_rows": 170,
+        "prompt_truncated_rows": 0,
+        "prompt_truncation_rate": 0.0,
+        "rows": 170,
+        "rows_at_max_length": 0,
+        "truncated_to_max_length_rows": 0
+      }
+    },
+    "trainable_lora_filter": null,
+    "trainable_parameters": null
+  },
+  "trainable_parameters": {
+    "checked_after_model_load": false,
+    "reason": "TOKENIZE_ONLY_DRY_RUN=1 skips the expensive model load."
+  },
+  "training": {
+    "batch_size": 32,
+    "friendly_log_score_hints": true,
+    "friendly_realtime_logs": true,
+    "gradient_accumulation": 32,
+    "max_length": 2048,
+    "max_prompt_truncation_rate": 0.0,
+    "max_trainable_param_ratio": 0.08,
+    "micro_batch_size": 1,
+    "sampling": {
+      "mode": "weighted_replacement",
+      "source_weights": {},
+      "subcategory_weights": {},
+      "weighted_share_by_source": {
+        "v1215_objective_train_anchor": 0.33546,
+        "v1240_cpu_generated_bit_sygus": 0.66454
+      },
+      "weighted_share_by_subcategory": {
+        "v1243_bit_solver_verified": 0.66454,
+        "v1243_protected_replay": 0.33546
+      }
+    },
+    "score_proxy_eval_check": true,
+    "score_proxy_eval_max_examples": 170,
+    "train_loss_weighting": {
+      "active_loss_tokens": 11586,
+      "boxed_payload_loss_weight": 5.0,
+      "boxed_payload_weighted_tokens": 5117,
+      "require_boxed_payload_weight": true,
+      "rows": 724,
+      "rows_with_boxed_payload_weight": 724,
+      "rows_without_boxed_payload_weight": 0,
+      "weighted_loss_token_sum": 32054.0
+    },
+    "validation_loss_weighting": {
+      "active_loss_tokens": 2478,
+      "boxed_payload_loss_weight": 5.0,
+      "boxed_payload_weighted_tokens": 952,
+      "require_boxed_payload_weight": true,
+      "rows": 170,
+      "rows_with_boxed_payload_weight": 170,
+      "rows_without_boxed_payload_weight": 0,
+      "weighted_loss_token_sum": 6286.0
+    }
+  }
+}

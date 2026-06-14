@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "case": "pass_canonical_full947_solution_inventory",
+      "errors": [],
+      "expected_pass": true,
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155,
+        "gravity_constant": 159,
+        "numeral_system": 157,
+        "text_encryption": 157,
+        "unit_conversion": 159
+      },
+      "observed_pass": true,
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv",
+      "rows": 947,
+      "sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935"
+    },
+    {
+      "answer_only_probe_passed": true,
+      "blockers": [],
+      "case": "pass_dirty_natural_clean_answer_only",
+      "decision": "pass_full947_086_answer_only_baseline_ready",
+      "expected_pass": true,
+      "natural_probe_passed": false,
+      "observed_pass": true
+    },
+    {
+      "blockers": [
+        "answer_only:answer_only predictions not found: C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\missing_answer_only.csv"
+      ],
+      "case": "fail_missing_answer_only_artifact",
+      "decision": "fail_full947_086_baseline_readiness",
+      "expected_pass": false,
+      "observed_pass": false
+    }
+  ],
+  "decision": "pass_v1241_full947_baseline_readiness_self_test",
+  "generated_at_utc": "2026-06-13T22:45:41+00:00",
+  "schema_version": "kg1_v1241_full947_baseline_readiness_selftest_v1"
+}

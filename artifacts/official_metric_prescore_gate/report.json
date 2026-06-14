@@ -1,0 +1,56 @@
+{
+  "decision": "pass",
+  "blockers": [],
+  "official_notebook_sha256": "d62302e4318de1dc9cf1103577b42b2d7f6234a9629b5198fdad800cefce24ed",
+  "expected_official_notebook_sha256": "d62302e4318de1dc9cf1103577b42b2d7f6234a9629b5198fdad800cefce24ed",
+  "prescore_script_sha256": "b60eaec8e507094fe4f1ee57104ea95e7a60d712159ecabc2bcaa071d76cae56",
+  "official_extracted_sha256": "6d8167a04bc190bff4927a1dc70e8272777e765b1d08bdc84f1a29d1f65e324b",
+  "function_parity_cases": 22,
+  "function_parity_failures": [],
+  "local_utils_parity_cases": 12,
+  "local_utils_parity_failures": [],
+  "v284_utils_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\src\\competition_utils.py",
+  "v284_utils_parity_cases": 12,
+  "v284_utils_parity_failures": [],
+  "expected_visible_defaults": {
+    "max_lora_rank": 32,
+    "max_tokens": 7680,
+    "top_p": 1.0,
+    "temperature": 0.0,
+    "max_num_seqs": 64,
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192
+  },
+  "prescore_visible_score_defaults": {
+    "max_lora_rank": 32,
+    "max_tokens": 7680,
+    "top_p": 1.0,
+    "temperature": 0.0,
+    "max_num_seqs": 64,
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192
+  },
+  "local_official_inference_config": {
+    "max_lora_rank": 32,
+    "max_tokens": 7680,
+    "top_p": 1.0,
+    "temperature": 0.0,
+    "max_num_seqs": 64,
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192
+  },
+  "v284_official_inference_config": {
+    "max_lora_rank": 32,
+    "max_tokens": 7680,
+    "top_p": 1.0,
+    "temperature": 0.0,
+    "max_num_seqs": 64,
+    "gpu_memory_utilization": 0.85,
+    "max_model_len": 8192
+  },
+  "fixture_score": 1.0,
+  "fixture_decision": "pass",
+  "duplicate_id_blockers": [
+    "duplicate_prediction_ids:1"
+  ]
+}

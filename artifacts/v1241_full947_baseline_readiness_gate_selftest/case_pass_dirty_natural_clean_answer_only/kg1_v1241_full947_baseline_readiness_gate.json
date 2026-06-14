@@ -1,0 +1,623 @@
+{
+  "blockers": [],
+  "decision": "pass_full947_086_answer_only_baseline_ready",
+  "expected_reference": {
+    "bit_public_correct": 135,
+    "equation_public_correct": 56,
+    "protected_public_correct": 632,
+    "public_correct": 823,
+    "rows": 947
+  },
+  "generated_at_utc": "2026-06-13T22:45:41+00:00",
+  "inputs": {
+    "answer_only_baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_answer_only_full947_raw_output.csv",
+    "inspect_only": false,
+    "max_tokens": 7680,
+    "natural_baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+    "profile": "full947_089",
+    "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+    "solution_csv_defaulted": false
+  },
+  "inspections": {
+    "answer_only": {
+      "columns": [
+        "id",
+        "raw_output",
+        "finish_reason",
+        "completion_tokens"
+      ],
+      "errors": [],
+      "exists": true,
+      "finish_reason_counts": {
+        "stop": 947
+      },
+      "id_field": "id",
+      "label": "answer_only",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_answer_only_full947_raw_output.csv",
+      "rows": 947,
+      "sha256": "7f538fdd3383c85890a9070a6289df31f816d8eb30a4c34bf4bb055788d04ffa",
+      "token_field": "completion_tokens",
+      "warnings": []
+    },
+    "natural": {
+      "columns": [
+        "id",
+        "raw_output",
+        "finish_reason",
+        "completion_tokens"
+      ],
+      "errors": [],
+      "exists": true,
+      "finish_reason_counts": {
+        "stop": 947
+      },
+      "id_field": "id",
+      "label": "natural",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+      "rows": 947,
+      "sha256": "b5d4f7d79db6ccf0c346a98c790d1524f8cdfe59a8782290a8c07f62bfd2509d",
+      "token_field": "completion_tokens",
+      "warnings": []
+    },
+    "solution": {
+      "canonical_match": false,
+      "canonical_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv",
+      "canonical_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+      "columns": [
+        "id",
+        "prompt",
+        "answer",
+        "family"
+      ],
+      "errors": [],
+      "exists": true,
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155,
+        "gravity_constant": 140,
+        "logic_grid": 112,
+        "numeral_system": 120,
+        "text_encryption": 120,
+        "unit_conversion": 140
+      },
+      "family_field": "family",
+      "id_field": "id",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+      "protected_rows": 632,
+      "rows": 947,
+      "sha256": "5f9aafe579b1fd215e9a8951dec0c78e17f3994ea41a7f60088e4991e43f532c",
+      "warnings": []
+    }
+  },
+  "kaggle_submit_authorized": false,
+  "not_authorized": [
+    "adapter_package",
+    "kaggle_submit",
+    "score_claim"
+  ],
+  "paid_candidate_train_precondition_satisfied": true,
+  "probe_results": {
+    "answer_only": {
+      "blockers": [],
+      "command": [
+        "C:\\Users\\davis\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py",
+        "--baseline-identity-probe",
+        "--profile",
+        "full947_089",
+        "--solution-csv",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+        "--baseline-predictions",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_answer_only_full947_raw_output.csv",
+        "--max-tokens",
+        "7680",
+        "--output-dir",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\case_pass_dirty_natural_clean_answer_only\\probe_086_answer_only"
+      ],
+      "label": "answer_only",
+      "passed": true,
+      "report": {
+        "baseline": {
+          "by_family": {
+            "bit_manipulation": {
+              "exact_one_closed_boxed": 160,
+              "public_correct": 135,
+              "public_metric_only_false_gain": 0,
+              "rows": 160,
+              "strict_accuracy": 0.84375,
+              "strict_correct": 135,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "equation_transform": {
+              "exact_one_closed_boxed": 155,
+              "public_correct": 56,
+              "public_metric_only_false_gain": 0,
+              "rows": 155,
+              "strict_accuracy": 0.36129032258064514,
+              "strict_correct": 56,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "gravity_constant": {
+              "exact_one_closed_boxed": 140,
+              "public_correct": 140,
+              "public_metric_only_false_gain": 0,
+              "rows": 140,
+              "strict_accuracy": 1.0,
+              "strict_correct": 140,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "logic_grid": {
+              "exact_one_closed_boxed": 112,
+              "public_correct": 112,
+              "public_metric_only_false_gain": 0,
+              "rows": 112,
+              "strict_accuracy": 1.0,
+              "strict_correct": 112,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "numeral_system": {
+              "exact_one_closed_boxed": 120,
+              "public_correct": 120,
+              "public_metric_only_false_gain": 0,
+              "rows": 120,
+              "strict_accuracy": 1.0,
+              "strict_correct": 120,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "text_encryption": {
+              "exact_one_closed_boxed": 120,
+              "public_correct": 120,
+              "public_metric_only_false_gain": 0,
+              "rows": 120,
+              "strict_accuracy": 1.0,
+              "strict_correct": 120,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "unit_conversion": {
+              "exact_one_closed_boxed": 140,
+              "public_correct": 140,
+              "public_metric_only_false_gain": 0,
+              "rows": 140,
+              "strict_accuracy": 1.0,
+              "strict_correct": 140,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            }
+          },
+          "exact_one_closed_boxed": 947,
+          "malformed_boxed": 0,
+          "multi_box": 0,
+          "no_box": 0,
+          "public_correct": 823,
+          "public_metric_only_false_gain": 0,
+          "rows": 947,
+          "strict_correct": 823,
+          "strict_metric_only_false_positive": 0,
+          "truncated": 0
+        },
+        "baseline_identity": {
+          "expected_public_reference": {
+            "bit_manipulation": 135,
+            "equation_transform": 56,
+            "full947": 823,
+            "protected": 632
+          },
+          "observed_public": {
+            "bit_manipulation": 135,
+            "equation_transform": 56,
+            "full947": 823,
+            "protected": 632
+          },
+          "observed_strict": {
+            "bit_manipulation": 135,
+            "equation_transform": 56,
+            "full947": 823,
+            "protected": 632
+          },
+          "public_identity_pass": true,
+          "public_mismatches": {},
+          "rationale": "Full947 promotion protects the known V291 public baseline by comparing strict row deltas. Therefore the baseline CSV must be strict-clean: public identity and strict identity must both match the V291 reference before candidate gains are trusted.",
+          "reference_note": "Reference only. This gate must compare real raw_output CSVs, not reuse this constant as proof.",
+          "reference_source": "validated_project_submission_history",
+          "require_strict_clean_baseline": true,
+          "required": true,
+          "strict_clean_identity_pass": true,
+          "strict_clean_mismatches": {}
+        },
+        "comparison_blockers_ignored_for_probe": [
+          "bit_gain_below_threshold:0<1",
+          "equation_gain_below_threshold:0<1",
+          "total_gain_below_threshold:0<20",
+          "candidate_total_correct_below_threshold:823<843"
+        ],
+        "decision": "pass_baseline_strict_clean_identity_probe",
+        "family_deltas": {
+          "bit_manipulation": {
+            "baseline_public_correct": 135,
+            "baseline_strict_correct": 135,
+            "candidate_public_correct": 135,
+            "candidate_strict_correct": 135,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 160,
+            "strict_correct_delta": 0
+          },
+          "equation_transform": {
+            "baseline_public_correct": 56,
+            "baseline_strict_correct": 56,
+            "candidate_public_correct": 56,
+            "candidate_strict_correct": 56,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 155,
+            "strict_correct_delta": 0
+          },
+          "gravity_constant": {
+            "baseline_public_correct": 140,
+            "baseline_strict_correct": 140,
+            "candidate_public_correct": 140,
+            "candidate_strict_correct": 140,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 140,
+            "strict_correct_delta": 0
+          },
+          "logic_grid": {
+            "baseline_public_correct": 112,
+            "baseline_strict_correct": 112,
+            "candidate_public_correct": 112,
+            "candidate_strict_correct": 112,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 112,
+            "strict_correct_delta": 0
+          },
+          "numeral_system": {
+            "baseline_public_correct": 120,
+            "baseline_strict_correct": 120,
+            "candidate_public_correct": 120,
+            "candidate_strict_correct": 120,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 120,
+            "strict_correct_delta": 0
+          },
+          "text_encryption": {
+            "baseline_public_correct": 120,
+            "baseline_strict_correct": 120,
+            "candidate_public_correct": 120,
+            "candidate_strict_correct": 120,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 120,
+            "strict_correct_delta": 0
+          },
+          "unit_conversion": {
+            "baseline_public_correct": 140,
+            "baseline_strict_correct": 140,
+            "candidate_public_correct": 140,
+            "candidate_strict_correct": 140,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 140,
+            "strict_correct_delta": 0
+          }
+        },
+        "generated_at_utc": "2026-06-13T22:45:41.688820+00:00",
+        "inputs": {
+          "baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_answer_only_full947_raw_output.csv",
+          "baseline_predictions_sha256": "7f538fdd3383c85890a9070a6289df31f816d8eb30a4c34bf4bb055788d04ffa",
+          "max_tokens": 7680,
+          "profile": "full947_089",
+          "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+          "solution_sha256": "5f9aafe579b1fd215e9a8951dec0c78e17f3994ea41a7f60088e4991e43f532c"
+        },
+        "not_authorized": [
+          "candidate_promotion",
+          "adapter_package",
+          "kaggle_submit",
+          "score_claim"
+        ],
+        "probe_blockers": [],
+        "schema_version": "kg1_v1241_baseline_identity_probe_v1"
+      },
+      "report_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\case_pass_dirty_natural_clean_answer_only\\probe_086_answer_only\\kg1_v1241_baseline_identity_probe_report.json",
+      "returncode": 0,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"decision\": \"pass_baseline_strict_clean_identity_probe\",\n  \"blockers\": [],\n  \"report\": \"C:\\\\Users\\\\davis\\\\Workspace\\\\KG1 -NVIDIA\\\\artifacts\\\\v1241_full947_baseline_readiness_gate_selftest\\\\case_pass_dirty_natural_clean_answer_only\\\\probe_086_answer_only\\\\kg1_v1241_baseline_identity_probe_report.json\"\n}\n"
+    },
+    "natural": {
+      "blockers": [
+        "baseline_strict_clean_identity_not_pass"
+      ],
+      "command": [
+        "C:\\Users\\davis\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py",
+        "--baseline-identity-probe",
+        "--profile",
+        "full947_089",
+        "--solution-csv",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+        "--baseline-predictions",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+        "--max-tokens",
+        "7680",
+        "--output-dir",
+        "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\case_pass_dirty_natural_clean_answer_only\\probe_086_natural"
+      ],
+      "label": "natural",
+      "passed": false,
+      "report": {
+        "baseline": {
+          "by_family": {
+            "bit_manipulation": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 135,
+              "public_metric_only_false_gain": 135,
+              "rows": 160,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "equation_transform": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 56,
+              "public_metric_only_false_gain": 56,
+              "rows": 155,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "gravity_constant": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 140,
+              "public_metric_only_false_gain": 140,
+              "rows": 140,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "logic_grid": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 112,
+              "public_metric_only_false_gain": 112,
+              "rows": 112,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "numeral_system": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 120,
+              "public_metric_only_false_gain": 120,
+              "rows": 120,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "text_encryption": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 120,
+              "public_metric_only_false_gain": 120,
+              "rows": 120,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            },
+            "unit_conversion": {
+              "exact_one_closed_boxed": 0,
+              "public_correct": 140,
+              "public_metric_only_false_gain": 140,
+              "rows": 140,
+              "strict_accuracy": 0.0,
+              "strict_correct": 0,
+              "strict_metric_only_false_positive": 0,
+              "truncated": 0
+            }
+          },
+          "exact_one_closed_boxed": 0,
+          "malformed_boxed": 0,
+          "multi_box": 0,
+          "no_box": 947,
+          "public_correct": 823,
+          "public_metric_only_false_gain": 823,
+          "rows": 947,
+          "strict_correct": 0,
+          "strict_metric_only_false_positive": 0,
+          "truncated": 0
+        },
+        "baseline_identity": {
+          "expected_public_reference": {
+            "bit_manipulation": 135,
+            "equation_transform": 56,
+            "full947": 823,
+            "protected": 632
+          },
+          "observed_public": {
+            "bit_manipulation": 135,
+            "equation_transform": 56,
+            "full947": 823,
+            "protected": 632
+          },
+          "observed_strict": {
+            "bit_manipulation": 0,
+            "equation_transform": 0,
+            "full947": 0,
+            "protected": 0
+          },
+          "public_identity_pass": true,
+          "public_mismatches": {},
+          "rationale": "Full947 promotion protects the known V291 public baseline by comparing strict row deltas. Therefore the baseline CSV must be strict-clean: public identity and strict identity must both match the V291 reference before candidate gains are trusted.",
+          "reference_note": "Reference only. This gate must compare real raw_output CSVs, not reuse this constant as proof.",
+          "reference_source": "validated_project_submission_history",
+          "require_strict_clean_baseline": true,
+          "required": true,
+          "strict_clean_identity_pass": false,
+          "strict_clean_mismatches": {
+            "bit_manipulation": {
+              "expected": 135,
+              "observed": 0
+            },
+            "equation_transform": {
+              "expected": 56,
+              "observed": 0
+            },
+            "full947": {
+              "expected": 823,
+              "observed": 0
+            },
+            "protected": {
+              "expected": 632,
+              "observed": 0
+            }
+          }
+        },
+        "comparison_blockers_ignored_for_probe": [
+          "baseline_strict_clean_identity_unverified:full947:0!=823",
+          "baseline_strict_clean_identity_unverified:bit_manipulation:0!=135",
+          "baseline_strict_clean_identity_unverified:equation_transform:0!=56",
+          "baseline_strict_clean_identity_unverified:protected:0!=632",
+          "bit_gain_below_threshold:0<1",
+          "equation_gain_below_threshold:0<1",
+          "total_gain_below_threshold:0<20",
+          "candidate_total_correct_below_threshold:0<843",
+          "candidate_format_failures_above_threshold:947>0",
+          "candidate_public_metric_only_false_gains_above_threshold:823>0"
+        ],
+        "decision": "fail",
+        "family_deltas": {
+          "bit_manipulation": {
+            "baseline_public_correct": 135,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 135,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 160,
+            "strict_correct_delta": 0
+          },
+          "equation_transform": {
+            "baseline_public_correct": 56,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 56,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 155,
+            "strict_correct_delta": 0
+          },
+          "gravity_constant": {
+            "baseline_public_correct": 140,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 140,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 140,
+            "strict_correct_delta": 0
+          },
+          "logic_grid": {
+            "baseline_public_correct": 112,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 112,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 112,
+            "strict_correct_delta": 0
+          },
+          "numeral_system": {
+            "baseline_public_correct": 120,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 120,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 120,
+            "strict_correct_delta": 0
+          },
+          "text_encryption": {
+            "baseline_public_correct": 120,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 120,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 120,
+            "strict_correct_delta": 0
+          },
+          "unit_conversion": {
+            "baseline_public_correct": 140,
+            "baseline_strict_correct": 0,
+            "candidate_public_correct": 140,
+            "candidate_strict_correct": 0,
+            "improved_rows": 0,
+            "public_correct_delta": 0,
+            "regressed_rows": 0,
+            "rows": 140,
+            "strict_correct_delta": 0
+          }
+        },
+        "generated_at_utc": "2026-06-13T22:45:41.430696+00:00",
+        "inputs": {
+          "baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+          "baseline_predictions_sha256": "b5d4f7d79db6ccf0c346a98c790d1524f8cdfe59a8782290a8c07f62bfd2509d",
+          "max_tokens": 7680,
+          "profile": "full947_089",
+          "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+          "solution_sha256": "5f9aafe579b1fd215e9a8951dec0c78e17f3994ea41a7f60088e4991e43f532c"
+        },
+        "not_authorized": [
+          "candidate_promotion",
+          "adapter_package",
+          "kaggle_submit",
+          "score_claim"
+        ],
+        "probe_blockers": [
+          "baseline_strict_clean_identity_not_pass"
+        ],
+        "schema_version": "kg1_v1241_baseline_identity_probe_v1"
+      },
+      "report_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\case_pass_dirty_natural_clean_answer_only\\probe_086_natural\\kg1_v1241_baseline_identity_probe_report.json",
+      "returncode": 2,
+      "stderr_tail": "",
+      "stdout_tail": "{\n  \"decision\": \"fail\",\n  \"blockers\": [\n    \"baseline_strict_clean_identity_not_pass\"\n  ],\n  \"report\": \"C:\\\\Users\\\\davis\\\\Workspace\\\\KG1 -NVIDIA\\\\artifacts\\\\v1241_full947_baseline_readiness_gate_selftest\\\\case_pass_dirty_natural_clean_answer_only\\\\probe_086_natural\\\\kg1_v1241_baseline_identity_probe_report.json\"\n}\n"
+    }
+  },
+  "schema_version": "kg1_v1241_full947_baseline_readiness_gate_v1",
+  "score_claim_authorized": false,
+  "score_objective": {
+    "additional_correct_required_for_089": 20,
+    "baseline_correct": 823,
+    "baseline_readiness_is_not_score_success": true,
+    "next_required_candidate_gate": "V1241 full947_089 with candidate >=843/947 and zero regressions",
+    "target": ">=0.89",
+    "target_090_correct": 853,
+    "target_correct": 843
+  }
+}

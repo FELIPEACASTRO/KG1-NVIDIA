@@ -1,0 +1,171 @@
+{
+  "artifact_dir": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft",
+  "datasets": {
+    "bit_specialist": {
+      "avg_boxed_payload_chars": 8.5152,
+      "boxed_payload_hashes": 385,
+      "errors": [],
+      "family_counts": {
+        "bit_manipulation": 540,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "name": "bit_specialist",
+      "prompt_hashes": 724,
+      "rows": 724,
+      "source_role_counts": {
+        "v1243_bit_solver_verified": 540,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "bit_manipulation": 729.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "equation_specialist": {
+      "avg_boxed_payload_chars": 5.1415,
+      "boxed_payload_hashes": 407,
+      "errors": [],
+      "family_counts": {
+        "equation_transform": 360,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "name": "equation_specialist",
+      "prompt_hashes": 544,
+      "rows": 544,
+      "source_role_counts": {
+        "v1243_equation_solver_verified": 360,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "equation_transform": 594.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "micro_consolidation": {
+      "avg_boxed_payload_chars": 6.5655,
+      "boxed_payload_hashes": 619,
+      "errors": [],
+      "family_counts": {
+        "bit_manipulation": 540,
+        "equation_transform": 360,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "name": "micro_consolidation",
+      "prompt_hashes": 1084,
+      "rows": 1084,
+      "source_role_counts": {
+        "v1243_bit_solver_verified": 540,
+        "v1243_equation_solver_verified": 360,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "bit_manipulation": 567.0,
+        "equation_transform": 432.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "protected_replay": {
+      "avg_boxed_payload_chars": 10.0272,
+      "boxed_payload_hashes": 173,
+      "errors": [],
+      "family_counts": {
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "name": "protected_replay",
+      "prompt_hashes": 184,
+      "rows": 184,
+      "source_role_counts": {
+        "v1243_protected_anchor": 184
+      },
+      "weight_by_family": {
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "val170": {
+      "avg_boxed_payload_chars": 6.3,
+      "boxed_payload_hashes": 142,
+      "errors": [],
+      "family_counts": {
+        "bit_manipulation": 90,
+        "equation_transform": 60,
+        "gravity_constant": 5,
+        "numeral_system": 5,
+        "text_encryption": 5,
+        "unit_conversion": 5
+      },
+      "name": "val170",
+      "prompt_hashes": 170,
+      "rows": 170,
+      "source_role_counts": {
+        "v1243_holdout": 170
+      },
+      "weight_by_family": {
+        "bit_manipulation": 0.0,
+        "equation_transform": 0.0,
+        "gravity_constant": 0.0,
+        "numeral_system": 0.0,
+        "text_encryption": 0.0,
+        "unit_conversion": 0.0
+      }
+    }
+  },
+  "decision": "pass_v1243_graft_trainer_contract_no_gpu_no_submit",
+  "env_preview": {
+    "errors": []
+  },
+  "env_preview_sha256": "0eb49189d696a13ed6b748342799b74d0cfd0ea88ae89923cd3493fb4e7cb77a",
+  "errors": [],
+  "generated_at_utc": "2026-06-14T01:13:15+00:00",
+  "manifest_commands": {
+    "commands": {
+      "baseline_identity_probe_086_answer_only": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+      "baseline_identity_probe_086_natural": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv'",
+      "full947_086_baseline_readiness": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py' --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --natural-baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv' --answer-only-baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+      "full947_089": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+      "tiny": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile tiny --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_tiny_bit_equation_probe_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+      "val170": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile val170 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_v1240_val170_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'"
+    },
+    "errors": []
+  },
+  "manifest_sha256": "7ac8b65ea25e2182c92008c020ebd1447fc5d6beafeb27082c32daee838e3e06",
+  "not_authorized": [
+    "paid_gpu_launch",
+    "adapter_package",
+    "kaggle_submit",
+    "score_claim"
+  ],
+  "schema_version": "kg1_v1243_graft_trainer_contract_gate_v1",
+  "train_prompt_hashes": 1084,
+  "train_val_prompt_overlap": 0,
+  "trainer": {
+    "errors": [],
+    "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\hf_job_train_v90.py",
+    "required_snippets": 42,
+    "sha256": "0294ba24dba0a4de0b8c2eb34de7da80f9b8f4107c1dbebd3cd53869ced2a112"
+  },
+  "val_prompt_hashes": 170
+}

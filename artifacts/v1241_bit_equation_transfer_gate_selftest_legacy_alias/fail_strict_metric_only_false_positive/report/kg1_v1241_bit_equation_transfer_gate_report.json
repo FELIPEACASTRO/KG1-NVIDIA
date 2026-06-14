@@ -1,0 +1,239 @@
+{
+  "baseline": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 0.5,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 0.5,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "text_encryption": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 0,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 7,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 0,
+    "public_correct": 4,
+    "public_metric_only_false_gain": 0,
+    "rows": 7,
+    "strict_correct": 4,
+    "strict_metric_only_false_positive": 0,
+    "truncated": 0
+  },
+  "baseline_identity": {
+    "rationale": "Full947 promotion protects the known V291 public baseline by comparing strict row deltas. Therefore the baseline CSV must be strict-clean: public identity and strict identity must both match the V291 reference before candidate gains are trusted.",
+    "reference_note": "Reference only. This gate must compare real raw_output CSVs, not reuse this constant as proof.",
+    "reference_source": "validated_project_submission_history",
+    "require_strict_clean_baseline": true,
+    "required": false
+  },
+  "blockers": [
+    "candidate_strict_metric_only_false_positive_above_threshold:1>0"
+  ],
+  "candidate": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 2,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 1.0,
+        "strict_correct": 2,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 2,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 1.0,
+        "strict_correct": 2,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "text_encryption": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 0,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 1,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 7,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 0,
+    "public_correct": 6,
+    "public_metric_only_false_gain": 0,
+    "rows": 7,
+    "strict_correct": 7,
+    "strict_metric_only_false_positive": 1,
+    "truncated": 0
+  },
+  "candidate_blocker_counts": {
+    "format_failures": 0,
+    "public_metric_only_false_gains": 0,
+    "strict_metric_only_false_positives": 1,
+    "truncated": 0
+  },
+  "decision": "fail",
+  "family_deltas": {
+    "bit_manipulation": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 2,
+      "candidate_strict_correct": 2,
+      "improved_rows": 1,
+      "public_correct_delta": 1,
+      "regressed_rows": 0,
+      "rows": 2,
+      "strict_correct_delta": 1
+    },
+    "equation_transform": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 2,
+      "candidate_strict_correct": 2,
+      "improved_rows": 1,
+      "public_correct_delta": 1,
+      "regressed_rows": 0,
+      "rows": 2,
+      "strict_correct_delta": 1
+    },
+    "gravity_constant": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 1,
+      "candidate_strict_correct": 1,
+      "improved_rows": 0,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 1,
+      "strict_correct_delta": 0
+    },
+    "text_encryption": {
+      "baseline_public_correct": 0,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 0,
+      "candidate_strict_correct": 1,
+      "improved_rows": 1,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 1,
+      "strict_correct_delta": 1
+    },
+    "unit_conversion": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 1,
+      "candidate_strict_correct": 1,
+      "improved_rows": 0,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 1,
+      "strict_correct_delta": 0
+    }
+  },
+  "gains": {
+    "bit_manipulation_strict_correct_gain": 1,
+    "equation_transform_strict_correct_gain": 1,
+    "total_strict_correct_gain": 3
+  },
+  "generated_at_utc": "2026-06-13T22:25:49.206327+00:00",
+  "inputs": {
+    "baseline_predictions": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_strict_metric_only_false_positive\\baseline.csv",
+    "baseline_predictions_sha256": "7b97e46209f3e811792af656c66f974b06e63af73c4d22b80f59825b8bff9152",
+    "candidate_predictions": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_strict_metric_only_false_positive\\candidate.csv",
+    "candidate_predictions_sha256": "584077d93fcd56cbdfe2b78afa7cac7d793b62161a0c35cee6f22e0e4ff211a2",
+    "max_tokens": 64,
+    "profile": "custom",
+    "solution_csv": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_strict_metric_only_false_positive\\solution.csv",
+    "solution_sha256": "1abbd5981c6f6ce839758c79fb2a11020db27d6096ac6040f64d3d60b0f2533a"
+  },
+  "regressions": {
+    "any": 0,
+    "protected_families": 0,
+    "weak_families": 0
+  },
+  "thresholds": {
+    "expected_rows": null,
+    "max_any_regressions": 0,
+    "max_candidate_format_failures": 0,
+    "max_candidate_public_false_gains": 0,
+    "max_candidate_strict_false_public": 0,
+    "max_candidate_truncated": 0,
+    "max_protected_regressions": 0,
+    "max_weak_regressions": 0,
+    "min_bit_gain": 1,
+    "min_equation_gain": 1,
+    "min_total_correct": null,
+    "min_total_gain": 2
+  }
+}

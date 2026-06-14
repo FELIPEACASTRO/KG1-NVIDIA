@@ -1,0 +1,13 @@
+id,raw_output,finish_reason,completion_tokens
+self_bit_a,"</think>
+\boxed{1010}",stop,8
+self_bit_b,"</think>
+\boxed{1111}",stop,8
+self_equation_a,"</think>
+\boxed{42}",stop,8
+self_equation_b,"</think>
+\boxed{17}",stop,8
+self_gravity,"</think>
+\boxed{24.64}",stop,8
+self_unit,"</think>
+\boxed{12}",stop,8

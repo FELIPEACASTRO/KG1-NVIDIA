@@ -1,0 +1,198 @@
+{
+  "self_test": true,
+  "approved": false,
+  "reasons": [
+    "net_gain_not_above_threshold:-0.166667<=0.000000",
+    "family_regression:equation_transform:0.000000<1.000000-0.000000"
+  ],
+  "prediction_only_blocked": true,
+  "multi_box_blocked": true,
+  "truncation_blocked": true,
+  "multi_box_reasons": [
+    "net_gain_not_above_threshold:0.000000<=0.000000",
+    "candidate_exact_boxed_rate_below_threshold:0.833333<1.000000"
+  ],
+  "truncation_reasons": [
+    "net_gain_not_above_threshold:0.000000<=0.000000",
+    "candidate_truncated_above_threshold:1>0"
+  ],
+  "comparison": {
+    "baseline": {
+      "rows": 6,
+      "correct": 6,
+      "accuracy": 1.0,
+      "boxed_format_rate": 1.0,
+      "accuracy_min_seed": 1.0,
+      "accuracy_mean_seed": 1.0,
+      "accuracy_max_seed": 1.0,
+      "truncated": 0,
+      "boxed_presence_rate": 1.0,
+      "by_seed": [
+        {
+          "seed": 0,
+          "rows": 6,
+          "correct": 6,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        }
+      ],
+      "by_family": {
+        "bit_manipulation": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "gravity_constant": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "numeral_system": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "text_encryption": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "unit_conversion": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        }
+      }
+    },
+    "candidate": {
+      "rows": 6,
+      "correct": 5,
+      "accuracy": 0.8333333333333334,
+      "boxed_format_rate": 1.0,
+      "accuracy_min_seed": 0.8333333333333334,
+      "accuracy_mean_seed": 0.8333333333333334,
+      "accuracy_max_seed": 0.8333333333333334,
+      "truncated": 0,
+      "boxed_presence_rate": 1.0,
+      "by_seed": [
+        {
+          "seed": 0,
+          "rows": 6,
+          "correct": 5,
+          "accuracy": 0.8333333333333334,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        }
+      ],
+      "by_family": {
+        "bit_manipulation": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "equation_transform": {
+          "rows": 1,
+          "correct": 0,
+          "accuracy": 0.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "gravity_constant": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "numeral_system": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "text_encryption": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        },
+        "unit_conversion": {
+          "rows": 1,
+          "correct": 1,
+          "accuracy": 1.0,
+          "boxed_format_rate": 1.0,
+          "boxed_presence_rate": 1.0,
+          "truncated": 0
+        }
+      }
+    },
+    "net_gain": -0.16666666666666663,
+    "family_deltas": {
+      "bit_manipulation": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "equation_transform": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 0.0,
+        "delta": -1.0
+      },
+      "gravity_constant": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "numeral_system": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "text_encryption": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      },
+      "unit_conversion": {
+        "baseline_accuracy": 1.0,
+        "candidate_accuracy": 1.0,
+        "delta": 0.0
+      }
+    }
+  }
+}

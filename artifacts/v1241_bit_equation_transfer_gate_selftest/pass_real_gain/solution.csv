@@ -1,0 +1,7 @@
+id,prompt,answer,family
+self_bit_a,bit a,1010,bit_manipulation
+self_bit_b,bit b,1111,bit_manipulation
+self_equation_a,equation a,42,equation_transform
+self_equation_b,equation b,17,equation_transform
+self_gravity,gravity,24.64,gravity_constant
+self_unit,unit,12,unit_conversion

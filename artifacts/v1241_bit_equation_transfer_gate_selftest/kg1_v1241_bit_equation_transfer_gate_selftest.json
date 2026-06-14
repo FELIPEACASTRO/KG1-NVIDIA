@@ -1,0 +1,107 @@
+{
+  "cases": [
+    {
+      "blockers": [],
+      "case": "pass_real_gain",
+      "expected_pass": true,
+      "observed_pass": true,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\pass_real_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "row_count_mismatch:6!=50"
+      ],
+      "case": "fail_row_count_profile_check",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_row_count_profile_check\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "total_gain_below_threshold:1<2",
+        "any_regressions_above_threshold:1>0",
+        "protected_regressions_above_threshold:1>0"
+      ],
+      "case": "fail_protected_regression",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_protected_regression\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "bit_gain_below_threshold:0<1",
+        "total_gain_below_threshold:1<2",
+        "candidate_format_failures_above_threshold:1>0",
+        "candidate_public_metric_only_false_gains_above_threshold:1>0"
+      ],
+      "case": "fail_public_metric_only_false_gain",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_public_metric_only_false_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "candidate_format_failures_above_threshold:1>0"
+      ],
+      "case": "fail_multi_box",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_multi_box\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "candidate_truncated_above_threshold:1>0"
+      ],
+      "case": "fail_truncated",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_truncated\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "candidate_strict_metric_only_false_positive_above_threshold:1>0"
+      ],
+      "case": "fail_strict_metric_only_false_positive",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_strict_metric_only_false_positive\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [],
+      "case": "pass_full947_clean_baseline_identity",
+      "expected_pass": true,
+      "observed_pass": true,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\pass_full947_clean_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [
+        "baseline_strict_clean_identity_unverified:full947:0!=823",
+        "baseline_strict_clean_identity_unverified:bit_manipulation:0!=135",
+        "baseline_strict_clean_identity_unverified:equation_transform:0!=56",
+        "baseline_strict_clean_identity_unverified:protected:0!=632"
+      ],
+      "case": "fail_full947_dirty_baseline_identity",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_full947_dirty_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+    },
+    {
+      "blockers": [],
+      "case": "probe_pass_full947_clean_baseline_identity",
+      "expected_pass": true,
+      "observed_pass": true,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\probe_pass_full947_clean_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+    },
+    {
+      "blockers": [
+        "baseline_strict_clean_identity_not_pass"
+      ],
+      "case": "probe_fail_full947_dirty_baseline_identity",
+      "expected_pass": false,
+      "observed_pass": false,
+      "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\probe_fail_full947_dirty_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+    }
+  ],
+  "decision": "pass_v1241_self_test",
+  "generated_at_utc": "2026-06-13T22:25:49.430884+00:00"
+}

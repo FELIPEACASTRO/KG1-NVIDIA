@@ -1,0 +1,1008 @@
+{
+  "checks": {
+    "dryrun_bit": {
+      "data": {
+        "tokenized_train_records": 724,
+        "tokenized_validation_records": 170,
+        "train_records": 724,
+        "validation_records": 170
+      },
+      "decision": {
+        "full_training_allowed": false,
+        "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+        "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+        "tokenization_contract_passed": true
+      },
+      "errors": [],
+      "lora": {
+        "parsed_target_modules": [
+          "down_proj",
+          "in_proj",
+          "k_proj",
+          "lm_head",
+          "o_proj",
+          "out_proj",
+          "q_proj",
+          "up_proj",
+          "v_proj"
+        ],
+        "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj"
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\bit\\dry_run_model_recipe_report.json",
+      "sha256": "4a995c7997fa7dae4ba9343f6cad07648c28817046ca2c7b71af089c27c17cf4",
+      "weighted_share_by_subcategory": {
+        "v1243_bit_solver_verified": 0.66454,
+        "v1243_protected_replay": 0.33546
+      }
+    },
+    "dryrun_equation": {
+      "data": {
+        "tokenized_train_records": 544,
+        "tokenized_validation_records": 170,
+        "train_records": 544,
+        "validation_records": 170
+      },
+      "decision": {
+        "full_training_allowed": false,
+        "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+        "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+        "tokenization_contract_passed": true
+      },
+      "errors": [],
+      "lora": {
+        "parsed_target_modules": [
+          "down_proj",
+          "in_proj",
+          "k_proj",
+          "lm_head",
+          "o_proj",
+          "out_proj",
+          "q_proj",
+          "up_proj",
+          "v_proj"
+        ],
+        "target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj"
+      },
+      "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\equation\\dry_run_model_recipe_report.json",
+      "sha256": "9395bcd32ffbe29e3e818cf55d77e493605d2cce5e381953369ad40284918561",
+      "weighted_share_by_subcategory": {
+        "v1243_equation_solver_verified": 0.617464,
+        "v1243_protected_replay": 0.382536
+      }
+    },
+    "existing_gate_reports": {
+      "errors": [],
+      "reports": {
+        "official_metric_prescore_gate": {
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\official_metric_prescore_gate\\report.json",
+          "payload": {
+            "blockers": [],
+            "decision": "pass",
+            "duplicate_id_blockers": [
+              "duplicate_prediction_ids:1"
+            ],
+            "expected_official_notebook_sha256": "d62302e4318de1dc9cf1103577b42b2d7f6234a9629b5198fdad800cefce24ed",
+            "expected_visible_defaults": {
+              "gpu_memory_utilization": 0.85,
+              "max_lora_rank": 32,
+              "max_model_len": 8192,
+              "max_num_seqs": 64,
+              "max_tokens": 7680,
+              "temperature": 0.0,
+              "top_p": 1.0
+            },
+            "fixture_decision": "pass",
+            "fixture_score": 1.0,
+            "function_parity_cases": 22,
+            "function_parity_failures": [],
+            "local_official_inference_config": {
+              "gpu_memory_utilization": 0.85,
+              "max_lora_rank": 32,
+              "max_model_len": 8192,
+              "max_num_seqs": 64,
+              "max_tokens": 7680,
+              "temperature": 0.0,
+              "top_p": 1.0
+            },
+            "local_utils_parity_cases": 12,
+            "local_utils_parity_failures": [],
+            "official_extracted_sha256": "6d8167a04bc190bff4927a1dc70e8272777e765b1d08bdc84f1a29d1f65e324b",
+            "official_notebook_sha256": "d62302e4318de1dc9cf1103577b42b2d7f6234a9629b5198fdad800cefce24ed",
+            "prescore_script_sha256": "b60eaec8e507094fe4f1ee57104ea95e7a60d712159ecabc2bcaa071d76cae56",
+            "prescore_visible_score_defaults": {
+              "gpu_memory_utilization": 0.85,
+              "max_lora_rank": 32,
+              "max_model_len": 8192,
+              "max_num_seqs": 64,
+              "max_tokens": 7680,
+              "temperature": 0.0,
+              "top_p": 1.0
+            },
+            "v284_official_inference_config": {
+              "gpu_memory_utilization": 0.85,
+              "max_lora_rank": 32,
+              "max_model_len": 8192,
+              "max_num_seqs": 64,
+              "max_tokens": 7680,
+              "temperature": 0.0,
+              "top_p": 1.0
+            },
+            "v284_utils_parity_cases": 12,
+            "v284_utils_parity_failures": [],
+            "v284_utils_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\src\\competition_utils.py"
+          },
+          "sha256": "09130193d3c8e2743df486c0586644c1084424da3b2c95c27f182c1886dbb219"
+        },
+        "solve_rate_gate_self_test": {
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\solve_rate_gate\\self_test_report.json",
+          "payload": {
+            "approved": false,
+            "comparison": {
+              "baseline": {
+                "accuracy": 1.0,
+                "accuracy_max_seed": 1.0,
+                "accuracy_mean_seed": 1.0,
+                "accuracy_min_seed": 1.0,
+                "boxed_format_rate": 1.0,
+                "boxed_presence_rate": 1.0,
+                "by_family": {
+                  "bit_manipulation": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "equation_transform": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "gravity_constant": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "numeral_system": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "text_encryption": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "unit_conversion": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  }
+                },
+                "by_seed": [
+                  {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 6,
+                    "rows": 6,
+                    "seed": 0,
+                    "truncated": 0
+                  }
+                ],
+                "correct": 6,
+                "rows": 6,
+                "truncated": 0
+              },
+              "candidate": {
+                "accuracy": 0.8333333333333334,
+                "accuracy_max_seed": 0.8333333333333334,
+                "accuracy_mean_seed": 0.8333333333333334,
+                "accuracy_min_seed": 0.8333333333333334,
+                "boxed_format_rate": 1.0,
+                "boxed_presence_rate": 1.0,
+                "by_family": {
+                  "bit_manipulation": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "equation_transform": {
+                    "accuracy": 0.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 0,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "gravity_constant": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "numeral_system": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "text_encryption": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  },
+                  "unit_conversion": {
+                    "accuracy": 1.0,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 1,
+                    "rows": 1,
+                    "truncated": 0
+                  }
+                },
+                "by_seed": [
+                  {
+                    "accuracy": 0.8333333333333334,
+                    "boxed_format_rate": 1.0,
+                    "boxed_presence_rate": 1.0,
+                    "correct": 5,
+                    "rows": 6,
+                    "seed": 0,
+                    "truncated": 0
+                  }
+                ],
+                "correct": 5,
+                "rows": 6,
+                "truncated": 0
+              },
+              "family_deltas": {
+                "bit_manipulation": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 1.0,
+                  "delta": 0.0
+                },
+                "equation_transform": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 0.0,
+                  "delta": -1.0
+                },
+                "gravity_constant": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 1.0,
+                  "delta": 0.0
+                },
+                "numeral_system": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 1.0,
+                  "delta": 0.0
+                },
+                "text_encryption": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 1.0,
+                  "delta": 0.0
+                },
+                "unit_conversion": {
+                  "baseline_accuracy": 1.0,
+                  "candidate_accuracy": 1.0,
+                  "delta": 0.0
+                }
+              },
+              "net_gain": -0.16666666666666663
+            },
+            "multi_box_blocked": true,
+            "multi_box_reasons": [
+              "net_gain_not_above_threshold:0.000000<=0.000000",
+              "candidate_exact_boxed_rate_below_threshold:0.833333<1.000000"
+            ],
+            "prediction_only_blocked": true,
+            "reasons": [
+              "net_gain_not_above_threshold:-0.166667<=0.000000",
+              "family_regression:equation_transform:0.000000<1.000000-0.000000"
+            ],
+            "self_test": true,
+            "truncation_blocked": true,
+            "truncation_reasons": [
+              "net_gain_not_above_threshold:0.000000<=0.000000",
+              "candidate_truncated_above_threshold:1>0"
+            ]
+          },
+          "sha256": "ca18923bbf4f1dc40fc35de4a32ecfba1960ab8f86e113ea12e437b21c6311f7"
+        },
+        "v1241_transfer_gate_legacy_alias_selftest": {
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "payload": {
+            "cases": [
+              {
+                "blockers": [],
+                "case": "pass_real_gain",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\pass_real_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "row_count_mismatch:6!=50"
+                ],
+                "case": "fail_row_count_profile_check",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_row_count_profile_check\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "total_gain_below_threshold:1<2",
+                  "any_regressions_above_threshold:1>0",
+                  "protected_regressions_above_threshold:1>0"
+                ],
+                "case": "fail_protected_regression",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_protected_regression\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "bit_gain_below_threshold:0<1",
+                  "total_gain_below_threshold:1<2",
+                  "candidate_format_failures_above_threshold:1>0",
+                  "candidate_public_metric_only_false_gains_above_threshold:1>0"
+                ],
+                "case": "fail_public_metric_only_false_gain",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_public_metric_only_false_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_format_failures_above_threshold:1>0"
+                ],
+                "case": "fail_multi_box",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_multi_box\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_truncated_above_threshold:1>0"
+                ],
+                "case": "fail_truncated",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_truncated\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_strict_metric_only_false_positive_above_threshold:1>0"
+                ],
+                "case": "fail_strict_metric_only_false_positive",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_strict_metric_only_false_positive\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [],
+                "case": "pass_full947_clean_baseline_identity",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\pass_full947_clean_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "baseline_strict_clean_identity_unverified:full947:0!=823",
+                  "baseline_strict_clean_identity_unverified:bit_manipulation:0!=135",
+                  "baseline_strict_clean_identity_unverified:equation_transform:0!=56",
+                  "baseline_strict_clean_identity_unverified:protected:0!=632"
+                ],
+                "case": "fail_full947_dirty_baseline_identity",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\fail_full947_dirty_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [],
+                "case": "probe_pass_full947_clean_baseline_identity",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\probe_pass_full947_clean_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+              },
+              {
+                "blockers": [
+                  "baseline_strict_clean_identity_not_pass"
+                ],
+                "case": "probe_fail_full947_dirty_baseline_identity",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\probe_fail_full947_dirty_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+              }
+            ],
+            "decision": "pass_v1241_self_test",
+            "generated_at_utc": "2026-06-13T22:25:49.554043+00:00"
+          },
+          "sha256": "57c5ba19b4c79d101a6f1c937d778e94dc8795c6e8c73edb1060e7f02fc921d8"
+        },
+        "v1241_transfer_gate_selftest": {
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "payload": {
+            "cases": [
+              {
+                "blockers": [],
+                "case": "pass_real_gain",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\pass_real_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "row_count_mismatch:6!=50"
+                ],
+                "case": "fail_row_count_profile_check",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_row_count_profile_check\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "total_gain_below_threshold:1<2",
+                  "any_regressions_above_threshold:1>0",
+                  "protected_regressions_above_threshold:1>0"
+                ],
+                "case": "fail_protected_regression",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_protected_regression\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "bit_gain_below_threshold:0<1",
+                  "total_gain_below_threshold:1<2",
+                  "candidate_format_failures_above_threshold:1>0",
+                  "candidate_public_metric_only_false_gains_above_threshold:1>0"
+                ],
+                "case": "fail_public_metric_only_false_gain",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_public_metric_only_false_gain\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_format_failures_above_threshold:1>0"
+                ],
+                "case": "fail_multi_box",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_multi_box\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_truncated_above_threshold:1>0"
+                ],
+                "case": "fail_truncated",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_truncated\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "candidate_strict_metric_only_false_positive_above_threshold:1>0"
+                ],
+                "case": "fail_strict_metric_only_false_positive",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_strict_metric_only_false_positive\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [],
+                "case": "pass_full947_clean_baseline_identity",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\pass_full947_clean_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [
+                  "baseline_strict_clean_identity_unverified:full947:0!=823",
+                  "baseline_strict_clean_identity_unverified:bit_manipulation:0!=135",
+                  "baseline_strict_clean_identity_unverified:equation_transform:0!=56",
+                  "baseline_strict_clean_identity_unverified:protected:0!=632"
+                ],
+                "case": "fail_full947_dirty_baseline_identity",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_full947_dirty_baseline_identity\\report\\kg1_v1241_bit_equation_transfer_gate_report.json"
+              },
+              {
+                "blockers": [],
+                "case": "probe_pass_full947_clean_baseline_identity",
+                "expected_pass": true,
+                "observed_pass": true,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\probe_pass_full947_clean_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+              },
+              {
+                "blockers": [
+                  "baseline_strict_clean_identity_not_pass"
+                ],
+                "case": "probe_fail_full947_dirty_baseline_identity",
+                "expected_pass": false,
+                "observed_pass": false,
+                "report": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\probe_fail_full947_dirty_baseline_identity\\probe\\kg1_v1241_baseline_identity_probe_report.json"
+              }
+            ],
+            "decision": "pass_v1241_self_test",
+            "generated_at_utc": "2026-06-13T22:25:49.430884+00:00"
+          },
+          "sha256": "75a42c50ae87eb1a315c7da9903ca15a48ef483b5adec2ab70f085c31d9a25e7"
+        },
+        "v1243_graft_trainer_contract_gate": {
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_contract_gate\\kg1_v1243_graft_trainer_contract_gate.json",
+          "payload": {
+            "artifact_dir": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft",
+            "datasets": {
+              "bit_specialist": {
+                "avg_boxed_payload_chars": 8.5152,
+                "boxed_payload_hashes": 385,
+                "errors": [],
+                "family_counts": {
+                  "bit_manipulation": 540,
+                  "gravity_constant": 46,
+                  "numeral_system": 46,
+                  "text_encryption": 46,
+                  "unit_conversion": 46
+                },
+                "name": "bit_specialist",
+                "prompt_hashes": 724,
+                "rows": 724,
+                "source_role_counts": {
+                  "v1243_bit_solver_verified": 540,
+                  "v1243_protected_replay": 184
+                },
+                "weight_by_family": {
+                  "bit_manipulation": 729.0,
+                  "gravity_constant": 92.0,
+                  "numeral_system": 92.0,
+                  "text_encryption": 92.0,
+                  "unit_conversion": 92.0
+                }
+              },
+              "equation_specialist": {
+                "avg_boxed_payload_chars": 5.1415,
+                "boxed_payload_hashes": 407,
+                "errors": [],
+                "family_counts": {
+                  "equation_transform": 360,
+                  "gravity_constant": 46,
+                  "numeral_system": 46,
+                  "text_encryption": 46,
+                  "unit_conversion": 46
+                },
+                "name": "equation_specialist",
+                "prompt_hashes": 544,
+                "rows": 544,
+                "source_role_counts": {
+                  "v1243_equation_solver_verified": 360,
+                  "v1243_protected_replay": 184
+                },
+                "weight_by_family": {
+                  "equation_transform": 594.0,
+                  "gravity_constant": 92.0,
+                  "numeral_system": 92.0,
+                  "text_encryption": 92.0,
+                  "unit_conversion": 92.0
+                }
+              },
+              "micro_consolidation": {
+                "avg_boxed_payload_chars": 6.5655,
+                "boxed_payload_hashes": 619,
+                "errors": [],
+                "family_counts": {
+                  "bit_manipulation": 540,
+                  "equation_transform": 360,
+                  "gravity_constant": 46,
+                  "numeral_system": 46,
+                  "text_encryption": 46,
+                  "unit_conversion": 46
+                },
+                "name": "micro_consolidation",
+                "prompt_hashes": 1084,
+                "rows": 1084,
+                "source_role_counts": {
+                  "v1243_bit_solver_verified": 540,
+                  "v1243_equation_solver_verified": 360,
+                  "v1243_protected_replay": 184
+                },
+                "weight_by_family": {
+                  "bit_manipulation": 567.0,
+                  "equation_transform": 432.0,
+                  "gravity_constant": 92.0,
+                  "numeral_system": 92.0,
+                  "text_encryption": 92.0,
+                  "unit_conversion": 92.0
+                }
+              },
+              "protected_replay": {
+                "avg_boxed_payload_chars": 10.0272,
+                "boxed_payload_hashes": 173,
+                "errors": [],
+                "family_counts": {
+                  "gravity_constant": 46,
+                  "numeral_system": 46,
+                  "text_encryption": 46,
+                  "unit_conversion": 46
+                },
+                "name": "protected_replay",
+                "prompt_hashes": 184,
+                "rows": 184,
+                "source_role_counts": {
+                  "v1243_protected_anchor": 184
+                },
+                "weight_by_family": {
+                  "gravity_constant": 92.0,
+                  "numeral_system": 92.0,
+                  "text_encryption": 92.0,
+                  "unit_conversion": 92.0
+                }
+              },
+              "val170": {
+                "avg_boxed_payload_chars": 6.3,
+                "boxed_payload_hashes": 142,
+                "errors": [],
+                "family_counts": {
+                  "bit_manipulation": 90,
+                  "equation_transform": 60,
+                  "gravity_constant": 5,
+                  "numeral_system": 5,
+                  "text_encryption": 5,
+                  "unit_conversion": 5
+                },
+                "name": "val170",
+                "prompt_hashes": 170,
+                "rows": 170,
+                "source_role_counts": {
+                  "v1243_holdout": 170
+                },
+                "weight_by_family": {
+                  "bit_manipulation": 0.0,
+                  "equation_transform": 0.0,
+                  "gravity_constant": 0.0,
+                  "numeral_system": 0.0,
+                  "text_encryption": 0.0,
+                  "unit_conversion": 0.0
+                }
+              }
+            },
+            "decision": "pass_v1243_graft_trainer_contract_no_gpu_no_submit",
+            "env_preview": {
+              "errors": []
+            },
+            "env_preview_sha256": "0eb49189d696a13ed6b748342799b74d0cfd0ea88ae89923cd3493fb4e7cb77a",
+            "errors": [],
+            "generated_at_utc": "2026-06-14T01:13:15+00:00",
+            "manifest_commands": {
+              "commands": {
+                "baseline_identity_probe_086_answer_only": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+                "baseline_identity_probe_086_natural": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv'",
+                "full947_086_baseline_readiness": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py' --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --natural-baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv' --answer-only-baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+                "full947_089": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+                "tiny": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile tiny --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_tiny_bit_equation_probe_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+                "val170": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile val170 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_v1240_val170_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'"
+              },
+              "errors": []
+            },
+            "manifest_sha256": "7ac8b65ea25e2182c92008c020ebd1447fc5d6beafeb27082c32daee838e3e06",
+            "not_authorized": [
+              "paid_gpu_launch",
+              "adapter_package",
+              "kaggle_submit",
+              "score_claim"
+            ],
+            "schema_version": "kg1_v1243_graft_trainer_contract_gate_v1",
+            "train_prompt_hashes": 1084,
+            "train_val_prompt_overlap": 0,
+            "trainer": {
+              "errors": [],
+              "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\hf_job_train_v90.py",
+              "required_snippets": 42,
+              "sha256": "0294ba24dba0a4de0b8c2eb34de7da80f9b8f4107c1dbebd3cd53869ced2a112"
+            },
+            "val_prompt_hashes": 170
+          },
+          "sha256": "e8602bbbd8139dd9b922856303fae055747637b38c21eee4ac366eed6bddcd04"
+        }
+      }
+    },
+    "official_config": {
+      "errors": [],
+      "expected": {
+        "gpu_memory_utilization": 0.85,
+        "max_lora_rank": 32,
+        "max_model_len": 8192,
+        "max_num_seqs": 64,
+        "max_tokens": 7680,
+        "temperature": 0.0,
+        "top_p": 1.0
+      },
+      "local_official_inference_config": {
+        "gpu_memory_utilization": 0.85,
+        "max_lora_rank": 32,
+        "max_model_len": 8192,
+        "max_num_seqs": 64,
+        "max_tokens": 7680,
+        "temperature": 0.0,
+        "top_p": 1.0
+      },
+      "prescore_visible_score_defaults": {
+        "gpu_memory_utilization": 0.85,
+        "max_lora_rank": 32,
+        "max_model_len": 8192,
+        "max_num_seqs": 64,
+        "max_tokens": 7680,
+        "temperature": 0.0,
+        "top_p": 1.0
+      }
+    },
+    "prompt_rendering": {
+      "errors": [],
+      "rendered_suffix_counts": [
+        1,
+        1
+      ]
+    },
+    "score_logic_fixtures": {
+      "errors": [],
+      "multi_box_reasons": [
+        "candidate_exact_boxed_rate_below_threshold:0.000000<1.000000"
+      ],
+      "truncation_cases": [
+        {
+          "completion_tokens": 1,
+          "expected": true,
+          "finish_reason": "length",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 1,
+          "expected": true,
+          "finish_reason": "max_tokens",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 1,
+          "expected": true,
+          "finish_reason": "max_output_tokens",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 1,
+          "expected": true,
+          "finish_reason": "token_limit",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 1,
+          "expected": true,
+          "finish_reason": "truncated",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 7680,
+          "expected": true,
+          "finish_reason": "stop",
+          "max_tokens": 7680,
+          "observed": true
+        },
+        {
+          "completion_tokens": 7679,
+          "expected": false,
+          "finish_reason": "stop",
+          "max_tokens": 7680,
+          "observed": false
+        },
+        {
+          "completion_tokens": "",
+          "expected": false,
+          "finish_reason": "",
+          "max_tokens": 7680,
+          "observed": false
+        }
+      ],
+      "truncation_reasons": [
+        "candidate_truncated_above_threshold:1>0"
+      ]
+    },
+    "sources": {
+      "errors": [],
+      "source_sha256": {
+        "active_gate_registry_audit": "e3fcceb4386fbbdc0928feb6469794495bc592145fb18aeb54b275956b8d72bd",
+        "colab_realtime_runner": "dcf9005b2b9f85b891b4e170b2fc9d48d99b3dad6e1ea2d444cd6f815ca4711a",
+        "competition_utils": "e753caa1e3a0f5d5a62beab820abf5beb351b8b1e4f113867df25bc88c5db238",
+        "evaluate_lora_adapter": "bdde3435f75208d20a13e190247b807e37e3d33ce150311e66abda4f8a0178d8",
+        "evaluate_lora_adapters_batch": "dffff0bc0da7bfe1d9b66665d5cd98fa269d067cc90b9f5e4b178f137f9a5cb0",
+        "full947_baseline_readiness_gate": "5efa9342eb130f3aa9ecc96cd14086feb3f04df826304cca1e06e5a7c1ba2d8c",
+        "graft_builder": "fe90f0d8bc8d2140b769816c52c1e3644e8b00a0675b1c5a7ad237d7af017497",
+        "graft_contract_gate": "836ee97ad3f84e03c49ec69d97c1327a380eae0e85a729bf14cc57f24b39d786",
+        "hf_job_train_v90": "0294ba24dba0a4de0b8c2eb34de7da80f9b8f4107c1dbebd3cd53869ced2a112",
+        "live_log_common": "a6ab899aea48daf0ddc3f619b745e2bde836516b7b2438d8a32ada1afd627e70",
+        "solve_rate_gate": "85c1211750473053563bb849207fdb1f71390968dfe03e18d570342d8f900bc6",
+        "v1241_transfer_gate": "6f29c8f3cafdcc3380222c01d4ffcdc1e8ca4579e11f1d773b8faa0c7f4b638e"
+      },
+      "warnings": []
+    },
+    "v1243_artifacts": {
+      "datasets": {
+        "bit_specialist": {
+          "errors": [],
+          "family_counts": {
+            "bit_manipulation": 540,
+            "gravity_constant": 46,
+            "numeral_system": 46,
+            "text_encryption": 46,
+            "unit_conversion": 46
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+          "prompt_hashes": 724,
+          "rows": 724,
+          "sha256": "3b801f35c8ebb9aeb9d2894639390652710f4f43578f0185ba70a726064f61d7",
+          "source_role_counts": {
+            "v1243_bit_solver_verified": 540,
+            "v1243_protected_replay": 184
+          },
+          "weight_by_family": {
+            "bit_manipulation": 729.0,
+            "gravity_constant": 92.0,
+            "numeral_system": 92.0,
+            "text_encryption": 92.0,
+            "unit_conversion": 92.0
+          }
+        },
+        "equation_specialist": {
+          "errors": [],
+          "family_counts": {
+            "equation_transform": 360,
+            "gravity_constant": 46,
+            "numeral_system": 46,
+            "text_encryption": 46,
+            "unit_conversion": 46
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
+          "prompt_hashes": 544,
+          "rows": 544,
+          "sha256": "63aad59bf01cc38ad1cf0822326b3f4541335cf30d6cdbc053891b52edccbd84",
+          "source_role_counts": {
+            "v1243_equation_solver_verified": 360,
+            "v1243_protected_replay": 184
+          },
+          "weight_by_family": {
+            "equation_transform": 594.0,
+            "gravity_constant": 92.0,
+            "numeral_system": 92.0,
+            "text_encryption": 92.0,
+            "unit_conversion": 92.0
+          }
+        },
+        "micro_consolidation": {
+          "errors": [],
+          "family_counts": {
+            "bit_manipulation": 540,
+            "equation_transform": 360,
+            "gravity_constant": 46,
+            "numeral_system": 46,
+            "text_encryption": 46,
+            "unit_conversion": 46
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_micro_consolidation_train.jsonl",
+          "prompt_hashes": 1084,
+          "rows": 1084,
+          "sha256": "2b8f63e94992e7d409f415bcf5279d6e458afcb1a14527b7592aa7feb381e4cd",
+          "source_role_counts": {
+            "v1243_bit_solver_verified": 540,
+            "v1243_equation_solver_verified": 360,
+            "v1243_protected_replay": 184
+          },
+          "weight_by_family": {
+            "bit_manipulation": 567.0,
+            "equation_transform": 432.0,
+            "gravity_constant": 92.0,
+            "numeral_system": 92.0,
+            "text_encryption": 92.0,
+            "unit_conversion": 92.0
+          }
+        },
+        "protected_replay": {
+          "errors": [],
+          "family_counts": {
+            "gravity_constant": 46,
+            "numeral_system": 46,
+            "text_encryption": 46,
+            "unit_conversion": 46
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_protected_replay_train.jsonl",
+          "prompt_hashes": 184,
+          "rows": 184,
+          "sha256": "1af27369cde21db73e1fe978d9cb93b96eae00d2dbbf091a61a6da2906090a53",
+          "source_role_counts": {
+            "v1243_protected_anchor": 184
+          },
+          "weight_by_family": {
+            "gravity_constant": 92.0,
+            "numeral_system": 92.0,
+            "text_encryption": 92.0,
+            "unit_conversion": 92.0
+          }
+        },
+        "val170": {
+          "errors": [],
+          "family_counts": {
+            "bit_manipulation": 90,
+            "equation_transform": 60,
+            "gravity_constant": 5,
+            "numeral_system": 5,
+            "text_encryption": 5,
+            "unit_conversion": 5
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
+          "prompt_hashes": 170,
+          "rows": 170,
+          "sha256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+          "source_role_counts": {
+            "v1243_holdout": 170
+          },
+          "weight_by_family": {
+            "bit_manipulation": 0.0,
+            "equation_transform": 0.0,
+            "gravity_constant": 0.0,
+            "numeral_system": 0.0,
+            "text_encryption": 0.0,
+            "unit_conversion": 0.0
+          }
+        }
+      },
+      "env_errors": [],
+      "env_preview_path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\v1243_hf_env_preview.json",
+      "env_preview_sha256": "0eb49189d696a13ed6b748342799b74d0cfd0ea88ae89923cd3493fb4e7cb77a",
+      "errors": [],
+      "manifest_path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
+      "manifest_sha256": "7ac8b65ea25e2182c92008c020ebd1447fc5d6beafeb27082c32daee838e3e06"
+    }
+  },
+  "decision": "pass_score_path_operational_audit_no_gpu_no_submit",
+  "errors": [],
+  "generated_at_utc": "2026-06-14T01:13:56+00:00",
+  "not_authorized": [
+    "paid_gpu_launch",
+    "adapter_package",
+    "kaggle_submit",
+    "score_claim"
+  ],
+  "root": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052",
+  "schema_version": "kg1_score_path_operational_audit_v2",
+  "warnings": []
+}

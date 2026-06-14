@@ -1,0 +1,206 @@
+{
+  "active_train_path_authorized": false,
+  "adapter_package_authorized": false,
+  "checks": {
+    "active_artifacts": {
+      "dryruns": {
+        "bit": {
+          "decision": {
+            "full_training_allowed": false,
+            "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+            "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+            "tokenization_contract_passed": true
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\bit\\dry_run_model_recipe_report.json",
+          "sha256": "4a995c7997fa7dae4ba9343f6cad07648c28817046ca2c7b71af089c27c17cf4",
+          "target_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "lm_head",
+            "o_proj",
+            "out_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ],
+          "train_file_sha256": "3b801f35c8ebb9aeb9d2894639390652710f4f43578f0185ba70a726064f61d7",
+          "trainable_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "o_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ]
+        },
+        "equation": {
+          "decision": {
+            "full_training_allowed": false,
+            "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+            "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+            "tokenization_contract_passed": true
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\equation\\dry_run_model_recipe_report.json",
+          "sha256": "9395bcd32ffbe29e3e818cf55d77e493605d2cce5e381953369ad40284918561",
+          "target_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "lm_head",
+            "o_proj",
+            "out_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ],
+          "train_file_sha256": "63aad59bf01cc38ad1cf0822326b3f4541335cf30d6cdbc053891b52edccbd84",
+          "trainable_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "o_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ]
+        }
+      },
+      "errors": [],
+      "manifest_path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
+      "manifest_sha256": "7ac8b65ea25e2182c92008c020ebd1447fc5d6beafeb27082c32daee838e3e06",
+      "not_authorized": [
+        "adapter_package",
+        "kaggle_submit",
+        "paid_gpu_launch",
+        "score_claim"
+      ]
+    },
+    "documentation_status": {
+      "errors": [],
+      "roadmap": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\docs\\ROADMAP.md",
+      "score_audit_doc": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\docs\\KG1_SCORE_DETERMINANTS_AUDIT_2026_06_13.md"
+    },
+    "forbidden_active_actions": {
+      "errors": [],
+      "findings": {}
+    },
+    "reports": {
+      "errors": [],
+      "reports": {
+        "official_metric_prescore_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\official_metric_prescore_gate\\report.json",
+          "sha256": "09130193d3c8e2743df486c0586644c1084424da3b2c95c27f182c1886dbb219"
+        },
+        "score_path_operational_audit": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\score_path_operational_audit\\kg1_score_path_operational_audit.json",
+          "sha256": "ebe5ac5943b7395d268579947c80e9e0412f8d5389dd3c2459ba6e695d3ef009"
+        },
+        "solve_rate_gate_self_test": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\solve_rate_gate\\self_test_report.json",
+          "sha256": "ca18923bbf4f1dc40fc35de4a32ecfba1960ab8f86e113ea12e437b21c6311f7"
+        },
+        "v1241_full947_baseline_readiness_selftest": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\kg1_v1241_full947_baseline_readiness_gate_selftest.json",
+          "sha256": "3130603ba587bf139ca78ccb3f1a30b0d4c50794019ed16e12929e1f5fbf2846"
+        },
+        "v1241_transfer_gate_legacy_alias_selftest": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "sha256": "57c5ba19b4c79d101a6f1c937d778e94dc8795c6e8c73edb1060e7f02fc921d8"
+        },
+        "v1241_transfer_gate_selftest": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "sha256": "75a42c50ae87eb1a315c7da9903ca15a48ef483b5adec2ab70f085c31d9a25e7"
+        },
+        "v1243_graft_trainer_contract_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_contract_gate\\kg1_v1243_graft_trainer_contract_gate.json",
+          "sha256": "e8602bbbd8139dd9b922856303fae055747637b38c21eee4ac366eed6bddcd04"
+        }
+      }
+    },
+    "scripts": {
+      "errors": [],
+      "scripts": {
+        "evaluate_lora_adapter": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\evaluate_lora_adapter.py",
+          "sha256": "bdde3435f75208d20a13e190247b807e37e3d33ce150311e66abda4f8a0178d8"
+        },
+        "evaluate_lora_adapters_batch": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\evaluate_lora_adapters_batch.py",
+          "sha256": "dffff0bc0da7bfe1d9b66665d5cd98fa269d067cc90b9f5e4b178f137f9a5cb0"
+        },
+        "hf_job_train_v90": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\hf_job_train_v90.py",
+          "sha256": "0294ba24dba0a4de0b8c2eb34de7da80f9b8f4107c1dbebd3cd53869ced2a112"
+        },
+        "notebook_release_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\notebook_release_gate.py",
+          "sha256": "e4972028e95519c66cefdc95de434e905ff3690e78a11d2420848525c89ef469"
+        },
+        "official_metric_prescore_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_official_metric_prescore_gate.py",
+          "sha256": "6c2196dc521ebbd83d45fa99d94dc9d4538b1525ca503d65a2be04a5bd9e771b"
+        },
+        "score_path_operational_audit": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_score_path_operational_audit.py",
+          "sha256": "38b06834e30f84545c3fad316aeb615c3a79f00f41c4aac67eac26698df801ea"
+        },
+        "solve_rate_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\solve_rate_gate.py",
+          "sha256": "85c1211750473053563bb849207fdb1f71390968dfe03e18d570342d8f900bc6"
+        },
+        "v1241_bit_equation_transfer_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1241_bit_equation_transfer_gate.py",
+          "sha256": "6f29c8f3cafdcc3380222c01d4ffcdc1e8ca4579e11f1d773b8faa0c7f4b638e"
+        },
+        "v1241_full947_baseline_readiness_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py",
+          "sha256": "5efa9342eb130f3aa9ecc96cd14086feb3f04df826304cca1e06e5a7c1ba2d8c"
+        },
+        "v1243_graft_trainer_contract_gate": {
+          "exists": true,
+          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1243_graft_trainer_contract_gate.py",
+          "sha256": "836ee97ad3f84e03c49ec69d97c1327a380eae0e85a729bf14cc57f24b39d786"
+        }
+      }
+    }
+  },
+  "decision": "pass_active_gate_registry_no_train_no_paid_no_submit",
+  "errors": [],
+  "generated_at_utc": "2026-06-14T01:14:29+00:00",
+  "kaggle_submit_authorized": false,
+  "paid_gpu_launch_authorized": false,
+  "required_before_any_future_paid_launch": [
+    "workspace_clean_gate",
+    "integrated_pretrain_gate",
+    "objective_gate",
+    "launcher_validate_only_gate",
+    "pre_paid_launch_gate",
+    "v276_canonical_full947_solution_hash_gate",
+    "v1243_train_val_vs_full947_judge_leak_gate",
+    "v291_086_full947_raw_output_readiness_gate",
+    "v291_086_full947_natural_baseline_identity_probe",
+    "v291_086_full947_answer_only_baseline_identity_probe",
+    "score_path_operational_audit",
+    "raw_output_transfer_gate"
+  ],
+  "schema_version": "kg1_active_gate_registry_audit_v1",
+  "score_claim_authorized": false
+}

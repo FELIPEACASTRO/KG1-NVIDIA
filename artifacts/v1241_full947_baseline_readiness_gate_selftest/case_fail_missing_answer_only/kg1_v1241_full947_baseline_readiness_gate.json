@@ -1,0 +1,102 @@
+{
+  "blockers": [
+    "answer_only:answer_only predictions not found: C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\missing_answer_only.csv"
+  ],
+  "decision": "fail_full947_086_baseline_readiness",
+  "expected_reference": {
+    "bit_public_correct": 135,
+    "equation_public_correct": 56,
+    "protected_public_correct": 632,
+    "public_correct": 823,
+    "rows": 947
+  },
+  "generated_at_utc": "2026-06-13T22:45:41+00:00",
+  "inputs": {
+    "answer_only_baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\missing_answer_only.csv",
+    "inspect_only": false,
+    "max_tokens": 7680,
+    "natural_baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+    "profile": "full947_089",
+    "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+    "solution_csv_defaulted": false
+  },
+  "inspections": {
+    "answer_only": {
+      "errors": [
+        "answer_only predictions not found: C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\missing_answer_only.csv"
+      ],
+      "exists": false,
+      "label": "answer_only",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\missing_answer_only.csv",
+      "warnings": []
+    },
+    "natural": {
+      "columns": [
+        "id",
+        "raw_output",
+        "finish_reason",
+        "completion_tokens"
+      ],
+      "errors": [],
+      "exists": true,
+      "finish_reason_counts": {
+        "stop": 947
+      },
+      "id_field": "id",
+      "label": "natural",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\086_natural_full947_raw_output.csv",
+      "rows": 947,
+      "sha256": "b5d4f7d79db6ccf0c346a98c790d1524f8cdfe59a8782290a8c07f62bfd2509d",
+      "token_field": "completion_tokens",
+      "warnings": []
+    },
+    "solution": {
+      "canonical_match": false,
+      "canonical_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv",
+      "canonical_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+      "columns": [
+        "id",
+        "prompt",
+        "answer",
+        "family"
+      ],
+      "errors": [],
+      "exists": true,
+      "family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155,
+        "gravity_constant": 140,
+        "logic_grid": 112,
+        "numeral_system": 120,
+        "text_encryption": 120,
+        "unit_conversion": 140
+      },
+      "family_field": "family",
+      "id_field": "id",
+      "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\fixtures\\full947_solution.csv",
+      "protected_rows": 632,
+      "rows": 947,
+      "sha256": "5f9aafe579b1fd215e9a8951dec0c78e17f3994ea41a7f60088e4991e43f532c",
+      "warnings": []
+    }
+  },
+  "kaggle_submit_authorized": false,
+  "not_authorized": [
+    "adapter_package",
+    "kaggle_submit",
+    "score_claim"
+  ],
+  "paid_candidate_train_precondition_satisfied": false,
+  "probe_results": {},
+  "schema_version": "kg1_v1241_full947_baseline_readiness_gate_v1",
+  "score_claim_authorized": false,
+  "score_objective": {
+    "additional_correct_required_for_089": 20,
+    "baseline_correct": 823,
+    "baseline_readiness_is_not_score_success": true,
+    "next_required_candidate_gate": "V1241 full947_089 with candidate >=843/947 and zero regressions",
+    "target": ">=0.89",
+    "target_090_correct": 853,
+    "target_correct": 843
+  }
+}

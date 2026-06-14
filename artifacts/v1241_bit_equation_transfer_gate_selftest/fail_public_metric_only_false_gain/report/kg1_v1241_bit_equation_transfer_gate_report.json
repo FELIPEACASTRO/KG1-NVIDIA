@@ -1,0 +1,211 @@
+{
+  "baseline": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 0.5,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 0.5,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 6,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 0,
+    "public_correct": 4,
+    "public_metric_only_false_gain": 0,
+    "rows": 6,
+    "strict_correct": 4,
+    "strict_metric_only_false_positive": 0,
+    "truncated": 0
+  },
+  "baseline_identity": {
+    "rationale": "Full947 promotion protects the known V291 public baseline by comparing strict row deltas. Therefore the baseline CSV must be strict-clean: public identity and strict identity must both match the V291 reference before candidate gains are trusted.",
+    "reference_note": "Reference only. This gate must compare real raw_output CSVs, not reuse this constant as proof.",
+    "reference_source": "validated_project_submission_history",
+    "require_strict_clean_baseline": true,
+    "required": false
+  },
+  "blockers": [
+    "bit_gain_below_threshold:0<1",
+    "total_gain_below_threshold:1<2",
+    "candidate_format_failures_above_threshold:1>0",
+    "candidate_public_metric_only_false_gains_above_threshold:1>0"
+  ],
+  "candidate": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 2,
+        "public_metric_only_false_gain": 1,
+        "rows": 2,
+        "strict_accuracy": 0.5,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 2,
+        "public_correct": 2,
+        "public_metric_only_false_gain": 0,
+        "rows": 2,
+        "strict_accuracy": 1.0,
+        "strict_correct": 2,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 1,
+        "public_correct": 1,
+        "public_metric_only_false_gain": 0,
+        "rows": 1,
+        "strict_accuracy": 1.0,
+        "strict_correct": 1,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 5,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 1,
+    "public_correct": 6,
+    "public_metric_only_false_gain": 1,
+    "rows": 6,
+    "strict_correct": 5,
+    "strict_metric_only_false_positive": 0,
+    "truncated": 0
+  },
+  "candidate_blocker_counts": {
+    "format_failures": 1,
+    "public_metric_only_false_gains": 1,
+    "strict_metric_only_false_positives": 0,
+    "truncated": 0
+  },
+  "decision": "fail",
+  "family_deltas": {
+    "bit_manipulation": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 2,
+      "candidate_strict_correct": 1,
+      "improved_rows": 0,
+      "public_correct_delta": 1,
+      "regressed_rows": 0,
+      "rows": 2,
+      "strict_correct_delta": 0
+    },
+    "equation_transform": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 2,
+      "candidate_strict_correct": 2,
+      "improved_rows": 1,
+      "public_correct_delta": 1,
+      "regressed_rows": 0,
+      "rows": 2,
+      "strict_correct_delta": 1
+    },
+    "gravity_constant": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 1,
+      "candidate_strict_correct": 1,
+      "improved_rows": 0,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 1,
+      "strict_correct_delta": 0
+    },
+    "unit_conversion": {
+      "baseline_public_correct": 1,
+      "baseline_strict_correct": 1,
+      "candidate_public_correct": 1,
+      "candidate_strict_correct": 1,
+      "improved_rows": 0,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 1,
+      "strict_correct_delta": 0
+    }
+  },
+  "gains": {
+    "bit_manipulation_strict_correct_gain": 0,
+    "equation_transform_strict_correct_gain": 1,
+    "total_strict_correct_gain": 1
+  },
+  "generated_at_utc": "2026-06-13T22:25:49.089415+00:00",
+  "inputs": {
+    "baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_public_metric_only_false_gain\\baseline.csv",
+    "baseline_predictions_sha256": "ee772d37ce11b21e30b291d01457a5117d791f4ad8ea2011452be5e98441275c",
+    "candidate_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_public_metric_only_false_gain\\candidate.csv",
+    "candidate_predictions_sha256": "f20231c7113550e9845f718eade5d02ded10d266a2fbd2eb520b09737d2cf409",
+    "max_tokens": 64,
+    "profile": "custom",
+    "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_public_metric_only_false_gain\\solution.csv",
+    "solution_sha256": "27ce95a77e57e7ea26ffe44e45df2ca222ab86ace3a65f2ebbfbdd4673f1e065"
+  },
+  "regressions": {
+    "any": 0,
+    "protected_families": 0,
+    "weak_families": 0
+  },
+  "thresholds": {
+    "expected_rows": null,
+    "max_any_regressions": 0,
+    "max_candidate_format_failures": 0,
+    "max_candidate_public_false_gains": 0,
+    "max_candidate_strict_false_public": 0,
+    "max_candidate_truncated": 0,
+    "max_protected_regressions": 0,
+    "max_weak_regressions": 0,
+    "min_bit_gain": 1,
+    "min_equation_gain": 1,
+    "min_total_correct": null,
+    "min_total_gain": 2
+  }
+}

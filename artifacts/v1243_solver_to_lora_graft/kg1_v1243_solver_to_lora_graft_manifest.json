@@ -56,13 +56,13 @@
     "tiny": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile tiny --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_tiny_bit_equation_probe_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
     "val170": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile val170 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_v1240_val170_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'"
   },
-  "generated_at_utc": "2026-06-13T23:03:20+00:00",
+  "generated_at_utc": "2026-06-14T01:08:40+00:00",
   "hf_env_preview": {
     "bit_specialist": {
       "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
       "BASELINE_EVAL_BEFORE_TRAIN": "1",
       "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
-      "DATA_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+      "DATA_FILE": "v1243_bit_specialist_train.jsonl",
       "DATA_REPO": "local-v1243-solver-to-lora-graft",
       "DRY_RUN_VALIDATE_ONLY": "1",
       "EVAL_EVERY_STEPS": "10",
@@ -123,13 +123,13 @@
       "TOKENIZE_ONLY_DRY_RUN": "1",
       "TRAINABLE_LORA_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
       "UPLOAD_TO_HF": "0",
-      "VAL_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl"
+      "VAL_FILE": "v1243_val170.jsonl"
     },
     "equation_specialist": {
       "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
       "BASELINE_EVAL_BEFORE_TRAIN": "1",
       "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
-      "DATA_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
+      "DATA_FILE": "v1243_equation_specialist_train.jsonl",
       "DATA_REPO": "local-v1243-solver-to-lora-graft",
       "DRY_RUN_VALIDATE_ONLY": "1",
       "EVAL_EVERY_STEPS": "10",
@@ -190,7 +190,7 @@
       "TOKENIZE_ONLY_DRY_RUN": "1",
       "TRAINABLE_LORA_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
       "UPLOAD_TO_HF": "0",
-      "VAL_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl"
+      "VAL_FILE": "v1243_val170.jsonl"
     }
   },
   "inputs": {

@@ -1,0 +1,7 @@
+id,prompt,answer,family
+self_bit,"In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. Now, determine the result for: 10101010",10101010,bit_manipulation
+self_num,"In Alice's Wonderland, numbers are secretly converted into a different numeral system. Now, determine the result for: 47",XLVII,numeral_system
+self_unit,"In Alice's Wonderland, a secret unit conversion is applied to measurements. Now, convert the following measurement: 10 m",14.64,unit_conversion
+self_cipher,"In Alice's Wonderland, secret encryption rules are used on text. Now, decrypt the following text: HELLO",hello,text_encryption
+self_gravity,"In Alice's Wonderland, the gravitational constant has been secretly changed. Now, determine the result for this measurement.",9.81,gravity_constant
+self_equation,"In Alice's Wonderland, a secret set of transformation rules is applied to equations. Now, determine the result for: A+B",AB,equation_transform

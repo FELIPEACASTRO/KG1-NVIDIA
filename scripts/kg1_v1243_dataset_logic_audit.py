@@ -15,7 +15,7 @@ import math
 import re
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 
@@ -147,8 +147,8 @@ def expected_from_env_preview(env_preview: dict[str, Any], phase: str) -> dict[s
     env = env_preview.get(phase)
     if not isinstance(env, dict):
         raise KeyError(f"env preview missing phase {phase}")
-    data_file = Path(str(env.get("DATA_FILE", ""))).name
-    val_file = Path(str(env.get("VAL_FILE", ""))).name
+    data_file = portable_basename(env.get("DATA_FILE", ""))
+    val_file = portable_basename(env.get("VAL_FILE", ""))
     return {
         "data_file": data_file,
         "val_file": val_file,
@@ -157,6 +157,16 @@ def expected_from_env_preview(env_preview: dict[str, Any], phase: str) -> dict[s
         "min_train_examples": int(env.get("MIN_TRAIN_EXAMPLES", "0")),
         "min_val_examples": int(env.get("MIN_VAL_EXAMPLES", "0")),
     }
+
+
+def portable_basename(value: object) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    posix_name = Path(raw.replace("\\", "/")).name
+    windows_name = PureWindowsPath(raw).name
+    candidates = [name for name in (posix_name, windows_name) if name]
+    return min(candidates, key=len) if candidates else raw
 
 
 def row_weight(item: dict[str, Any]) -> float:

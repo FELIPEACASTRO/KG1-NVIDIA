@@ -1,0 +1,7 @@
+id,family_gate,answer,baseline_final_answer,baseline_correct,candidate_final_answer,candidate_correct,regressed,improved
+self_bit,bit_manipulation,10101010,10101010,True,10101010,True,False,False
+self_cipher,text_encryption,the queen smiles,the queen smiles,True,the queen smiles,True,False,False
+self_equation,equation_transform,}52,}52,True,INTENTIONAL_WRONG,False,True,False
+self_gravity,gravity_constant,24.64,24.64,True,24.64,True,False,False
+self_numeral,numeral_system,XLVII,XLVII,True,XLVII,True,False,False
+self_unit,unit_conversion,13.37,13.37,True,13.37,True,False,False

@@ -1,0 +1,312 @@
+{
+  "baseline": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 135,
+        "public_metric_only_false_gain": 135,
+        "rows": 160,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 56,
+        "public_metric_only_false_gain": 56,
+        "rows": 155,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 158,
+        "rows": 158,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "numeral_system": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 158,
+        "rows": 158,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "text_encryption": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 158,
+        "rows": 158,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 0,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 158,
+        "rows": 158,
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 0,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 947,
+    "public_correct": 823,
+    "public_metric_only_false_gain": 823,
+    "rows": 947,
+    "strict_correct": 0,
+    "strict_metric_only_false_positive": 0,
+    "truncated": 0
+  },
+  "baseline_identity": {
+    "expected_public_reference": {
+      "bit_manipulation": 135,
+      "equation_transform": 56,
+      "full947": 823,
+      "protected": 632
+    },
+    "observed_public": {
+      "bit_manipulation": 135,
+      "equation_transform": 56,
+      "full947": 823,
+      "protected": 632
+    },
+    "observed_strict": {
+      "bit_manipulation": 0,
+      "equation_transform": 0,
+      "full947": 0,
+      "protected": 0
+    },
+    "public_identity_pass": true,
+    "public_mismatches": {},
+    "rationale": "Full947 promotion protects the known V291 public baseline by comparing strict row deltas. Therefore the baseline CSV must be strict-clean: public identity and strict identity must both match the V291 reference before candidate gains are trusted.",
+    "reference_note": "Reference only. This gate must compare real raw_output CSVs, not reuse this constant as proof.",
+    "reference_source": "validated_project_submission_history",
+    "require_strict_clean_baseline": true,
+    "required": true,
+    "strict_clean_identity_pass": false,
+    "strict_clean_mismatches": {
+      "bit_manipulation": {
+        "expected": 135,
+        "observed": 0
+      },
+      "equation_transform": {
+        "expected": 56,
+        "observed": 0
+      },
+      "full947": {
+        "expected": 823,
+        "observed": 0
+      },
+      "protected": {
+        "expected": 632,
+        "observed": 0
+      }
+    }
+  },
+  "blockers": [
+    "baseline_strict_clean_identity_unverified:full947:0!=823",
+    "baseline_strict_clean_identity_unverified:bit_manipulation:0!=135",
+    "baseline_strict_clean_identity_unverified:equation_transform:0!=56",
+    "baseline_strict_clean_identity_unverified:protected:0!=632"
+  ],
+  "candidate": {
+    "by_family": {
+      "bit_manipulation": {
+        "exact_one_closed_boxed": 160,
+        "public_correct": 145,
+        "public_metric_only_false_gain": 0,
+        "rows": 160,
+        "strict_accuracy": 0.90625,
+        "strict_correct": 145,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "equation_transform": {
+        "exact_one_closed_boxed": 155,
+        "public_correct": 66,
+        "public_metric_only_false_gain": 0,
+        "rows": 155,
+        "strict_accuracy": 0.4258064516129032,
+        "strict_correct": 66,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "gravity_constant": {
+        "exact_one_closed_boxed": 158,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 0,
+        "rows": 158,
+        "strict_accuracy": 1.0,
+        "strict_correct": 158,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "numeral_system": {
+        "exact_one_closed_boxed": 158,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 0,
+        "rows": 158,
+        "strict_accuracy": 1.0,
+        "strict_correct": 158,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "text_encryption": {
+        "exact_one_closed_boxed": 158,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 0,
+        "rows": 158,
+        "strict_accuracy": 1.0,
+        "strict_correct": 158,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      },
+      "unit_conversion": {
+        "exact_one_closed_boxed": 158,
+        "public_correct": 158,
+        "public_metric_only_false_gain": 0,
+        "rows": 158,
+        "strict_accuracy": 1.0,
+        "strict_correct": 158,
+        "strict_metric_only_false_positive": 0,
+        "truncated": 0
+      }
+    },
+    "exact_one_closed_boxed": 947,
+    "malformed_boxed": 0,
+    "multi_box": 0,
+    "no_box": 0,
+    "public_correct": 843,
+    "public_metric_only_false_gain": 0,
+    "rows": 947,
+    "strict_correct": 843,
+    "strict_metric_only_false_positive": 0,
+    "truncated": 0
+  },
+  "candidate_blocker_counts": {
+    "format_failures": 0,
+    "public_metric_only_false_gains": 0,
+    "strict_metric_only_false_positives": 0,
+    "truncated": 0
+  },
+  "decision": "fail",
+  "family_deltas": {
+    "bit_manipulation": {
+      "baseline_public_correct": 135,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 145,
+      "candidate_strict_correct": 145,
+      "improved_rows": 145,
+      "public_correct_delta": 10,
+      "regressed_rows": 0,
+      "rows": 160,
+      "strict_correct_delta": 145
+    },
+    "equation_transform": {
+      "baseline_public_correct": 56,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 66,
+      "candidate_strict_correct": 66,
+      "improved_rows": 66,
+      "public_correct_delta": 10,
+      "regressed_rows": 0,
+      "rows": 155,
+      "strict_correct_delta": 66
+    },
+    "gravity_constant": {
+      "baseline_public_correct": 158,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 158,
+      "candidate_strict_correct": 158,
+      "improved_rows": 158,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 158,
+      "strict_correct_delta": 158
+    },
+    "numeral_system": {
+      "baseline_public_correct": 158,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 158,
+      "candidate_strict_correct": 158,
+      "improved_rows": 158,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 158,
+      "strict_correct_delta": 158
+    },
+    "text_encryption": {
+      "baseline_public_correct": 158,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 158,
+      "candidate_strict_correct": 158,
+      "improved_rows": 158,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 158,
+      "strict_correct_delta": 158
+    },
+    "unit_conversion": {
+      "baseline_public_correct": 158,
+      "baseline_strict_correct": 0,
+      "candidate_public_correct": 158,
+      "candidate_strict_correct": 158,
+      "improved_rows": 158,
+      "public_correct_delta": 0,
+      "regressed_rows": 0,
+      "rows": 158,
+      "strict_correct_delta": 158
+    }
+  },
+  "gains": {
+    "bit_manipulation_strict_correct_gain": 145,
+    "equation_transform_strict_correct_gain": 66,
+    "total_strict_correct_gain": 843
+  },
+  "generated_at_utc": "2026-06-13T22:25:49.309376+00:00",
+  "inputs": {
+    "baseline_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_full947_dirty_baseline_identity\\baseline.csv",
+    "baseline_predictions_sha256": "b984faf12a74f045b202d4f2d31f8ad5c8004f0741aa3997cc20fee4164a654c",
+    "candidate_predictions": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_full947_dirty_baseline_identity\\candidate.csv",
+    "candidate_predictions_sha256": "4d36f9cc20cf6692ad7f6232c5f3037fe1a0a384463e0ecea5962c068acc0a50",
+    "max_tokens": 64,
+    "profile": "full947_089",
+    "solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\fail_full947_dirty_baseline_identity\\solution.csv",
+    "solution_sha256": "7989aa3d8701643f31756a5d0e3c460543855064e773d4873945b0a83c1a04fe"
+  },
+  "regressions": {
+    "any": 0,
+    "protected_families": 0,
+    "weak_families": 0
+  },
+  "thresholds": {
+    "expected_rows": 947,
+    "max_any_regressions": 0,
+    "max_candidate_format_failures": 0,
+    "max_candidate_public_false_gains": 0,
+    "max_candidate_strict_false_public": 0,
+    "max_candidate_truncated": 0,
+    "max_protected_regressions": 0,
+    "max_weak_regressions": 0,
+    "min_bit_gain": 1,
+    "min_equation_gain": 1,
+    "min_total_correct": 843,
+    "min_total_gain": 2
+  }
+}
