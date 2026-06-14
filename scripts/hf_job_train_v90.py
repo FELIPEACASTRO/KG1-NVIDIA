@@ -1888,7 +1888,9 @@ def score_contract_example_report(examples: list[dict[str, Any]], label: str) ->
             assistant_not_exact_one_boxed += 1
             add_bad(row_id, f"assistant_boxed_count={boxed_count}")
         stripped = assistant.strip()
-        if not stripped.startswith("</think>\n\\boxed{") or not stripped.endswith("}"):
+        # Aceita CoT: o raciocinio pode vir ANTES de </think>; exige close-think + boxed terminal.
+        # (antes era startswith = so answer-only/V1243; quebrava o V1244 CoT que e correto.)
+        if ("</think>\n\\boxed{" not in stripped) or not stripped.endswith("}"):
             assistant_not_terminal_boxed += 1
             add_bad(row_id, "assistant_not_terminal_close_think_boxed")
         if item.get("answer") not in (None, ""):
