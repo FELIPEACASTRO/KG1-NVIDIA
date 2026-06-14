@@ -84,6 +84,8 @@ RUN_TRAIN = os.environ.get('KG1_V1243_RUN_TRAIN', '0')
 OUTPUT_REPO = os.environ.get('OUTPUT_REPO', '')
 REQUIRE_LIVE_LOG_UPLOAD = os.environ.get('KG1_REQUIRE_LIVE_LOG_UPLOAD', '1')
 ACCEPT_GPU_SPEND = os.environ.get('KG1_ACCEPT_GPU_SPEND', '0')
+REQUIRE_MODEL_DRYRUN = os.environ.get('KG1_V1243_REQUIRE_MODEL_DRYRUN', '0')
+REQUIRE_REAL_TRAIN = os.environ.get('KG1_V1243_REQUIRE_REAL_TRAIN', '0')
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_MIN_GPU_TOTAL_GIB', '70'))
 MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_MIN_CONTENT_FREE_GIB', '35'))
 INIT_ADAPTER_DIR_VALUE = os.environ.get('INIT_ADAPTER_DIR', '')
@@ -137,6 +139,8 @@ for secret_name in [
     'KG1_TARGET_ACCURACY',
     'KG1_V1243_RUN_MODEL_DRYRUN',
     'KG1_V1243_RUN_TRAIN',
+    'KG1_V1243_REQUIRE_MODEL_DRYRUN',
+    'KG1_V1243_REQUIRE_REAL_TRAIN',
     'KG1_REQUIRE_LIVE_LOG_UPLOAD',
     'KG1_ACCEPT_GPU_SPEND',
     'KG1_MIN_GPU_TOTAL_GIB',
@@ -169,6 +173,8 @@ RUN_TRAIN = os.environ.get('KG1_V1243_RUN_TRAIN', RUN_TRAIN)
 OUTPUT_REPO = os.environ.get('OUTPUT_REPO', OUTPUT_REPO)
 REQUIRE_LIVE_LOG_UPLOAD = os.environ.get('KG1_REQUIRE_LIVE_LOG_UPLOAD', REQUIRE_LIVE_LOG_UPLOAD)
 ACCEPT_GPU_SPEND = os.environ.get('KG1_ACCEPT_GPU_SPEND', ACCEPT_GPU_SPEND)
+REQUIRE_MODEL_DRYRUN = os.environ.get('KG1_V1243_REQUIRE_MODEL_DRYRUN', REQUIRE_MODEL_DRYRUN)
+REQUIRE_REAL_TRAIN = os.environ.get('KG1_V1243_REQUIRE_REAL_TRAIN', REQUIRE_REAL_TRAIN)
 MIN_GPU_TOTAL_GIB = float(os.environ.get('KG1_MIN_GPU_TOTAL_GIB', str(MIN_GPU_TOTAL_GIB)))
 MIN_CONTENT_FREE_GIB = float(os.environ.get('KG1_MIN_CONTENT_FREE_GIB', str(MIN_CONTENT_FREE_GIB)))
 INIT_ADAPTER_DIR_VALUE = os.environ.get('INIT_ADAPTER_DIR', INIT_ADAPTER_DIR_VALUE)
@@ -323,6 +329,26 @@ def validate_gpu_phase_preconditions(cuda_available, gpu_total_gib):
         raise RuntimeError(f'GPU memory too small for safe Nemotron model dry-run/train: {{gpu_total_gib:.2f}} GiB < {{MIN_GPU_TOTAL_GIB:.2f}} GiB.')
     print('gpu_phase_preflight_pass=True', flush=True)
     print('=== V1243 GPU PHASE PREFLIGHT END ===', flush=True)
+
+def validate_launch_intent_contract():
+    print('launch_intent_contract =', json.dumps({{
+        'require_model_dryrun': REQUIRE_MODEL_DRYRUN,
+        'require_real_train': REQUIRE_REAL_TRAIN,
+        'run_model_dryrun': RUN_MODEL_DRYRUN,
+        'run_train': RUN_TRAIN,
+        'accept_gpu_spend': ACCEPT_GPU_SPEND,
+        'output_repo_ready': bool(OUTPUT_REPO),
+    }}, sort_keys=True), flush=True)
+    if REQUIRE_REAL_TRAIN == '1' and RUN_TRAIN != '1':
+        raise RuntimeError(
+            'KG1_V1243_REQUIRE_REAL_TRAIN=1 but KG1_V1243_RUN_TRAIN is not 1. '
+            'This blocks a silent tokenize-only success when the intended operation is real training.'
+        )
+    if REQUIRE_MODEL_DRYRUN == '1' and RUN_MODEL_DRYRUN != '1':
+        raise RuntimeError(
+            'KG1_V1243_REQUIRE_MODEL_DRYRUN=1 but KG1_V1243_RUN_MODEL_DRYRUN is not 1. '
+            'This blocks a silent skip of the model/LoRA validation phase.'
+        )
 
 def dependency_versions():
     names = [
@@ -520,6 +546,8 @@ print('phase =', PHASE, flush=True)
 print('target_accuracy =', TARGET_ACCURACY, flush=True)
 print('run_model_dryrun =', RUN_MODEL_DRYRUN, flush=True)
 print('run_train =', RUN_TRAIN, flush=True)
+print('require_model_dryrun =', REQUIRE_MODEL_DRYRUN, flush=True)
+print('require_real_train =', REQUIRE_REAL_TRAIN, flush=True)
 print('output_repo_ready =', bool(OUTPUT_REPO), flush=True)
 print('hf_token_ready =', bool(os.environ.get('HF_TOKEN')), flush=True)
 print('live_log_repo =', os.environ.get('KG1_LIVE_LOG_HF_REPO'), flush=True)
@@ -548,7 +576,10 @@ wrapper_event(
     accept_gpu_spend=ACCEPT_GPU_SPEND,
     min_gpu_total_gib=MIN_GPU_TOTAL_GIB,
     require_live_log_upload=REQUIRE_LIVE_LOG_UPLOAD,
+    require_model_dryrun=REQUIRE_MODEL_DRYRUN,
+    require_real_train=REQUIRE_REAL_TRAIN,
 )
+validate_launch_intent_contract()
 cuda_available, gpu_total_gib, content_free_gib = runtime_probe()
 needs_gpu = RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1'
 if REQUIRE_LIVE_LOG_UPLOAD == '1' and not os.environ.get('HF_TOKEN'):
@@ -665,6 +696,7 @@ validate_gpu_phase_preconditions(cuda_available, gpu_total_gib)
 wrapper_event('GPU_PREFLIGHT', 'OK', needs_gpu=needs_gpu, gpu_total_gib=round(gpu_total_gib, 3))
 
 print('=== V1243 MODEL DRYRUN START ===', flush=True)
+model_dryrun_executed = False
 if RUN_MODEL_DRYRUN != '1':
     print('model_dryrun_skipped=True set KG1_V1243_RUN_MODEL_DRYRUN=1 to enable', flush=True)
     wrapper_event('MODEL_DRYRUN', 'SKIPPED', reason='KG1_V1243_RUN_MODEL_DRYRUN is not 1')
@@ -702,12 +734,16 @@ else:
         log_path=LOG_ROOT / (model_run_id + '_launcher.log'),
     )
     wrapper_event('MODEL_DRYRUN', 'OK', run_id=model_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
+    model_dryrun_executed = True
     print('model_monitor_command = python scripts\\\\kg1_colab_live_monitor.py --hf-repo ' + os.environ.get('KG1_LIVE_LOG_HF_REPO', '') + ' --hf-path ' + os.environ['KG1_LIVE_LOG_HF_PATH'] + ' --hf-repo-type dataset --interval 30 --target-accuracy ' + TARGET_ACCURACY, flush=True)
 print('=== V1243 MODEL DRYRUN END ===', flush=True)
 
 print('=== V1243 REAL TRAIN START ===', flush=True)
+real_train_executed = False
 if RUN_TRAIN != '1':
     print('real_train_skipped=True set KG1_V1243_RUN_TRAIN=1 and OUTPUT_REPO only after dry runs pass', flush=True)
+    print('TRAIN_NOT_EXECUTED_NO_ADAPTER_CREATED=True', flush=True)
+    print('TRAIN_ENABLE_FLAGS=KG1_ACCEPT_GPU_SPEND=1 KG1_V1243_RUN_MODEL_DRYRUN=1 KG1_V1243_RUN_TRAIN=1 KG1_V1243_REQUIRE_REAL_TRAIN=1 OUTPUT_REPO=<hf-output-repo>', flush=True)
     wrapper_event('REAL_TRAIN', 'SKIPPED', reason='KG1_V1243_RUN_TRAIN is not 1')
 else:
     if not OUTPUT_REPO:
@@ -735,8 +771,23 @@ else:
         log_path=LOG_ROOT / (real_run_id + '_launcher.log'),
     )
     wrapper_event('REAL_TRAIN', 'OK', run_id=real_run_id, hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'])
+    real_train_executed = True
 print('=== V1243 REAL TRAIN END ===', flush=True)
-wrapper_event('WRAPPER_END', 'OK')
+effective_mode = 'real_train' if real_train_executed else ('model_dryrun' if model_dryrun_executed else 'tokenize_only')
+if REQUIRE_REAL_TRAIN == '1' and not real_train_executed:
+    wrapper_event('WRAPPER_END', 'FAIL', effective_mode=effective_mode, model_dryrun_executed=model_dryrun_executed, real_train_executed=real_train_executed, reason='required real train was not executed')
+    raise RuntimeError('Required real train was not executed; refusing to report wrapper success.')
+if REQUIRE_MODEL_DRYRUN == '1' and not model_dryrun_executed:
+    wrapper_event('WRAPPER_END', 'FAIL', effective_mode=effective_mode, model_dryrun_executed=model_dryrun_executed, real_train_executed=real_train_executed, reason='required model dry-run was not executed')
+    raise RuntimeError('Required model dry-run was not executed; refusing to report wrapper success.')
+wrapper_event(
+    'WRAPPER_END',
+    'OK',
+    effective_mode=effective_mode,
+    model_dryrun_executed=model_dryrun_executed,
+    real_train_executed=real_train_executed,
+    final_adapter_created=real_train_executed,
+)
 print('=== V1243 ONECELL REALTIME LAUNCHER END ===', flush=True)
 """
 
@@ -762,11 +813,13 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
         "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n"
         "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'\n"
         "os.environ['KG1_V1243_RUN_TRAIN'] = '0'\n"
+        "os.environ['KG1_V1243_REQUIRE_MODEL_DRYRUN'] = '1'\n"
         "os.environ['KG1_V1243_FORCE_PACK_ADAPTER_DEFAULTS'] = '1'\n"
         "os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'\n"
         "RUN_MODEL_DRYRUN = '1'\n"
         "ACCEPT_GPU_SPEND = '1'\n"
         "RUN_TRAIN = '0'\n"
+        "REQUIRE_MODEL_DRYRUN = '1'\n"
         "INSTALL_CAUSAL_CONV1D = '1'\n"
         "print('model_dryrun_launcher_hard_lock = true', flush=True)\n"
         "print('force_pack_adapter_defaults = true', flush=True)\n\n"
