@@ -311,7 +311,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--artifact-dir", type=Path, default=DEFAULT_ARTIFACT_DIR)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--env-preview", type=Path, default=DEFAULT_ENV_PREVIEW)
-    parser.add_argument("--phase", choices=["all", "bit_specialist", "equation_specialist"], default="all")
+    parser.add_argument(
+        "--phase",
+        choices=["all", "bit_specialist", "equation_specialist", "micro_consolidation"],
+        default="all",
+    )
     return parser
 
 
@@ -321,7 +325,9 @@ def main() -> int:
     manifest = load_json(args.manifest.resolve())
     env_preview = load_json(args.env_preview.resolve())
     expected_phases = (
-        ["bit_specialist", "equation_specialist"] if args.phase == "all" else [args.phase]
+        ["bit_specialist", "equation_specialist", "micro_consolidation"]
+        if args.phase == "all"
+        else [args.phase]
     )
     errors: list[str] = []
     warnings: list[str] = []

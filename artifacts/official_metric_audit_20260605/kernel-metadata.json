@@ -1,0 +1,28 @@
+{
+  "id": "metric/nvidia-nemotron-metric",
+  "id_no": 109982711,
+  "title": "NVIDIA Nemotron Metric",
+  "code_file": "nvidia-nemotron-metric.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "competition metric",
+    "other"
+  ],
+  "dataset_sources": [
+    ""
+  ],
+  "kernel_sources": [
+    "metric/nvidia-metric-utility-script"
+  ],
+  "competition_sources": [],
+  "model_sources": [
+    "metric/nemotron-3-nano-30b-a3b-bf16/Transformers/default/1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:9fa0da194fad2241d3f01a80581cbecbd3a258b4d1b695e2cbbbc62a0fd205ac",
+  "machine_shape": "NvidiaRtxPro6000"
+}

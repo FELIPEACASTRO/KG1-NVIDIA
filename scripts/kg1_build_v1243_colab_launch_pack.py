@@ -29,6 +29,7 @@ REQUIRED_FILES = [
     "artifacts/v1243_solver_to_lora_graft/V1243_SOLVER_TO_LORA_GRAFT.md",
     "artifacts/v1243_solver_to_lora_graft/v1243_bit_specialist_train.jsonl",
     "artifacts/v1243_solver_to_lora_graft/v1243_equation_specialist_train.jsonl",
+    "artifacts/v1243_solver_to_lora_graft/v1243_micro_consolidation_train.jsonl",
     "artifacts/v1243_solver_to_lora_graft/v1243_val170.jsonl",
     "docs/COLAB_REALTIME_LOG_MONITORING.md",
     "docs/KG1_SCORE_DETERMINANTS_AUDIT_2026_06_13.md",

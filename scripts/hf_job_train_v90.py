@@ -274,6 +274,7 @@ SCORE_PROXY_EVAL_CHECK = env_bool("SCORE_PROXY_EVAL_CHECK", True)
 SCORE_PROXY_EVAL_MAX_EXAMPLES = env_int("SCORE_PROXY_EVAL_MAX_EXAMPLES", EVAL_MAX_EXAMPLES)
 SCORE_TRAJECTORY_CHECK = env_bool("SCORE_TRAJECTORY_CHECK", True)
 REQUIRE_SCORE_TRAJECTORY_PASS = env_bool("REQUIRE_SCORE_TRAJECTORY_PASS", False)
+REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY = env_bool("REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY", False)
 SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA = env_float("SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA", 0.0)
 SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP = env_float("SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP", 0.0)
 SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP = env_float("SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP", 0.0)
@@ -2667,7 +2668,16 @@ def evaluate_score_proxy(
     trajectory = score_trajectory_report(report, baseline_report) if SCORE_TRAJECTORY_CHECK else {}
     if trajectory:
         report["score_trajectory"] = trajectory
-        if REQUIRE_SCORE_TRAJECTORY_PASS and trajectory.get("status") in {"RISK", "STOP"}:
+        trajectory_status = str(trajectory.get("status") or "")
+        hard_fail_now = REQUIRE_SCORE_TRAJECTORY_PASS and (
+            not REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY or str(label).lower() == "final"
+        )
+        trajectory_failed = (
+            trajectory_status != "OK"
+            if REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY
+            else trajectory_status in {"RISK", "STOP"}
+        )
+        if hard_fail_now and trajectory_failed:
             raise RuntimeError(
                 "score_trajectory_not_pass: "
                 + "; ".join(str(reason) for reason in trajectory.get("reasons", [])[:5])
@@ -2809,6 +2819,7 @@ def make_manifest(
             "score_proxy_eval_check": SCORE_PROXY_EVAL_CHECK,
             "score_proxy_eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
             "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
+            "require_score_trajectory_final_only": REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY,
             "friendly_realtime_logs": FRIENDLY_REALTIME_LOGS,
             "friendly_log_score_hints": FRIENDLY_LOG_SCORE_HINTS,
             "seed": SEED,
@@ -2839,6 +2850,7 @@ def make_manifest(
                 "max_final_boxed_tail_token_accuracy_drop": MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP,
                 "max_final_boxed_tail_exact_rate_drop": MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP,
                 "require_score_trajectory_pass": REQUIRE_SCORE_TRAJECTORY_PASS,
+                "require_score_trajectory_final_only": REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY,
                 "score_trajectory_min_weak_exact_delta": SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA,
                 "score_trajectory_max_protected_exact_drop": SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP,
                 "score_trajectory_max_overall_exact_drop": SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP,
@@ -3003,6 +3015,7 @@ def train() -> None:
     print(
         f"Score trajectory check: {SCORE_TRAJECTORY_CHECK} "
         f"require_pass={REQUIRE_SCORE_TRAJECTORY_PASS} "
+        f"final_only={REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY} "
         f"min_weak_exact_delta={SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA} "
         f"target_correct_required={math.ceil(SCORE_CONTRACT_TARGET_ACCURACY * SCORE_CONTRACT_FULL_ROWS)}"
     )
@@ -3827,6 +3840,7 @@ def train() -> None:
         "max_final_boxed_tail_token_accuracy_drop": MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP,
         "max_final_boxed_tail_exact_rate_drop": MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP,
         "require_score_trajectory_pass": REQUIRE_SCORE_TRAJECTORY_PASS,
+        "require_score_trajectory_final_only": REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY,
         "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
     }
     manifest["training"]["score_proxy"] = {
@@ -3835,6 +3849,7 @@ def train() -> None:
         "eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
         "score_trajectory_schema_version": "kg1_score_trajectory_v1",
         "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
+        "require_score_trajectory_final_only": REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY,
         "score_trajectory_thresholds": {
             "min_weak_exact_delta": SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA,
             "max_protected_exact_drop": SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP,

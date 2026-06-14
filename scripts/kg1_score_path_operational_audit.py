@@ -580,6 +580,7 @@ def audit_v1243_artifacts() -> dict[str, Any]:
         "SCORE_PROXY_EVAL_MAX_EXAMPLES": "170",
         "SCORE_TRAJECTORY_CHECK": "1",
         "REQUIRE_SCORE_TRAJECTORY_PASS": "0",
+        "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY": "0",
         "SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA": "0.0",
         "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
@@ -608,7 +609,11 @@ def audit_v1243_artifacts() -> dict[str, Any]:
     }
 
 
-def audit_dryrun_report(phase: str, expected_rows: int, expected_share_key: str, expected_share: float) -> dict[str, Any]:
+def audit_dryrun_report(
+    phase: str,
+    expected_rows: int,
+    expected_shares: dict[str, float],
+) -> dict[str, Any]:
     errors: list[str] = []
     path = V1243_DRYRUN_DIR / phase / "dry_run_model_recipe_report.json"
     report = load_json(path)
@@ -619,7 +624,12 @@ def audit_dryrun_report(phase: str, expected_rows: int, expected_share_key: str,
     loss = training.get("train_loss_weighting", {})
     val_loss = training.get("validation_loss_weighting", {})
     shares = training.get("sampling", {}).get("weighted_share_by_subcategory", {})
-    dataset_name = "bit_specialist" if phase == "bit" else "equation_specialist"
+    dataset_by_phase = {
+        "bit": "bit_specialist",
+        "equation": "equation_specialist",
+        "micro_consolidation": "micro_consolidation",
+    }
+    dataset_name = dataset_by_phase[phase]
     expected_dataset_path = V1243_DIR / EXPECTED_V1243[dataset_name]["path"]
     expected_val_path = V1243_DIR / EXPECTED_V1243["val170"]["path"]
 
@@ -647,7 +657,13 @@ def audit_dryrun_report(phase: str, expected_rows: int, expected_share_key: str,
     expect(errors, loss.get("rows_without_boxed_payload_weight") == 0, f"{phase}: boxed payload missing rows")
     expect(errors, val_loss.get("rows") == 170, f"{phase}: validation loss rows mismatch")
     expect(errors, val_loss.get("rows_with_boxed_payload_weight") == 170, f"{phase}: validation boxed payload rows mismatch")
-    expect(errors, round(float(shares.get(expected_share_key, 0.0)), 6) == expected_share, f"{phase}: weighted share mismatch")
+    for expected_share_key, expected_share in expected_shares.items():
+        actual_share = round(float(shares.get(expected_share_key, 0.0)), 6)
+        expect(
+            errors,
+            actual_share == expected_share,
+            f"{phase}: weighted share mismatch for {expected_share_key}: {actual_share} != {expected_share}",
+        )
     return {
         "errors": errors,
         "path": str(path),
@@ -903,9 +919,12 @@ def audit_sources() -> dict[str, Any]:
     expect(errors, '"score_contract_runtime"' in text["hf_job_train_v90"], "trainer manifest missing score contract runtime")
     expect(errors, "SCORE_PROXY_EVAL_CHECK" in text["graft_builder"], "graft builder missing score proxy env")
     expect(errors, "SCORE_TRAJECTORY_CHECK" in text["graft_builder"], "graft builder missing score trajectory env")
+    expect(errors, "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY" in text["graft_builder"], "graft builder missing final-only score trajectory env")
     expect(errors, "def evaluate_score_proxy(" in text["hf_job_train_v90"], "trainer missing score proxy eval")
     expect(errors, "KG1_SCORE_PROXY_STATUS=" in text["hf_job_train_v90"], "trainer missing score proxy status log")
     expect(errors, "def score_trajectory_report(" in text["hf_job_train_v90"], "trainer missing score trajectory report")
+    expect(errors, "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY" in text["hf_job_train_v90"], "trainer missing final-only trajectory guard")
+    expect(errors, 'str(label).lower() == "final"' in text["hf_job_train_v90"], "trainer final-only trajectory guard is not label-gated")
     expect(errors, "KG1_SCORE_TRAJECTORY_STATUS=" in text["hf_job_train_v90"], "trainer missing score trajectory status log")
     expect(errors, "score_trajectory_alignment" in text["hf_job_train_v90"], "trainer missing score trajectory alignment flag")
     expect(errors, "TRAJECTORY_RE" in text["live_log_common"], "live log parser missing score trajectory regex")
@@ -1070,11 +1089,23 @@ def run(args: argparse.Namespace) -> int:
         ("v1243_artifacts", audit_v1243_artifacts),
         (
             "dryrun_bit",
-        lambda: audit_dryrun_report("bit", 724, "v1243_bit_solver_verified", 0.664540),
+            lambda: audit_dryrun_report("bit", 724, {"v1243_bit_solver_verified": 0.664540}),
         ),
         (
             "dryrun_equation",
-            lambda: audit_dryrun_report("equation", 544, "v1243_equation_solver_verified", 0.617464),
+            lambda: audit_dryrun_report("equation", 544, {"v1243_equation_solver_verified": 0.617464}),
+        ),
+        (
+            "dryrun_micro_consolidation",
+            lambda: audit_dryrun_report(
+                "micro_consolidation",
+                1084,
+                {
+                    "v1243_bit_solver_verified": 0.414777,
+                    "v1243_equation_solver_verified": 0.316020,
+                    "v1243_protected_replay": 0.269203,
+                },
+            ),
         ),
         ("existing_gate_reports", audit_existing_gate_reports),
         ("score_logic_fixtures", audit_score_logic_fixtures),

@@ -457,6 +457,7 @@ def build_readme(manifest: dict[str, Any]) -> str:
 def build_hf_env_preview(output_dir: Path) -> dict[str, Any]:
     bit_train = output_dir / "v1243_bit_specialist_train.jsonl"
     equation_train = output_dir / "v1243_equation_specialist_train.jsonl"
+    micro_train = output_dir / "v1243_micro_consolidation_train.jsonl"
     val170 = output_dir / "v1243_val170.jsonl"
 
     common = {
@@ -482,6 +483,7 @@ def build_hf_env_preview(output_dir: Path) -> dict[str, Any]:
         "SCORE_PROXY_EVAL_MAX_EXAMPLES": "170",
         "SCORE_TRAJECTORY_CHECK": "1",
         "REQUIRE_SCORE_TRAJECTORY_PASS": "0",
+        "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY": "0",
         "SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA": "0.0",
         "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
@@ -540,6 +542,23 @@ def build_hf_env_preview(output_dir: Path) -> dict[str, Any]:
             "FINAL_LEARNING_RATE": "0.0000008",
             "MAX_STEPS": "50",
             "NOTES": "Only run after bit specialist passes raw-output gates, or from baseline.",
+        },
+        "micro_consolidation": {
+            **common,
+            "DATA_FILE": micro_train.name,
+            "EXPECTED_TRAIN_SHA256": sha256_file(micro_train),
+            "MIN_TRAIN_EXAMPLES": "1084",
+            "MIN_TOKENIZED_TRAIN_EXAMPLES": "1084",
+            "LEARNING_RATE": "0.00000075",
+            "FINAL_LEARNING_RATE": "0.00000020",
+            "MAX_STEPS": "20",
+            "EVAL_EVERY_STEPS": "2",
+            "SAVE_EVERY_STEPS": "2",
+            "LOG_EVERY_STEPS": "1",
+            "NOTES": (
+                "Final sprint micro consolidation: bit + equation + protected replay. "
+                "Run model dry-run first, then real train with final-only score trajectory hard guard."
+            ),
         },
     }
 

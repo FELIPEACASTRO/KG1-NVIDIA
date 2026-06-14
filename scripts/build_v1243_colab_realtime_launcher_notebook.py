@@ -32,7 +32,7 @@ PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "9107966a8d27c4be5c6f43e645b77ba3f901bc6cc7b17005c6f079e6d82bf542"
+PACK_SHA256 = "bed920d9937c31b7164702658cae1986464ab1ebbcac9df7097cbb17690e1b4a"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
@@ -186,6 +186,7 @@ for secret_name in [
     'KG1_V1243_OVERRIDE_SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION',
     'KG1_V1243_OVERRIDE_MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION',
     'KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS',
+    'KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY',
     'KG1_V1243_OVERRIDE_REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION',
     'KG1_V1243_OVERRIDE_REQUIRE_FINAL_EVAL_LTE_BASELINE',
 ]:
@@ -1097,7 +1098,8 @@ FINAL_SPRINT_ONE_CELL_SOURCE = (
         "os.environ['KG1_V1243_OVERRIDE_BOXED_PAYLOAD_LOSS_WEIGHT'] = '5.0'\n"
         "os.environ['KG1_V1243_OVERRIDE_REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION'] = '1'\n"
         "os.environ['KG1_V1243_OVERRIDE_REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'\n"
-        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS'] = '0'\n"
+        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY'] = '1'\n"
         "if not os.environ.get('OUTPUT_REPO'):\n"
         "    os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-final-sprint-candidate'\n",
     )

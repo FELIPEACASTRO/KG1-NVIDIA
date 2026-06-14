@@ -864,6 +864,8 @@ def audit_v1243_launcher_contract(
             "os.environ['KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'] = '170'",
             "os.environ['KG1_V1243_OVERRIDE_LEARNING_RATE'] = '0.00000075'",
             "os.environ['KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE'] = '0.00000020'",
+            "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS'] = '1'",
+            "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY'] = '1'",
             "os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-final-sprint-candidate'",
             "Required real train was not executed; refusing to report wrapper success.",
         ]

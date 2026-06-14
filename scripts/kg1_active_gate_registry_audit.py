@@ -73,10 +73,18 @@ V1243_MANIFEST = ROOT / "artifacts" / "v1243_solver_to_lora_graft" / "kg1_v1243_
 V1243_DRYRUN_REPORTS = {
     "bit": ROOT / "artifacts" / "v1243_solver_to_lora_graft_tokenize_dryrun" / "bit" / "dry_run_model_recipe_report.json",
     "equation": ROOT / "artifacts" / "v1243_solver_to_lora_graft_tokenize_dryrun" / "equation" / "dry_run_model_recipe_report.json",
+    "micro_consolidation": (
+        ROOT
+        / "artifacts"
+        / "v1243_solver_to_lora_graft_tokenize_dryrun"
+        / "micro_consolidation"
+        / "dry_run_model_recipe_report.json"
+    ),
 }
 V1243_DATASETS = {
     "bit": ROOT / "artifacts" / "v1243_solver_to_lora_graft" / "v1243_bit_specialist_train.jsonl",
     "equation": ROOT / "artifacts" / "v1243_solver_to_lora_graft" / "v1243_equation_specialist_train.jsonl",
+    "micro_consolidation": ROOT / "artifacts" / "v1243_solver_to_lora_graft" / "v1243_micro_consolidation_train.jsonl",
 }
 V1243_VAL = ROOT / "artifacts" / "v1243_solver_to_lora_graft" / "v1243_val170.jsonl"
 FULL_ADAPTER_LORA_MODULES = [

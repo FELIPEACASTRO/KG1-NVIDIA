@@ -11,8 +11,8 @@
             "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
             "tokenization_contract_passed": true
           },
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\bit\\dry_run_model_recipe_report.json",
-          "sha256": "4a995c7997fa7dae4ba9343f6cad07648c28817046ca2c7b71af089c27c17cf4",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\bit\\dry_run_model_recipe_report.json",
+          "sha256": "2adc91978db4b1d7d2b5006678a23e4a2fc4dd7f2ea48f336e28ebcdfdb0350e",
           "target_modules": [
             "down_proj",
             "in_proj",
@@ -42,8 +42,8 @@
             "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
             "tokenization_contract_passed": true
           },
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\equation\\dry_run_model_recipe_report.json",
-          "sha256": "9395bcd32ffbe29e3e818cf55d77e493605d2cce5e381953369ad40284918561",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\equation\\dry_run_model_recipe_report.json",
+          "sha256": "3f3052be17efee1dec4630556d4a0e1865d26b88dc204373ed57bbf54cf00410",
           "target_modules": [
             "down_proj",
             "in_proj",
@@ -65,11 +65,42 @@
             "up_proj",
             "v_proj"
           ]
+        },
+        "micro_consolidation": {
+          "decision": {
+            "full_training_allowed": false,
+            "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+            "note": "Tokenize-only dry run validated dataset hashes, row counts, chat-template tokenization, offset masks, prompt truncation guard, and weighted sampling. It does not authorize full training because model/adapter trainability is checked only by the subsequent model-load dry run.",
+            "tokenization_contract_passed": true
+          },
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft_tokenize_dryrun\\micro_consolidation\\dry_run_model_recipe_report.json",
+          "sha256": "c7a631eae4a90d5629a781a9a2c6af30f827779b50d2d772b7091a3bb012160c",
+          "target_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "lm_head",
+            "o_proj",
+            "out_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ],
+          "train_file_sha256": "2b8f63e94992e7d409f415bcf5279d6e458afcb1a14527b7592aa7feb381e4cd",
+          "trainable_modules": [
+            "down_proj",
+            "in_proj",
+            "k_proj",
+            "o_proj",
+            "q_proj",
+            "up_proj",
+            "v_proj"
+          ]
         }
       },
       "errors": [],
-      "manifest_path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
-      "manifest_sha256": "7ac8b65ea25e2182c92008c020ebd1447fc5d6beafeb27082c32daee838e3e06",
+      "manifest_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
+      "manifest_sha256": "79b383b739d036331b0687fddd16f87e9a99de9b15581a8b9af171cfc3a60c1b",
       "not_authorized": [
         "adapter_package",
         "kaggle_submit",
@@ -79,8 +110,8 @@
     },
     "documentation_status": {
       "errors": [],
-      "roadmap": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\docs\\ROADMAP.md",
-      "score_audit_doc": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\docs\\KG1_SCORE_DETERMINANTS_AUDIT_2026_06_13.md"
+      "roadmap": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\docs\\ROADMAP.md",
+      "score_audit_doc": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\docs\\KG1_SCORE_DETERMINANTS_AUDIT_2026_06_13.md"
     },
     "forbidden_active_actions": {
       "errors": [],
@@ -91,38 +122,38 @@
       "reports": {
         "official_metric_prescore_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\official_metric_prescore_gate\\report.json",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\official_metric_prescore_gate\\report.json",
           "sha256": "09130193d3c8e2743df486c0586644c1084424da3b2c95c27f182c1886dbb219"
         },
         "score_path_operational_audit": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\score_path_operational_audit\\kg1_score_path_operational_audit.json",
-          "sha256": "ebe5ac5943b7395d268579947c80e9e0412f8d5389dd3c2459ba6e695d3ef009"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\score_path_operational_audit\\kg1_score_path_operational_audit.json",
+          "sha256": "abc69c7b0fb5ad457ffd641d2f7429a65e64d883f0feaed37b677f3fcd945bfc"
         },
         "solve_rate_gate_self_test": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\solve_rate_gate\\self_test_report.json",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\solve_rate_gate\\self_test_report.json",
           "sha256": "ca18923bbf4f1dc40fc35de4a32ecfba1960ab8f86e113ea12e437b21c6311f7"
         },
         "v1241_full947_baseline_readiness_selftest": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\kg1_v1241_full947_baseline_readiness_gate_selftest.json",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1241_full947_baseline_readiness_gate_selftest\\kg1_v1241_full947_baseline_readiness_gate_selftest.json",
           "sha256": "3130603ba587bf139ca78ccb3f1a30b0d4c50794019ed16e12929e1f5fbf2846"
         },
         "v1241_transfer_gate_legacy_alias_selftest": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1241_bit_equation_transfer_gate_selftest_legacy_alias\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
           "sha256": "57c5ba19b4c79d101a6f1c937d778e94dc8795c6e8c73edb1060e7f02fc921d8"
         },
         "v1241_transfer_gate_selftest": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1241_bit_equation_transfer_gate_selftest\\kg1_v1241_bit_equation_transfer_gate_selftest.json",
           "sha256": "75a42c50ae87eb1a315c7da9903ca15a48ef483b5adec2ab70f085c31d9a25e7"
         },
         "v1243_graft_trainer_contract_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\artifacts\\v1243_solver_to_lora_graft_contract_gate\\kg1_v1243_graft_trainer_contract_gate.json",
-          "sha256": "e8602bbbd8139dd9b922856303fae055747637b38c21eee4ac366eed6bddcd04"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft_contract_gate\\kg1_v1243_graft_trainer_contract_gate.json",
+          "sha256": "4f6fb405bbdae5564884f8262929a5d585975bf5c326792baba419d61c51ad2c"
         }
       }
     },
@@ -131,60 +162,60 @@
       "scripts": {
         "evaluate_lora_adapter": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\evaluate_lora_adapter.py",
-          "sha256": "bdde3435f75208d20a13e190247b807e37e3d33ce150311e66abda4f8a0178d8"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\evaluate_lora_adapter.py",
+          "sha256": "042d2a71d16530dfc409d5ac25b49471022b0a3346a3fde82452a0612f9c79e8"
         },
         "evaluate_lora_adapters_batch": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\evaluate_lora_adapters_batch.py",
-          "sha256": "dffff0bc0da7bfe1d9b66665d5cd98fa269d067cc90b9f5e4b178f137f9a5cb0"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\evaluate_lora_adapters_batch.py",
+          "sha256": "469838b553c6091d982d7dfa501c7a1be1b9422b418b9e37a098957e47abe64b"
         },
         "hf_job_train_v90": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\hf_job_train_v90.py",
-          "sha256": "0294ba24dba0a4de0b8c2eb34de7da80f9b8f4107c1dbebd3cd53869ced2a112"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\hf_job_train_v90.py",
+          "sha256": "8f41d1f48f8780a53aa78b178b50e9b1c60c82540d0be45c6dbdf81f762f35a9"
         },
         "notebook_release_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\notebook_release_gate.py",
-          "sha256": "e4972028e95519c66cefdc95de434e905ff3690e78a11d2420848525c89ef469"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\notebook_release_gate.py",
+          "sha256": "214a8825fc713de5b5790cbcdb4b758b699e3e76eff2210e42dea13c94e1b408"
         },
         "official_metric_prescore_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_official_metric_prescore_gate.py",
-          "sha256": "6c2196dc521ebbd83d45fa99d94dc9d4538b1525ca503d65a2be04a5bd9e771b"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_official_metric_prescore_gate.py",
+          "sha256": "3e77b98d4b6b017b65daf51649cf86520f8e67e5bb13c66d79f38f94a4972c77"
         },
         "score_path_operational_audit": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_score_path_operational_audit.py",
-          "sha256": "38b06834e30f84545c3fad316aeb615c3a79f00f41c4aac67eac26698df801ea"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_score_path_operational_audit.py",
+          "sha256": "d0b1522c74677374a011eec6e58fb316cdb5eae6d8542733f0673ffd97cd3e37"
         },
         "solve_rate_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\solve_rate_gate.py",
-          "sha256": "85c1211750473053563bb849207fdb1f71390968dfe03e18d570342d8f900bc6"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\solve_rate_gate.py",
+          "sha256": "6029bee753aa6ac42cb185644ec1e2e01077045a52edb1da0f9a4d56aeb368dc"
         },
         "v1241_bit_equation_transfer_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1241_bit_equation_transfer_gate.py",
-          "sha256": "6f29c8f3cafdcc3380222c01d4ffcdc1e8ca4579e11f1d773b8faa0c7f4b638e"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1241_bit_equation_transfer_gate.py",
+          "sha256": "0869981e061b2aafc2b25934bf473998a3c4d54cfac1a344a694948e0f252509"
         },
         "v1241_full947_baseline_readiness_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py",
-          "sha256": "5efa9342eb130f3aa9ecc96cd14086feb3f04df826304cca1e06e5a7c1ba2d8c"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py",
+          "sha256": "9769bfa9218ffc79a74f20596ef0fb5be96797d9887f0d32bd1a54f77f9a4527"
         },
         "v1243_graft_trainer_contract_gate": {
           "exists": true,
-          "path": "C:\\Users\\davis\\Workspace\\KG1_publish_v1243_20260613_221052\\scripts\\kg1_v1243_graft_trainer_contract_gate.py",
-          "sha256": "836ee97ad3f84e03c49ec69d97c1327a380eae0e85a729bf14cc57f24b39d786"
+          "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1243_graft_trainer_contract_gate.py",
+          "sha256": "87665325a7af0326448793b82f08d1557fc48ef5b98f810a057b03b42ccdebf7"
         }
       }
     }
   },
   "decision": "pass_active_gate_registry_no_train_no_paid_no_submit",
   "errors": [],
-  "generated_at_utc": "2026-06-14T01:14:29+00:00",
+  "generated_at_utc": "2026-06-14T16:00:26+00:00",
   "kaggle_submit_authorized": false,
   "paid_gpu_launch_authorized": false,
   "required_before_any_future_paid_launch": [
