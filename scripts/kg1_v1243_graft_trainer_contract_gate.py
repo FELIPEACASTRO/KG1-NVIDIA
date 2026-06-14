@@ -253,6 +253,19 @@ def audit_dataset(name: str, rows: list[dict[str, Any]], expected: dict[str, Any
             row_weight = float(row.get("row_loss_weight", row.get("loss_weight", 1.0)) or 0.0)
         except (TypeError, ValueError):
             row_weight = 0.0
+        metadata = row.get("metadata") or {}
+        for weight_key in ("row_loss_weight", "loss_weight"):
+            try:
+                parsed = float(row.get(weight_key, "nan"))
+            except (TypeError, ValueError):
+                parsed = float("nan")
+            expect(errors, abs(parsed - row_weight) <= 1e-9, f"{name}: top-level {weight_key} mismatch")
+        for weight_key in ("v1243_sampling_weight", "row_loss_weight", "loss_weight"):
+            try:
+                parsed = float(metadata.get(weight_key, "nan"))
+            except (TypeError, ValueError):
+                parsed = float("nan")
+            expect(errors, abs(parsed - row_weight) <= 1e-9, f"{name}: metadata {weight_key} mismatch")
         weight_by_family[str(row.get("family") or "")] += row_weight
     rounded_weight_by_family = {
         key: round(value, 6)
@@ -491,6 +504,7 @@ def audit_trainer_source(trainer_path: Path) -> dict[str, Any]:
         'SCORE_TRAJECTORY_CHECK = env_bool("SCORE_TRAJECTORY_CHECK", True)',
         'REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY = env_bool("REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY", False)',
         "def score_trajectory_report(",
+        'trajectory_failed = trajectory_status != "OK"',
         '"weak_families_individually_improved": weak_improved',
         "bit_and_equation_improved_without_global_or_protected_regression",
         "KG1_SCORE_TRAJECTORY_JSON_BEGIN",

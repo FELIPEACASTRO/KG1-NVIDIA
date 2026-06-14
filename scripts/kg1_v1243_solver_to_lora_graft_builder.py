@@ -289,6 +289,8 @@ def tag_row(row: dict[str, Any], *, phase: str, phase_role: str, sampling_weight
             "v1243_expected_raw_output_gate": "V1241",
             "v1243_family": family,
             "v1243_sampling_weight": sampling_weight,
+            "row_loss_weight": sampling_weight,
+            "loss_weight": sampling_weight,
         }
     )
     tagged["metadata"] = metadata

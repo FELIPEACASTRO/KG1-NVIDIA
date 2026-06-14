@@ -2684,11 +2684,7 @@ def evaluate_score_proxy(
         hard_fail_now = REQUIRE_SCORE_TRAJECTORY_PASS and (
             not REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY or str(label).lower() == "final"
         )
-        trajectory_failed = (
-            trajectory_status != "OK"
-            if REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY
-            else trajectory_status in {"RISK", "STOP"}
-        )
+        trajectory_failed = trajectory_status != "OK"
         if hard_fail_now and trajectory_failed:
             raise RuntimeError(
                 "score_trajectory_not_pass: "

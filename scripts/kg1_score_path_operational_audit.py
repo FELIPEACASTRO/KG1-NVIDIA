@@ -382,8 +382,28 @@ def audit_v1243_dataset(name: str, path: Path, expected: dict[str, Any]) -> dict
         assistant_text = last_message_content(row, "assistant")
         prompt = prompt_text(row)
         answer = row.get("answer")
+        metadata = row.get("metadata") or {}
         prompt_hashes.add(sha256_text(prompt))
         local: list[str] = []
+        try:
+            effective_weight = float(row.get("row_loss_weight", row.get("loss_weight", 1.0)) or 0.0)
+        except (TypeError, ValueError):
+            effective_weight = float("nan")
+            local.append("effective row weight invalid")
+        for weight_key in ("row_loss_weight", "loss_weight"):
+            try:
+                parsed_weight = float(row.get(weight_key, "nan"))
+            except (TypeError, ValueError):
+                parsed_weight = float("nan")
+            if abs(parsed_weight - effective_weight) > 1e-9:
+                local.append(f"top-level {weight_key} mismatch")
+        for weight_key in ("v1243_sampling_weight", "row_loss_weight", "loss_weight"):
+            try:
+                parsed_weight = float(metadata.get(weight_key, "nan"))
+            except (TypeError, ValueError):
+                parsed_weight = float("nan")
+            if abs(parsed_weight - effective_weight) > 1e-9:
+                local.append(f"metadata {weight_key} mismatch")
         if prompt != user_text:
             local.append("prompt != user message")
         if prompt.count(PROMPT_SUFFIX.strip()) != 1:
@@ -937,6 +957,7 @@ def audit_sources() -> dict[str, Any]:
     expect(errors, "def score_trajectory_report(" in text["hf_job_train_v90"], "trainer missing score trajectory report")
     expect(errors, "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY" in text["hf_job_train_v90"], "trainer missing final-only trajectory guard")
     expect(errors, 'str(label).lower() == "final"' in text["hf_job_train_v90"], "trainer final-only trajectory guard is not label-gated")
+    expect(errors, 'trajectory_failed = trajectory_status != "OK"' in text["hf_job_train_v90"], "trainer REQUIRE_SCORE_TRAJECTORY_PASS must fail every non-OK status")
     expect(errors, "weak_families_individually_improved" in text["hf_job_train_v90"], "trainer trajectory can average-mask bit/equation regression")
     expect(errors, "bit_and_equation_improved_without_global_or_protected_regression" in text["hf_job_train_v90"], "trainer trajectory missing individual bit/equation success reason")
     expect(errors, "KG1_SCORE_TRAJECTORY_STATUS=" in text["hf_job_train_v90"], "trainer missing score trajectory status log")
@@ -951,6 +972,8 @@ def audit_sources() -> dict[str, Any]:
     expect(errors, '"boxed_tail_exact_rate"' in text["hf_job_train_v90"], "trainer missing boxed-tail exact proxy")
     expect(errors, '"score_proxy"' in text["hf_job_train_v90"], "trainer manifest missing score proxy report")
     expect(errors, "FRIENDLY_REALTIME_LOGS" in text["graft_builder"], "graft builder missing friendly log env")
+    expect(errors, '"row_loss_weight": sampling_weight' in text["graft_builder"], "graft builder must synchronize metadata row_loss_weight with effective weight")
+    expect(errors, '"loss_weight": sampling_weight' in text["graft_builder"], "graft builder must synchronize metadata loss_weight with effective weight")
     expect(errors, "def kg1_teach_card(" in text["hf_job_train_v90"], "trainer missing friendly real-time log cards")
     expect(errors, "[KG1-TEACH]" in text["hf_job_train_v90"], "trainer missing KG1-TEACH marker")
     expect(errors, "O que e:" in text["hf_job_train_v90"], "trainer missing friendly what field")

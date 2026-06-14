@@ -10,11 +10,11 @@
     "pretokenized_validation_fraction": 0.0,
     "tokenized_train_records": 724,
     "tokenized_validation_records": 170,
-    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
-    "train_file_sha256": "3b801f35c8ebb9aeb9d2894639390652710f4f43578f0185ba70a726064f61d7",
+    "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+    "train_file_sha256": "b78a7b92c22ec0f4ba6f86be3cfe47f52a5a2d85ce9a9fa9cbe2649e67ac066c",
     "train_records": 724,
-    "validation_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
-    "validation_file_sha256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+    "validation_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
+    "validation_file_sha256": "28e26f6f64812fdd6bc962550bd1c0ce1bf4de24806016d3ccc7ec963b9cb3eb",
     "validation_records": 170
   },
   "decision": {
@@ -62,7 +62,7 @@
   },
   "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
   "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
-  "run_id": "v1243_local_bit_tokenize_refresh_20260614",
+  "run_id": "v1243_bit_tokenize_regen_20260614",
   "runtime": {
     "cuda_available": false,
     "tokenize_only_dry_run": true,

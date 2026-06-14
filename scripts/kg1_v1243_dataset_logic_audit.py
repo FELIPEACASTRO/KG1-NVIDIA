@@ -233,6 +233,31 @@ def audit_rows(rows: list[dict[str, Any]], label: str) -> tuple[dict[str, Any], 
             errors.append(f"{label}:{row_id}: unknown family {family!r}")
         if metadata.get("v1243_family") and metadata.get("v1243_family") != family:
             errors.append(f"{label}:{row_id}: metadata family mismatch")
+        effective_weight = row_weight(item)
+        for weight_key in ("row_loss_weight", "loss_weight"):
+            raw_weight = item.get(weight_key)
+            if raw_weight in (None, ""):
+                errors.append(f"{label}:{row_id}: missing top-level {weight_key}")
+            else:
+                try:
+                    parsed_weight = float(raw_weight)
+                except (TypeError, ValueError):
+                    errors.append(f"{label}:{row_id}: invalid top-level {weight_key}={raw_weight!r}")
+                else:
+                    if not math.isfinite(parsed_weight) or abs(parsed_weight - effective_weight) > 1e-9:
+                        errors.append(f"{label}:{row_id}: top-level {weight_key} mismatch")
+        for weight_key in ("v1243_sampling_weight", "row_loss_weight", "loss_weight"):
+            raw_weight = metadata.get(weight_key)
+            if raw_weight in (None, ""):
+                errors.append(f"{label}:{row_id}: missing metadata {weight_key}")
+            else:
+                try:
+                    parsed_weight = float(raw_weight)
+                except (TypeError, ValueError):
+                    errors.append(f"{label}:{row_id}: invalid metadata {weight_key}={raw_weight!r}")
+                else:
+                    if not math.isfinite(parsed_weight) or abs(parsed_weight - effective_weight) > 1e-9:
+                        errors.append(f"{label}:{row_id}: metadata {weight_key} mismatch")
         if not isinstance(messages, list) or not user_message or not assistant_message:
             errors.append(f"{label}:{row_id}: missing user/assistant messages")
         if PROMPT_SUFFIX in str(prompt):
