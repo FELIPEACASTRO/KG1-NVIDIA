@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>A Pizzaria do Seu Nemotron — Edição de Luxo (ultra-micro)</title>
+<style>
+  @page { size: A4; margin: 1.3cm 1.2cm; }
+  * { box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body { font-family:"Segoe UI",system-ui,sans-serif; color:#2b2118; line-height:1.5; margin:0; font-size:12px; }
+  .wrap { max-width:830px; margin:0 auto; }
+  :root{ --tomato:#d7372e; --crust:#c98a3a; --basil:#3a9d4f; --cheese:#f4c542; --soft:#fff7ec; --line:#e7d6bd; }
+  .cover{ background:linear-gradient(160deg,#fff3df,#ffe7c7); border:3px solid var(--crust); border-radius:18px; padding:22px; text-align:center; page-break-after:always;}
+  .cover h1{ font-size:30px; margin:8px 0 2px; color:var(--tomato);}
+  .cover .sub{ color:#7a5a32; font-size:13.5px; margin:0;}
+  .cover .tag{ display:inline-block; background:var(--basil); color:#fff; padding:3px 12px; border-radius:20px; font-weight:700; font-size:12px;}
+  .narr{ font-style:italic; color:#6b4f2a; background:#fff7ec; border-radius:8px; padding:7px 12px; margin:10px 0; border-left:4px solid var(--cheese);}
+  /* balões de fala */
+  .talk{ display:flex; gap:8px; align-items:flex-start; margin:9px 0; }
+  .talk .ava{ font-size:24px; flex:0 0 auto; line-height:1; margin-top:2px; }
+  .talk .bub{ background:#fff; border:2px solid var(--line); border-radius:12px; padding:7px 11px; position:relative; font-size:11.5px; }
+  .talk .bub:before{ content:""; position:absolute; left:-9px; top:11px; border:5px solid transparent; border-right-color:var(--line);}
+  .talk .who{ font-weight:800; font-size:10.5px; color:var(--tomato); display:block; }
+  .chef .who{color:#b5651d} .insp .who{color:#1f6fd0} .vovo .who{color:#a0399b}
+  /* células */
+  .cell{ border:2px solid var(--line); border-radius:14px; margin:15px 0; overflow:hidden; page-break-inside:avoid;}
+  .cell>.head{ background:var(--tomato); color:#fff; padding:8px 13px; font-size:15px; font-weight:800; display:flex; gap:9px; align-items:center;}
+  .cell>.head .n{ background:#fff; color:var(--tomato); width:24px;height:24px;border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:900; font-size:13px;}
+  .cell .body{ padding:11px 13px;}
+  pre.code{ background:#241c14; color:#f3e9d8; border-radius:9px; padding:9px 11px; font-family:"Cascadia Code",Consolas,monospace; font-size:10.5px; overflow-x:auto; margin:9px 0;}
+  pre.code .kw{color:#ff9f6b} pre.code .st{color:#9fd98a} pre.code .cm{color:#d6b15e;font-style:italic}
+  /* dissecação token a token */
+  .diss{ width:100%; border-collapse:collapse; margin:6px 0 10px; font-size:10.5px;}
+  .diss caption{ text-align:left; font-weight:800; color:var(--crust); padding:3px 0; font-size:11px;}
+  .diss th,.diss td{ border:1px solid var(--line); padding:4px 7px; vertical-align:top; text-align:left;}
+  .diss th{ background:#f6ecd9;} .diss td.tk{ font-family:Consolas,monospace; background:#fbf4e7; white-space:nowrap; color:#9a3b1e; font-weight:700;}
+  .diss td.pz{ color:#3a7d46;}
+  .box{ border-radius:10px; padding:8px 11px; margin:9px 0; font-size:11px; border:2px solid;}
+  .box .t{ font-weight:800; display:block; margin-bottom:2px;}
+  .bts{ background:#f1ecff; border-color:#a785e0;} .bts .t{color:#7a4fce;}
+  .warn{ background:#fff0ee; border-color:var(--tomato);} .warn .t{color:var(--tomato);}
+  .recap{ background:#241c14; color:#f3e9d8; border-radius:10px; padding:9px 13px; margin:9px 0; font-size:11px;} .recap b{color:var(--cheese);}
+  code{ background:#f0e6d6; padding:1px 4px; border-radius:4px; font-size:10.5px;}
+  .footer{ text-align:center; color:#9a7b50; font-size:10px; margin-top:12px;}
+</style></head><body><div class="wrap">
+
+<div class="cover">
+  <div style="font-size:46px">🍕👨‍🍳🔬</div>
+  <div class="tag">EDIÇÃO DE LUXO · ultra-micro</div>
+  <h1>A Pizzaria do Seu Nemotron</h1>
+  <p class="sub">O job <b>pedacinho por pedacinho</b> — com os personagens falando 🗨️</p>
+  <div class="narr" style="text-align:left">🎬 <b>Recapitulando o elenco:</b> 👨‍🍳 <b>Seu Nemotron</b> (chef 30B) · 👵 <b>Vovó</b> (o molho 086) ·
+  🔥 <b>Forno</b> (GPU) · 🍞 <b>Massa Pronta</b> (wheel) · 🕵️ <b>Inspetor Sherllambda</b> (watchdog) · 📹 <b>Câmera</b> (live-log).</div>
+</div>
+
+<!-- ================= CÉLULA 1 ================= -->
+<div class="cell"><div class="head"><span class="n">1</span> 🧩 Os ingredientes — desmontando cada pedaço</div><div class="body">
+  <div class="narr">🎬 Abre a cortina: o mercado ainda fechado, o Seu Nemotron bate o pé impaciente...</div>
+  <div class="talk chef"><span class="ava">👨‍🍳</span><div class="bub"><span class="who">Seu Nemotron</span>Sem a apostila de receitas eu NEM coloco o avental, viu?</div></div>
+
+  <pre class="code">subprocess.run([<span class="st">'git'</span>,<span class="st">'clone'</span>,<span class="st">'--depth'</span>,<span class="st">'1'</span>,<span class="st">'--branch'</span>,<span class="st">'claude/v1244-cot-safe'</span>, URL, <span class="st">'/content/kg1'</span>], check=<span class="kw">True</span>)</pre>
+  <table class="diss"><caption>🔬 Dissecando pedaço por pedaço:</caption>
+    <tr><th>Pedaço</th><th>O que é (técnico)</th><th>Quem é na pizzaria 🍕</th></tr>
+    <tr><td class="tk">subprocess</td><td>módulo que roda programas de fora do Python</td><td class="pz">o telefone pra ligar pro mercado</td></tr>
+    <tr><td class="tk">.run(...)</td><td>executa E ESPERA terminar</td><td class="pz">"faz o pedido e aguarda chegar"</td></tr>
+    <tr><td class="tk">'git'</td><td>o programa a chamar</td><td class="pz">o entregador (o Sr. Git 🛵)</td></tr>
+    <tr><td class="tk">'clone'</td><td>comando: copiar um repositório</td><td class="pz">"me traz uma cópia da apostila"</td></tr>
+    <tr><td class="tk">'--depth','1'</td><td>baixa só o último commit</td><td class="pz">"só a última página, não a saga toda"</td></tr>
+    <tr><td class="tk">'--branch','claude/...'</td><td>qual ramo do repo</td><td class="pz">"a EDIÇÃO certa da apostila"</td></tr>
+    <tr><td class="tk">'/content/kg1'</td><td>pasta de destino</td><td class="pz">a prateleira onde guarda</td></tr>
+    <tr><td class="tk">check=True</td><td>levanta erro se o git falhar</td><td class="pz">"não chegou? FECHA a loja agora"</td></tr>
+  </table>
+
+  <pre class="code">subprocess.run([... <span class="st">'torch==2.10.0'</span>, <span class="st">'--index-url'</span>, <span class="st">'https://download.pytorch.org/whl/cu126'</span>])</pre>
+  <div class="talk insp"><span class="ava">🕵️</span><div class="bub"><span class="who">Inspetor Sherllambda</span>O Colab entregou a batedeira 2.11... mas a massa pronta só encaixa na 2.10. Caso encerrado: a gente TROCA.</div></div>
+  <table class="diss"><caption>🔬 Dissecando:</caption>
+    <tr><th>Pedaço</th><th>Técnico</th><th>Na pizzaria 🍕</th></tr>
+    <tr><td class="tk">'torch==2.10.0'</td><td>fixa a versão exata do torch</td><td class="pz">"quero a batedeira modelo 2.10, nem mais nem menos"</td></tr>
+    <tr><td class="tk">'==' (dois iguais)</td><td>versão EXATA (não &gt;=)</td><td class="pz">"esse modelo e ponto final"</td></tr>
+    <tr><td class="tk">--index-url .../cu126</td><td>baixa da loja oficial do PyTorch (com CUDA)</td><td class="pz">a loja que entrega batedeira COM MOTOR ⚡</td></tr>
+    <tr><td class="tk">cu126</td><td>build pra CUDA 12.6</td><td class="pz">o tipo de tomada/motor</td></tr>
+  </table>
+  <div class="box warn"><span class="t">⚠️ CUIDADO! (piada séria)</span> Comprar torch na loja errada = batedeira **sem motor (CPU)**. Ela liga, acende a luzinha, faz "vrum"... e **não bate nada**. Você só descobre quando a massa continua dura. 😅</div>
+
+  <pre class="code">tmm = <span class="st">'.'</span>.join(torch.__version__.split(<span class="st">'+'</span>)[<span class="st">0</span>].split(<span class="st">'.'</span>)[:<span class="st">2</span>])   <span class="cm"># vira "2.10"</span></pre>
+  <table class="diss"><caption>🔬 Dissecando a linha mais "code-golf" do job:</caption>
+    <tr><th>Pedaço</th><th>O que faz</th><th>Exemplo</th></tr>
+    <tr><td class="tk">torch.__version__</td><td>a string da versão</td><td class="pz">"2.10.0+cu126"</td></tr>
+    <tr><td class="tk">.split('+')[0]</td><td>corta no "+" e pega o 1º pedaço</td><td class="pz">"2.10.0"</td></tr>
+    <tr><td class="tk">.split('.')</td><td>quebra nos pontos</td><td class="pz">["2","10","0"]</td></tr>
+    <tr><td class="tk">[:2]</td><td>pega os 2 primeiros</td><td class="pz">["2","10"]</td></tr>
+    <tr><td class="tk">'.'.join(...)</td><td>cola com ponto</td><td class="pz">"2.10" ✅</td></tr>
+  </table>
+  <div class="box bts"><span class="t">🎥 Nos bastidores</span> Por que tanto malabarismo só pra virar "2.10"? Porque é com esse "2.10" que a gente **monta o endereço da massa pronta** (`...torch2.10...`). Um caractere errado aqui = massa pronta não encontrada = 30 min sovando. Detalhe é tudo na cozinha!</div>
+
+  <pre class="code"><span class="kw">if</span> subprocess.run([... <span class="st">'--no-deps'</span>, url]).returncode != <span class="st">0</span>:  <span class="cm"># a massa pronta falhou?</span>
+      ... compila do source                              <span class="cm"># plano B: sova do zero</span></pre>
+  <table class="diss">
+    <tr><th>Pedaço</th><th>Técnico</th><th>Na pizzaria 🍕</th></tr>
+    <tr><td class="tk">--no-deps</td><td>instala SÓ esse pacote, sem puxar dependências</td><td class="pz">"só a massa, sem vir tralha de brinde"</td></tr>
+    <tr><td class="tk">.returncode</td><td>0 = deu certo; ≠0 = falhou</td><td class="pz">o "joinha" ou "joia pra baixo" do entregador</td></tr>
+    <tr><td class="tk">if ... != 0:</td><td>se falhou, entra no plano B</td><td class="pz">"acabou a massa pronta? bota a mão na massa"</td></tr>
+  </table>
+  <div class="recap"><b>📝 Resumo Cél 1:</b> ligou pro mercado (git) → trocou a batedeira (torch 2.10 com motor) → leu a etiqueta ("2.10") → pegou a massa pronta (10s) ou sovou (plano B) → provou → DEPS OK.</div>
+</div></div>
+
+<!-- ================= CÉLULA 2 ================= -->
+<div class="cell"><div class="head"><span class="n">2</span> 🗝️ A chave do depósito — desmontada</div><div class="body">
+  <pre class="code"><span class="kw">for</span> k <span class="kw">in</span> [<span class="st">'HF_KEY'</span>,<span class="st">'HF_TOKEN'</span>,<span class="st">'HUGGINGFACE_TOKEN'</span>]:
+      v = userdata.get(k)
+      <span class="kw">if</span> v: os.environ[<span class="st">'HF_TOKEN'</span>] = v; <span class="kw">break</span></pre>
+  <table class="diss"><caption>🔬 Dissecando:</caption>
+    <tr><th>Pedaço</th><th>Técnico</th><th>Na pizzaria 🍕</th></tr>
+    <tr><td class="tk">for k in [3 nomes]</td><td>tenta 3 nomes de chave</td><td class="pz">testa 3 chaveiros (cada um chama de um jeito)</td></tr>
+    <tr><td class="tk">userdata.get(k)</td><td>lê o segredo do cofre do Colab</td><td class="pz">abre o cofrinho de senhas</td></tr>
+    <tr><td class="tk">if v: ... break</td><td>achou? guarda e PARA</td><td class="pz">"achei a chave! pode parar de procurar"</td></tr>
+  </table>
+  <div class="talk vovo"><span class="ava">👵</span><div class="bub"><span class="who">Vovó (o molho 086)</span>Sem a chavinha do depósito, ninguém pega meu molho secreto, meu bem. 😘</div></div>
+</div></div>
+
+<!-- ================= CÉLULA 3 ================= -->
+<div class="cell"><div class="head"><span class="n">3</span> 🔥 Medir o forno — desmontada</div><div class="body">
+  <pre class="code">vram = torch.cuda.get_device_properties(<span class="st">0</span>).total_memory / <span class="st">1e9</span>
+<span class="kw">assert</span> vram &gt;= <span class="st">70</span>, <span class="st">'40GB -&gt; RECONECTE p/ 80GB'</span></pre>
+  <table class="diss"><caption>🔬 Dissecando:</caption>
+    <tr><th>Pedaço</th><th>Técnico</th><th>Na pizzaria 🍕</th></tr>
+    <tr><td class="tk">get_device_properties(0)</td><td>dados da GPU nº 0</td><td class="pz">a ficha técnica do forno</td></tr>
+    <tr><td class="tk">.total_memory</td><td>VRAM total em bytes</td><td class="pz">o tamanho do forno (em bytes)</td></tr>
+    <tr><td class="tk">/ 1e9</td><td>bytes → gigabytes</td><td class="pz">converte pra "GB" de gente</td></tr>
+    <tr><td class="tk">assert vram&gt;=70</td><td>exige ≥70GB, senão erro</td><td class="pz">"forno &lt; 70GB? PARA, pizza família não cabe"</td></tr>
+  </table>
+  <div class="talk insp"><span class="ava">🕵️</span><div class="bub"><span class="who">Inspetor Sherllambda</span>42GB? Elementar: a pizza de 60GB NÃO entra. Eu te paro agora — antes do incêndio, não depois. 🔎🔥</div></div>
+  <div class="box warn"><span class="t">⚠️ O "erro" aqui é HERÓI</span> Quando aparece <code>AssertionError: VRAM=42GB</code>, NÃO é bug — é o Inspetor te salvando de um OOM que só explodiria 10 min depois. Detector de fumaça apitando = casa salva.</div>
+</div></div>
+
+<!-- ================= CÉLULA 4 ================= -->
+<div class="cell"><div class="head"><span class="n">4</span> 📋 A ficha da masterclass — os pedaços que importam</div><div class="body">
+  <pre class="code">os.environ[<span class="st">'MAX_STEPS'</span>]=<span class="st">'160'</span>; os.environ[<span class="st">'NUM_EPOCHS'</span>]=<span class="st">'6'</span>   <span class="cm"># o pulo do gato</span></pre>
+  <table class="diss"><caption>🔬 A conta que quase deu ruim (dissecada):</caption>
+    <tr><th>Pedaço</th><th>Conta</th><th>Resultado</th></tr>
+    <tr><td class="tk">979 receitas / 32 por panela</td><td>ceil(979/32)</td><td class="pz">31 passos por turma</td></tr>
+    <tr><td class="tk">NUM_EPOCHS = 6</td><td>31 × 6</td><td class="pz">186 passos planejados</td></tr>
+    <tr><td class="tk">MAX_STEPS = 160</td><td>min(186, 160)</td><td class="pz">corta em 160 ✅</td></tr>
+    <tr><td class="tk">(se epochs=1)</td><td>min(31, 160)</td><td class="pz">só 31! ❌ a armadilha</td></tr>
+  </table>
+  <div class="talk chef"><span class="ava">👨‍🍳</span><div class="bub"><span class="who">Seu Nemotron</span>Se eu fizer só 31 passos achando que são 160, saio achando que treinei e... mal aqueci. Por isso 6 turmas!</div></div>
+</div></div>
+
+<!-- ================= CÉLULA 5 ================= -->
+<div class="cell"><div class="head"><span class="n">5</span> 📹 A AÇÃO — a linha mais importante, byte a byte</div><div class="body">
+  <pre class="code">r = subprocess.run([sys.executable, <span class="st">'scripts/kg1_colab_realtime_runner.py'</span>, <span class="st">'--'</span>, <span class="st">'python'</span>, <span class="st">'scripts/hf_job_train_v90.py'</span>])</pre>
+  <table class="diss"><caption>🔬 Dissecando a "claquete" do treino:</caption>
+    <tr><th>Pedaço</th><th>Técnico</th><th>Na pizzaria 🍕</th></tr>
+    <tr><td class="tk">sys.executable</td><td>o Python certo</td><td class="pz">o mesmo cozinheiro de sempre</td></tr>
+    <tr><td class="tk">kg1_colab_realtime_runner.py</td><td>o WRAPPER (vigia)</td><td class="pz">o Inspetor 🕵️ + a Câmera 📹</td></tr>
+    <tr><td class="tk">'--'</td><td>separador: fim das opções do vigia</td><td class="pz">"daqui pra frente é o COZINHEIRO que eu vigio"</td></tr>
+    <tr><td class="tk">'python' ...train_v90.py</td><td>o comando VIGIADO (o chef cozinhando)</td><td class="pz">Seu Nemotron fazendo a pizza 🍕</td></tr>
+    <tr><td class="tk">r = ...</td><td>guarda o resultado</td><td class="pz">o boletim do prato no fim</td></tr>
+  </table>
+  <div class="talk insp"><span class="ava">🕵️</span><div class="bub"><span class="who">Inspetor Sherllambda</span>Tudo depois do <code>--</code> é o suspeito que EU vigio. Câmera ligada, 45s de heartbeat, e se sentir cheiro de NaN/OOM... desligo o fogão. 🚨</div></div>
+  <pre class="code">print(<span class="st">'RETURN_CODE='</span>, r.returncode)   <span class="cm"># 0 = pizza perfeita; outro = deu ruim</span></pre>
+  <div class="recap"><b>🎬 Fim do episódio:</b> <code>RETURN_CODE=0</code> → a pizza saiu, o crítico (Claude) aplaude. Qualquer outro número → o Inspetor já filmou onde pegou fogo.</div>
+</div></div>
+
+<div class="box bts"><span class="t">🎥 Cena pós-créditos</span> A versão "linha por linha" (sem dissecar token) está no
+<code>JOB_LINHA_A_LINHA_USE_A_CABECA.md</code>. A história completa, no <code>A_PIZZARIA_DO_SEU_NEMOTRON.pdf</code>.
+Esta aqui é o **director's cut**: cada byte com legenda e os personagens falando. 🎞️</div>
+
+<div class="footer">🍕 A Pizzaria do Seu Nemotron · Edição de Luxo (ultra-micro) · gerado pelo Claude · estilo Use a Cabeça</div>
+</div></body></html>
