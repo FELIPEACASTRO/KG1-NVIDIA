@@ -35,6 +35,8 @@ REQUIRED_FAMILIES = {
     "text_encryption",
     "unit_conversion",
 }
+EXPECTED_INIT_ADAPTER_CONFIG_SHA256 = "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d"
+EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256 = "0a7b6144231d9358ae73a5e57d8778b32be1520fa47e3041414b3e025aaa1aa1"
 
 
 def utc_now() -> str:
@@ -341,6 +343,13 @@ def main() -> int:
 
     for phase in expected_phases:
         expected = expected_from_env_preview(env_preview, phase)
+        phase_env = env_preview.get(phase) if isinstance(env_preview.get(phase), dict) else {}
+        if phase_env.get("EXPECTED_INIT_ADAPTER_CONFIG_SHA256") != EXPECTED_INIT_ADAPTER_CONFIG_SHA256:
+            errors.append(f"{phase}: expected init adapter config sha is missing or mismatched")
+        if phase_env.get("EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256") != EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256:
+            errors.append(f"{phase}: expected init adapter weights sha is missing or mismatched")
+        if not phase_env.get("INIT_ADAPTER_REVISION"):
+            errors.append(f"{phase}: INIT_ADAPTER_REVISION is required for pinned adapter load")
         path = artifact_dir / expected["data_file"]
         rows = load_jsonl(path)
         observed_sha = sha256_file(path)
@@ -361,6 +370,11 @@ def main() -> int:
             errors.append(f"{path.name}: train/val prompt overlap count={len(overlap)}")
 
     full947_judge = (manifest.get("audit") or {}).get("full947_judge") or {}
+    adapter_contract = (manifest.get("algorithm") or {}).get("adapter_contract") or {}
+    if adapter_contract.get("init_adapter_config_sha256") != EXPECTED_INIT_ADAPTER_CONFIG_SHA256:
+        errors.append("manifest adapter config sha is missing or mismatched")
+    if adapter_contract.get("init_adapter_weights_sha256") != EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256:
+        errors.append("manifest adapter weights sha is missing or mismatched")
     canonical_rows = full947_judge.get("canonical_full947_solution_rows")
     if canonical_rows != 947:
         warnings.append(f"manifest canonical_full947_solution_rows unexpected: {canonical_rows}")

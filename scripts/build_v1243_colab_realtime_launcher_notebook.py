@@ -22,7 +22,7 @@ PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "30d8401c16a748c5b74de4b3b3e72d3688ea2c765cd4e72d7fb0452e2775d87d"
+PACK_SHA256 = "9c72aeeb42890aca8ea23ffc9e2adf40d964556ee399a32d1c43eb745e1c8f25"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
