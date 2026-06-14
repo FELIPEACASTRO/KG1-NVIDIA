@@ -77,6 +77,7 @@ ROOT.mkdir(parents=True, exist_ok=True)
 repo_commit = os.environ.get('KG1_REPO_COMMIT', 'master-onecell-launcher')
 # release gate provenance marker: git clone is intentionally not executed because the notebook uses a pinned launch-pack zip.
 PHASE = os.environ.get('KG1_V1243_PHASE', 'bit_specialist')
+WRAPPER_RUN_ID = 'v1243_' + PHASE + '_wrapper_' + time.strftime('%Y%m%d_%H%M%S')
 TARGET_ACCURACY = os.environ.get('KG1_TARGET_ACCURACY', '0.89')
 RUN_MODEL_DRYRUN = os.environ.get('KG1_V1243_RUN_MODEL_DRYRUN', '0')
 RUN_TRAIN = os.environ.get('KG1_V1243_RUN_TRAIN', '0')
@@ -201,6 +202,26 @@ def sha256_file(path):
         for chunk in iter(lambda: handle.read(1024 * 1024), b''):
             digest.update(chunk)
     return digest.hexdigest()
+
+def upload_wrapper_artifact(local_path, label):
+    repo = os.environ.get('KG1_LIVE_LOG_HF_REPO', '')
+    repo_type = os.environ.get('KG1_LIVE_LOG_HF_REPO_TYPE', 'dataset')
+    token = os.environ.get('HF_TOKEN') or os.environ.get('HUGGINGFACE_HUB_TOKEN')
+    if not repo or not token:
+        return
+    try:
+        from huggingface_hub import HfApi
+        local_path = pathlib.Path(local_path)
+        remote_path = 'colab/' + WRAPPER_RUN_ID + '/' + local_path.name
+        HfApi(token=token).upload_file(
+            repo_id=repo,
+            repo_type=repo_type,
+            path_or_fileobj=str(local_path),
+            path_in_repo=remote_path,
+        )
+        print('WRAPPER_ARTIFACT_UPLOADED', json.dumps({{'label': label, 'hf_path': remote_path}}, sort_keys=True), flush=True)
+    except Exception as exc:
+        print('WRAPPER_ARTIFACT_UPLOAD_WARNING', json.dumps({{'label': label, 'error': type(exc).__name__ + ': ' + str(exc)}}, sort_keys=True), flush=True)
 
 def runtime_probe():
     try:
@@ -448,6 +469,7 @@ def run_cmd(cmd, *, cwd=None, log_path=None, check=True):
                 tail.pop(0)
         returncode = proc.wait()
     print('COMMAND END', json.dumps({{'returncode': returncode, 'log_path': str(log_path)}}), flush=True)
+    upload_wrapper_artifact(log_path, 'command_log')
     if check and returncode != 0:
         print('command_tail_on_failure =', '\\n'.join(tail[-25:]), flush=True)
         raise RuntimeError('command failed with returncode=' + str(returncode))
@@ -455,6 +477,7 @@ def run_cmd(cmd, *, cwd=None, log_path=None, check=True):
 
 print('colab_url =', COLAB_URL, flush=True)
 print('repo_commit =', repo_commit, flush=True)
+print('wrapper_run_id =', WRAPPER_RUN_ID, flush=True)
 print('phase =', PHASE, flush=True)
 print('target_accuracy =', TARGET_ACCURACY, flush=True)
 print('run_model_dryrun =', RUN_MODEL_DRYRUN, flush=True)
@@ -627,6 +650,19 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
     .replace(
         "ACCEPT_GPU_SPEND = os.environ.get('KG1_ACCEPT_GPU_SPEND', '0')\n",
         "ACCEPT_GPU_SPEND = os.environ.get('KG1_ACCEPT_GPU_SPEND', '1')\n",
+    )
+    .replace(
+        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n\nos.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
+        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n\n"
+        "# Hard-lock this dedicated notebook against stale Colab Secrets from tokenize-only runs.\n"
+        "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n"
+        "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'\n"
+        "os.environ['KG1_V1243_RUN_TRAIN'] = '0'\n"
+        "RUN_MODEL_DRYRUN = '1'\n"
+        "ACCEPT_GPU_SPEND = '1'\n"
+        "RUN_TRAIN = '0'\n"
+        "print('model_dryrun_launcher_hard_lock = true', flush=True)\n\n"
+        "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
     )
     .replace(
         "print('=== V1243 ONECELL REALTIME LAUNCHER START ===', flush=True)\n",
