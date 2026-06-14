@@ -127,6 +127,23 @@ def upload_loop(
         f"repo={repo_id} repo_type={repo_type} log_path={path_in_repo} status_path={status_path_in_repo}",
         flush=True,
     )
+    # Upload IMEDIATO (canario): fecha a janela cega de <upload_every segundos.
+    # Garante que um crash rapido no load (RC!=0 em <60s) ainda deixe o log no HF,
+    # e revela na hora (KG1_LIVE_UPLOAD_OK/WARN) se o upload esta funcionando.
+    try:
+        upload_snapshot(
+            api=api,
+            repo_id=repo_id,
+            repo_type=repo_type,
+            token=token,
+            log_path=log_path,
+            status_path=status_path,
+            path_in_repo=path_in_repo,
+            status_path_in_repo=status_path_in_repo,
+            raise_on_error=False,
+        )
+    except Exception as exc:
+        print(f"KG1_LIVE_UPLOAD_WARN reason=initial_upload_failed error={type(exc).__name__}: {exc}", flush=True)
     while not stop_event.wait(max(5.0, upload_every)):
         try:
             upload_snapshot(
