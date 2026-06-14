@@ -1,0 +1,337 @@
+{
+  "algorithm": {
+    "adapter_contract": {
+      "active_target_modules": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+      "init_adapter_config_sha256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "init_adapter_repo": "felipesp1983/kg1-recovered-v291-v290-checkpoint6-submit086",
+      "init_adapter_revision": "f4134a6d223249d27be2f1c5d94ed59d118d1ce5",
+      "lora_alpha": 32,
+      "lora_r": 32,
+      "protected_replay_weight": 2.0,
+      "rationale": "Load the full submit086 adapter shape, then freeze non-delta LoRA modules so bit/equation GRAFT training does not silently drop lm_head/out_proj adapter tensors.",
+      "trainable_delta_modules": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj"
+    },
+    "expanded_name": "Gate-verified Replay Answer-Focused Transfer",
+    "name": "GRAFT",
+    "not_authorized": [
+      "paid_gpu_launch",
+      "adapter_package",
+      "kaggle_submit",
+      "score_claim"
+    ],
+    "objective": "Minimize completion loss on short score-facing boxed targets while using protected replay to preserve solved families. Promotion is based only on raw-output V1241 gates.",
+    "purpose": "Convert solver-verified bit/equation rows into family-specialist LoRA-ready packs."
+  },
+  "audit": {
+    "full947_judge": {
+      "canonical_full947_solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv",
+      "canonical_full947_solution_family_counts": {
+        "bit_manipulation": 160,
+        "equation_transform": 155,
+        "gravity_constant": 159,
+        "numeral_system": 157,
+        "text_encryption": 157,
+        "unit_conversion": 159
+      },
+      "canonical_full947_solution_prompt_hashes": 947,
+      "canonical_full947_solution_rows": 947,
+      "canonical_full947_solution_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+      "leak_check_pass": true,
+      "train_full947_prompt_overlap": 0,
+      "val_full947_prompt_overlap": 0
+    },
+    "train_prompt_hashes": 1084,
+    "train_rows_ok": 1084,
+    "train_val_prompt_overlap": 0,
+    "val_prompt_hashes": 170,
+    "val_rows_ok": 170
+  },
+  "decision": "pass_v1243_cpu_dataset_graft_no_gpu_no_submit",
+  "gate_commands": {
+    "baseline_identity_probe_086_answer_only": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+    "baseline_identity_probe_086_natural": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv'",
+    "full947_086_baseline_readiness": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_full947_baseline_readiness_gate.py' --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --natural-baseline-predictions 'path\\to\\086_natural_full947_raw_output.csv' --answer-only-baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
+    "full947_089": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+    "tiny": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile tiny --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_tiny_bit_equation_probe_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'",
+    "val170": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --profile val170 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate\\v1241_v1240_val170_solution.csv' --baseline-predictions 'path\\to\\baseline_predictions_with_raw_output.csv' --candidate-predictions 'path\\to\\candidate_predictions_with_raw_output.csv'"
+  },
+  "generated_at_utc": "2026-06-13T23:03:20+00:00",
+  "hf_env_preview": {
+    "bit_specialist": {
+      "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
+      "BASELINE_EVAL_BEFORE_TRAIN": "1",
+      "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
+      "DATA_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+      "DATA_REPO": "local-v1243-solver-to-lora-graft",
+      "DRY_RUN_VALIDATE_ONLY": "1",
+      "EVAL_EVERY_STEPS": "10",
+      "EVAL_MAX_EXAMPLES": "170",
+      "EXPECTED_INIT_ADAPTER_CONFIG_SHA256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "EXPECTED_TRAIN_SHA256": "3b801f35c8ebb9aeb9d2894639390652710f4f43578f0185ba70a726064f61d7",
+      "EXPECTED_VAL_SHA256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+      "FINAL_LEARNING_RATE": "0.000001",
+      "FRIENDLY_LOG_SCORE_HINTS": "1",
+      "FRIENDLY_REALTIME_LOGS": "1",
+      "INIT_ADAPTER_LOAD_MODE": "manual",
+      "INIT_ADAPTER_REPO": "felipesp1983/kg1-recovered-v291-v290-checkpoint6-submit086",
+      "INIT_ADAPTER_REVISION": "f4134a6d223249d27be2f1c5d94ed59d118d1ce5",
+      "LEARNING_RATE": "0.000003",
+      "LORA_ALPHA": "32",
+      "LORA_DROPOUT": "0.0",
+      "LORA_R": "32",
+      "LORA_TARGET_MODULES": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+      "MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP": "0.0",
+      "MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION": "0.0",
+      "MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP": "0.0",
+      "MAX_FINAL_EVAL_REGRESSION": "0.0",
+      "MAX_LENGTH": "2048",
+      "MAX_PROMPT_TRUNCATION_RATE": "0.0",
+      "MAX_STEPS": "60",
+      "MIN_TOKENIZED_TRAIN_EXAMPLES": "724",
+      "MIN_TOKENIZED_VAL_EXAMPLES": "170",
+      "MIN_TRAIN_EXAMPLES": "724",
+      "MIN_VAL_EXAMPLES": "170",
+      "NOTES": "Tokenize-only validate first. Real train requires explicit gate update and user decision.",
+      "PEFT_MANUAL_LOAD_METHOD": "direct",
+      "REQUIRE_BOXED_PAYLOAD_WEIGHT": "1",
+      "REQUIRE_FINAL_EVAL_LTE_BASELINE": "1",
+      "REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION": "1",
+      "REQUIRE_INIT_ADAPTER": "1",
+      "REQUIRE_INIT_ADAPTER_REVISION": "1",
+      "REQUIRE_OFFSET_MASK": "1",
+      "REQUIRE_SCORE_CONTRACT_PASS": "1",
+      "REQUIRE_SCORE_TRAJECTORY_PASS": "0",
+      "SAMPLING_MODE": "weighted_replacement",
+      "SAVE_EVERY_STEPS": "10",
+      "SCORE_CONTRACT_BASELINE_CORRECT": "823",
+      "SCORE_CONTRACT_EXPECTED_TARGET_MODULES": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+      "SCORE_CONTRACT_EXPECTED_TRAINABLE_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
+      "SCORE_CONTRACT_FULL_ROWS": "947",
+      "SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+      "SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER": "1",
+      "SCORE_CONTRACT_RUNTIME_CHECK": "1",
+      "SCORE_CONTRACT_TARGET_ACCURACY": "0.89",
+      "SCORE_PROXY_EVAL_CHECK": "1",
+      "SCORE_PROXY_EVAL_MAX_EXAMPLES": "170",
+      "SCORE_TRAJECTORY_CHECK": "1",
+      "SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION": "0.0",
+      "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
+      "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
+      "SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA": "0.0",
+      "TOKENIZE_ONLY_DRY_RUN": "1",
+      "TRAINABLE_LORA_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
+      "UPLOAD_TO_HF": "0",
+      "VAL_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl"
+    },
+    "equation_specialist": {
+      "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
+      "BASELINE_EVAL_BEFORE_TRAIN": "1",
+      "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
+      "DATA_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
+      "DATA_REPO": "local-v1243-solver-to-lora-graft",
+      "DRY_RUN_VALIDATE_ONLY": "1",
+      "EVAL_EVERY_STEPS": "10",
+      "EVAL_MAX_EXAMPLES": "170",
+      "EXPECTED_INIT_ADAPTER_CONFIG_SHA256": "a3d74c5a52ce75f71a8406222d877b9760ea18a40a772bcf407686c8ea19f11d",
+      "EXPECTED_TRAIN_SHA256": "63aad59bf01cc38ad1cf0822326b3f4541335cf30d6cdbc053891b52edccbd84",
+      "EXPECTED_VAL_SHA256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+      "FINAL_LEARNING_RATE": "0.0000008",
+      "FRIENDLY_LOG_SCORE_HINTS": "1",
+      "FRIENDLY_REALTIME_LOGS": "1",
+      "INIT_ADAPTER_LOAD_MODE": "manual",
+      "INIT_ADAPTER_REPO": "felipesp1983/kg1-recovered-v291-v290-checkpoint6-submit086",
+      "INIT_ADAPTER_REVISION": "f4134a6d223249d27be2f1c5d94ed59d118d1ce5",
+      "LEARNING_RATE": "0.000002",
+      "LORA_ALPHA": "32",
+      "LORA_DROPOUT": "0.0",
+      "LORA_R": "32",
+      "LORA_TARGET_MODULES": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+      "MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP": "0.0",
+      "MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION": "0.0",
+      "MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP": "0.0",
+      "MAX_FINAL_EVAL_REGRESSION": "0.0",
+      "MAX_LENGTH": "2048",
+      "MAX_PROMPT_TRUNCATION_RATE": "0.0",
+      "MAX_STEPS": "50",
+      "MIN_TOKENIZED_TRAIN_EXAMPLES": "544",
+      "MIN_TOKENIZED_VAL_EXAMPLES": "170",
+      "MIN_TRAIN_EXAMPLES": "544",
+      "MIN_VAL_EXAMPLES": "170",
+      "NOTES": "Only run after bit specialist passes raw-output gates, or from baseline.",
+      "PEFT_MANUAL_LOAD_METHOD": "direct",
+      "REQUIRE_BOXED_PAYLOAD_WEIGHT": "1",
+      "REQUIRE_FINAL_EVAL_LTE_BASELINE": "1",
+      "REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION": "1",
+      "REQUIRE_INIT_ADAPTER": "1",
+      "REQUIRE_INIT_ADAPTER_REVISION": "1",
+      "REQUIRE_OFFSET_MASK": "1",
+      "REQUIRE_SCORE_CONTRACT_PASS": "1",
+      "REQUIRE_SCORE_TRAJECTORY_PASS": "0",
+      "SAMPLING_MODE": "weighted_replacement",
+      "SAVE_EVERY_STEPS": "10",
+      "SCORE_CONTRACT_BASELINE_CORRECT": "823",
+      "SCORE_CONTRACT_EXPECTED_TARGET_MODULES": "down_proj,in_proj,k_proj,lm_head,o_proj,out_proj,q_proj,up_proj,v_proj",
+      "SCORE_CONTRACT_EXPECTED_TRAINABLE_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
+      "SCORE_CONTRACT_FULL_ROWS": "947",
+      "SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE": "0.0",
+      "SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER": "1",
+      "SCORE_CONTRACT_RUNTIME_CHECK": "1",
+      "SCORE_CONTRACT_TARGET_ACCURACY": "0.89",
+      "SCORE_PROXY_EVAL_CHECK": "1",
+      "SCORE_PROXY_EVAL_MAX_EXAMPLES": "170",
+      "SCORE_TRAJECTORY_CHECK": "1",
+      "SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION": "0.0",
+      "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
+      "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
+      "SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA": "0.0",
+      "TOKENIZE_ONLY_DRY_RUN": "1",
+      "TRAINABLE_LORA_MODULES": "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj",
+      "UPLOAD_TO_HF": "0",
+      "VAL_FILE": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl"
+    }
+  },
+  "inputs": {
+    "canonical_full947_solution_csv": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv",
+    "canonical_full947_solution_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+    "expected_canonical_full947_solution_sha256": "84e90b5b4d9adad6fdd9028aae3161d1b8991f2eab11e292b32d920c0ec3c935",
+    "v1240_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1240_solver_verified_weak_curriculum_gate",
+    "v1240_manifest": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1240_solver_verified_weak_curriculum_gate\\kg1_v1240_solver_verified_weak_curriculum_gate.json",
+    "v1240_manifest_sha256": "f6147e92c027a0d00254144481dd5d681f8fcf04a071ad21d2a8448c4c9f5dc5",
+    "v1240_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1240_solver_verified_weak_curriculum_gate\\v1240_solver_verified_train.jsonl",
+    "v1240_train_sha256": "35077f44e2379dcad5cb55760e5b1e382c55a6af13e2d7a247cc0b50e10650e3",
+    "v1240_val_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1240_solver_verified_weak_curriculum_gate\\v1240_solver_verified_val.jsonl",
+    "v1240_val_sha256": "268bee31a37899cdd7dc32ca11535905046d136e7b039e365258e6671daf2fde",
+    "v1241_dir": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1241_bit_equation_real_transfer_gate"
+  },
+  "outputs": {
+    "bit_specialist_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_bit_specialist_train.jsonl",
+    "equation_specialist_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
+    "hf_env_preview_json": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_hf_env_preview.json",
+    "micro_consolidation_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_micro_consolidation_train.jsonl",
+    "protected_replay_train_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_protected_replay_train.jsonl",
+    "readme": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\V1243_SOLVER_TO_LORA_GRAFT.md",
+    "val170_jsonl": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl"
+  },
+  "promotion_rules": {
+    "first_probe": "V1241 tiny then val170 with raw_output; no regressions.",
+    "score_089": "V1241 full947_089 requires >=843/947, +20 total, +1 bit, +1 equation, zero regressions.",
+    "score_090": "V1241 full947_090 requires >=853/947, +30 total, +1 bit, +1 equation, zero regressions."
+  },
+  "quarantine": [
+    "FASE5/s140/fase5_mix",
+    "rows missing top-level answer",
+    "rows without exactly one closed boxed answer",
+    "public-metric-only gains",
+    "symbolic equation brace/backslash rows unless strict extraction proof passes",
+    "any candidate without raw_output"
+  ],
+  "schema_version": "kg1_v1243_solver_to_lora_graft_v1",
+  "summaries": {
+    "bit_specialist": {
+      "family_counts": {
+        "bit_manipulation": 540,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "rows": 724,
+      "source_role_counts": {
+        "v1243_bit_solver_verified": 540,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "bit_manipulation": 729.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "equation_specialist": {
+      "family_counts": {
+        "equation_transform": 360,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "rows": 544,
+      "source_role_counts": {
+        "v1243_equation_solver_verified": 360,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "equation_transform": 594.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "micro_consolidation": {
+      "family_counts": {
+        "bit_manipulation": 540,
+        "equation_transform": 360,
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "rows": 1084,
+      "source_role_counts": {
+        "v1243_bit_solver_verified": 540,
+        "v1243_equation_solver_verified": 360,
+        "v1243_protected_replay": 184
+      },
+      "weight_by_family": {
+        "bit_manipulation": 567.0,
+        "equation_transform": 432.0,
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "protected_replay": {
+      "family_counts": {
+        "gravity_constant": 46,
+        "numeral_system": 46,
+        "text_encryption": 46,
+        "unit_conversion": 46
+      },
+      "rows": 184,
+      "source_role_counts": {
+        "v1243_protected_anchor": 184
+      },
+      "weight_by_family": {
+        "gravity_constant": 92.0,
+        "numeral_system": 92.0,
+        "text_encryption": 92.0,
+        "unit_conversion": 92.0
+      }
+    },
+    "val170": {
+      "family_counts": {
+        "bit_manipulation": 90,
+        "equation_transform": 60,
+        "gravity_constant": 5,
+        "numeral_system": 5,
+        "text_encryption": 5,
+        "unit_conversion": 5
+      },
+      "rows": 170,
+      "source_role_counts": {
+        "v1243_holdout": 170
+      },
+      "weight_by_family": {
+        "bit_manipulation": 0.0,
+        "equation_transform": 0.0,
+        "gravity_constant": 0.0,
+        "numeral_system": 0.0,
+        "text_encryption": 0.0,
+        "unit_conversion": 0.0
+      }
+    }
+  }
+}

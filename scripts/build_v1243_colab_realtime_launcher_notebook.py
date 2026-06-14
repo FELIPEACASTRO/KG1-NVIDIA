@@ -22,7 +22,7 @@ PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "5404cc746106c2acfafe50a6bfc99843cf4f5d1bf3ab5773530a62b3288314bb"
+PACK_SHA256 = "30d8401c16a748c5b74de4b3b3e72d3688ea2c765cd4e72d7fb0452e2775d87d"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
@@ -597,10 +597,26 @@ for rel in [
     'scripts/kg1_colab_live_monitor.py',
     'scripts/kg1_live_log_common.py',
     'scripts/hf_job_train_v90.py',
+    'scripts/kg1_v1243_dataset_logic_audit.py',
 ]:
     import py_compile
     py_compile.compile(str(ROOT / rel), doraise=True)
 print('py_compile = PASS', flush=True)
+print('=== V1243 DATASET LOGIC AUDIT START ===', flush=True)
+print('dataset_audit_expected_status_marker = KG1_V1243_DATASET_AUDIT_STATUS', flush=True)
+wrapper_event('DATASET_AUDIT', 'START', phase=PHASE)
+run_cmd(
+    [
+        sys.executable,
+        'scripts/kg1_v1243_dataset_logic_audit.py',
+        '--artifact-dir', 'artifacts/v1243_solver_to_lora_graft',
+        '--phase', 'all',
+    ],
+    cwd=ROOT,
+    log_path=LOG_ROOT / 'dataset_logic_audit.log',
+)
+wrapper_event('DATASET_AUDIT', 'OK', log_path=str(LOG_ROOT / 'dataset_logic_audit.log'))
+print('=== V1243 DATASET LOGIC AUDIT END ===', flush=True)
 run_cmd(
     [sys.executable, '-m', 'pip', 'install', '-q', '-r', str(ROOT / 'requirements_v1243_colab.txt')],
     cwd=ROOT,

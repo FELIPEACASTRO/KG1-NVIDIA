@@ -1,0 +1,3879 @@
+#!/usr/bin/env python3
+"""
+HF Jobs training script V90 - category-solver SFT over the gold-safe corpus.
+
+This script is intended for a single remote A100/H100-class GPU job. The local
+workstation used to build the v90 dataset does not have enough GPU/disk headroom
+to train NVIDIA-Nemotron-3-Nano-30B-A3B-BF16 directly.
+
+Defaults:
+  - Dataset: data/v90/v90_train_gold_safe.jsonl
+  - Validation: data/v90/v90_val_gold_safe_stratified.jsonl
+  - LoRA: r=32 alpha=32 dropout=0.0, guarded target modules
+  - Length: 6144 tokens by default; V1243 short-target runs override MAX_LENGTH=2048
+  - LR: 2e-4 -> 1e-4 linear decay
+  - Steps: 300 by default, roughly one epoch at batch size 32
+
+Required env on the remote job:
+  HF_TOKEN=<token with read access to model/data and write access to output repo>
+
+Optional env:
+  MODEL_NAME, MODEL_REVISION, DATA_REPO, DATA_FILE, VAL_FILE, OUTPUT_REPO, OUTPUT_DIR,
+  MAX_LENGTH, BATCH_SIZE, MICRO_BATCH_SIZE, LEARNING_RATE, FINAL_LEARNING_RATE,
+  NUM_EPOCHS, MAX_STEPS, SAVE_EVERY_STEPS, EVAL_EVERY_STEPS, EVAL_MAX_EXAMPLES,
+  LOG_EVERY_STEPS, MICRO_LOG_EVERY, SEED, EXPECTED_TRAIN_SHA256,
+  EXPECTED_VAL_SHA256, MIN_TRAIN_EXAMPLES, MIN_VAL_EXAMPLES,
+  MIN_TOKENIZED_TRAIN_EXAMPLES, MIN_TOKENIZED_VAL_EXAMPLES, REQUIRE_OFFSET_MASK,
+  BOXED_PAYLOAD_LOSS_WEIGHT, REQUIRE_BOXED_PAYLOAD_WEIGHT,
+  LORA_TARGET_MODULES, LORA_TARGET_PARAMETERS, MAX_TRAINABLE_PARAM_RATIO, DRY_RUN_VALIDATE_ONLY,
+  TOKENIZE_ONLY_DRY_RUN, UPLOAD_TO_HF,
+  UPLOAD_CHECKPOINTS_DURING_TRAINING, SAMPLING_MODE, SUBCATEGORY_WEIGHTS, SOURCE_WEIGHTS,
+  TRAINABLE_LORA_MODULES, SCORE_CONTRACT_RUNTIME_CHECK,
+  REQUIRE_SCORE_CONTRACT_PASS, SCORE_CONTRACT_TARGET_ACCURACY,
+  SCORE_CONTRACT_EXPECTED_TARGET_MODULES,
+  SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER, SCORE_TRAJECTORY_CHECK,
+  REQUIRE_SCORE_TRAJECTORY_PASS, FRIENDLY_REALTIME_LOGS
+"""
+
+from __future__ import annotations
+
+import gc
+import hashlib
+import inspect
+import importlib.metadata as importlib_metadata
+import importlib.util
+import json
+import math
+import os
+import random
+import re
+import sys
+import time
+import warnings
+import zipfile
+from pathlib import Path
+from typing import Any
+
+import torch
+import torch.nn.functional as F
+from huggingface_hub import HfApi, get_token, hf_hub_download
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+try:
+    from peft import LoraConfig, PeftModel, get_peft_model
+    from peft.utils.save_and_load import load_peft_weights, set_peft_model_state_dict
+    PEFT_IMPORT_ERROR: Exception | None = None
+except ModuleNotFoundError as exc:
+    LoraConfig = None  # type: ignore[assignment]
+    PeftModel = None  # type: ignore[assignment]
+    get_peft_model = None  # type: ignore[assignment]
+    load_peft_weights = None  # type: ignore[assignment]
+    set_peft_model_state_dict = None  # type: ignore[assignment]
+    PEFT_IMPORT_ERROR = exc
+
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8", errors="replace")
+
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+os.environ.setdefault("TQDM_DISABLE", "1")
+
+
+def disable_peft_torchao_dispatch_if_incompatible() -> None:
+    """Avoid PEFT aborting on stale Colab/Kaggle torchao installs.
+
+    This training path loads the Nemotron base in BF16 and injects ordinary
+    LoRA modules. It does not use torchao quantization. Some hosted runtimes
+    preinstall old torchao builds; recent PEFT versions probe torchao during
+    adapter injection and raise before falling through to the normal dispatch.
+    """
+
+    try:
+        torchao_version = importlib_metadata.version("torchao")
+    except importlib_metadata.PackageNotFoundError:
+        return
+    except Exception as exc:
+        print(f"torchao version probe failed; leaving PEFT dispatch unchanged: {exc}")
+        return
+
+    def version_tuple(value: str) -> tuple[int, ...]:
+        parts: list[int] = []
+        for chunk in value.replace("-", ".").split("."):
+            if not chunk.isdigit():
+                break
+            parts.append(int(chunk))
+        return tuple(parts or [0])
+
+    if version_tuple(torchao_version) >= (0, 16, 0):
+        print(f"torchao present and compatible enough for PEFT probe: {torchao_version}")
+        return
+
+    print(
+        "Disabling PEFT torchao dispatcher: "
+        f"found torchao=={torchao_version}, but this BF16 LoRA run does not need torchao."
+    )
+
+    def _false() -> bool:
+        return False
+
+    try:
+        import peft.import_utils as peft_import_utils
+
+        if hasattr(peft_import_utils.is_torchao_available, "cache_clear"):
+            peft_import_utils.is_torchao_available.cache_clear()
+        peft_import_utils.is_torchao_available = _false
+    except Exception as exc:
+        print(f"Warning: could not patch peft.import_utils torchao probe: {exc}")
+
+    try:
+        import peft.tuners.lora.torchao as peft_lora_torchao
+
+        peft_lora_torchao.is_torchao_available = _false
+    except Exception as exc:
+        print(f"Warning: could not patch peft lora torchao dispatcher: {exc}")
+
+
+disable_peft_torchao_dispatch_if_incompatible()
+
+
+def require_peft() -> None:
+    if PEFT_IMPORT_ERROR is not None:
+        raise RuntimeError(
+            "PEFT is required for real adapter loading/training. "
+            "Install peft, or run only with DRY_RUN_VALIDATE_ONLY=1 and "
+            "TOKENIZE_ONLY_DRY_RUN=1 for tokenizer/mask validation."
+        ) from PEFT_IMPORT_ERROR
+
+
+def env_int(name: str, default: int) -> int:
+    value = os.environ.get(name)
+    return default if value in (None, "") else int(value)
+
+
+def env_float(name: str, default: float) -> float:
+    value = os.environ.get(name)
+    return default if value in (None, "") else float(value)
+
+
+def env_str(name: str, default: str) -> str:
+    value = os.environ.get(name)
+    return default if value in (None, "") else value
+
+
+def env_bool(name: str, default: bool) -> bool:
+    value = os.environ.get(name)
+    if value in (None, ""):
+        return default
+    return value.strip().lower() not in {"0", "false", "no", "off"}
+
+
+MODEL_NAME = env_str("MODEL_NAME", "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16")
+MODEL_REVISION = env_str("MODEL_REVISION", "cbd3fa9f933d55ef16a84236559f4ee2a0526848")
+MODEL_DEVICE_MAP = env_str("MODEL_DEVICE_MAP", "auto")
+ATTN_IMPLEMENTATION = env_str("ATTN_IMPLEMENTATION", "eager")
+TORCH_ALLOW_TF32 = env_bool("TORCH_ALLOW_TF32", True)
+TORCH_FLOAT32_MATMUL_PRECISION = env_str("TORCH_FLOAT32_MATMUL_PRECISION", "high")
+TORCH_DISABLE_CUDNN_SDP = env_bool("TORCH_DISABLE_CUDNN_SDP", False)
+TORCH_FORCE_MATH_SDP = env_bool("TORCH_FORCE_MATH_SDP", False)
+GRADIENT_CHECKPOINTING = env_bool("GRADIENT_CHECKPOINTING", True)
+DATA_REPO = env_str("DATA_REPO", "felipesp1983/kg1-nemotron-training")
+DATA_FILE = env_str("DATA_FILE", "data/v90/v90_train_gold_safe.jsonl")
+VAL_FILE = env_str("VAL_FILE", "data/v90/v90_val_gold_safe_stratified.jsonl")
+PRETOKENIZED_ARCHIVE_ZIP = env_str("PRETOKENIZED_ARCHIVE_ZIP", "")
+PRETOKENIZED_EXCLUDE_CATEGORIES = env_str("PRETOKENIZED_EXCLUDE_CATEGORIES", "")
+PRETOKENIZED_VAL_EXAMPLES = env_int("PRETOKENIZED_VAL_EXAMPLES", 0)
+PRETOKENIZED_VAL_FRACTION = env_float("PRETOKENIZED_VAL_FRACTION", 0.0)
+PRETOKENIZED_VAL_COPY_ONLY = env_bool("PRETOKENIZED_VAL_COPY_ONLY", False)
+EXPECTED_ARCHIVE_SHA256 = env_str("EXPECTED_ARCHIVE_SHA256", "")
+EXPECTED_TRAIN_SHA256 = env_str(
+    "EXPECTED_TRAIN_SHA256",
+    "ad1c4a1886e92d82d03c0d75c0615ba8c4b96d29e2b07948ff72d541f03c15e4",
+)
+EXPECTED_VAL_SHA256 = env_str(
+    "EXPECTED_VAL_SHA256",
+    "749ad2babbfb96c6191b514572e0b1f4aa976681f9a084ee774b3c8f4a44cc04",
+)
+MIN_TRAIN_EXAMPLES = env_int("MIN_TRAIN_EXAMPLES", 8777)
+MIN_VAL_EXAMPLES = env_int("MIN_VAL_EXAMPLES", 720)
+MIN_TOKENIZED_TRAIN_EXAMPLES = env_int("MIN_TOKENIZED_TRAIN_EXAMPLES", MIN_TRAIN_EXAMPLES)
+MIN_TOKENIZED_VAL_EXAMPLES = env_int("MIN_TOKENIZED_VAL_EXAMPLES", MIN_VAL_EXAMPLES)
+
+MAX_COMPETITION_LORA_R = 32
+LORA_R = env_int("LORA_R", 32)
+if LORA_R > MAX_COMPETITION_LORA_R:
+    raise ValueError(
+        f"LORA_R={LORA_R} exceeds competition serving limit "
+        f"of {MAX_COMPETITION_LORA_R}."
+    )
+LORA_ALPHA = env_int("LORA_ALPHA", 32)
+LORA_DROPOUT = env_float("LORA_DROPOUT", 0.0)
+DEFAULT_LORA_TARGET_MODULES = (
+    "down_proj,in_proj,k_proj,o_proj,q_proj,up_proj,v_proj"
+)
+LORA_TARGET_MODULES = env_str("LORA_TARGET_MODULES", DEFAULT_LORA_TARGET_MODULES)
+LORA_TARGET_PARAMETERS = env_str("LORA_TARGET_PARAMETERS", "")
+MAX_TRAINABLE_PARAM_RATIO = env_float("MAX_TRAINABLE_PARAM_RATIO", 0.08)
+
+OFFICIAL_PROMPT_SUFFIX = (
+    "\nPlease put your final answer inside `\\boxed{}`. "
+    "For example: `\\boxed{your answer}`"
+)
+OFFICIAL_SCORE_INFERENCE_CONFIG = {
+    "max_lora_rank": 32,
+    "max_tokens": 7680,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "max_model_len": 8192,
+    "max_num_seqs": 64,
+    "gpu_memory_utilization": 0.85,
+}
+EXPECTED_SCORE_MODEL_NAME = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+EXPECTED_SCORE_MODEL_REVISION = "cbd3fa9f933d55ef16a84236559f4ee2a0526848"
+SCORE_CONTRACT_RUNTIME_CHECK = env_bool("SCORE_CONTRACT_RUNTIME_CHECK", True)
+REQUIRE_SCORE_CONTRACT_PASS = env_bool("REQUIRE_SCORE_CONTRACT_PASS", False)
+SCORE_CONTRACT_TARGET_ACCURACY = env_float("SCORE_CONTRACT_TARGET_ACCURACY", 0.89)
+SCORE_CONTRACT_FULL_ROWS = env_int("SCORE_CONTRACT_FULL_ROWS", 947)
+SCORE_CONTRACT_BASELINE_CORRECT = env_int("SCORE_CONTRACT_BASELINE_CORRECT", 823)
+SCORE_CONTRACT_EXPECTED_TARGET_MODULES = env_str(
+    "SCORE_CONTRACT_EXPECTED_TARGET_MODULES",
+    DEFAULT_LORA_TARGET_MODULES,
+)
+SCORE_CONTRACT_EXPECTED_TRAINABLE_MODULES = env_str(
+    "SCORE_CONTRACT_EXPECTED_TRAINABLE_MODULES",
+    "",
+)
+SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER = env_bool("SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER", False)
+SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE = env_float(
+    "SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE",
+    0.0,
+)
+
+MAX_LENGTH = env_int("MAX_LENGTH", 6144)
+BATCH_SIZE = env_int("BATCH_SIZE", 32)
+MICRO_BATCH_SIZE = env_int("MICRO_BATCH_SIZE", 1)
+if BATCH_SIZE < MICRO_BATCH_SIZE:
+    raise ValueError("BATCH_SIZE must be >= MICRO_BATCH_SIZE")
+if BATCH_SIZE % MICRO_BATCH_SIZE != 0:
+    raise ValueError("BATCH_SIZE must be divisible by MICRO_BATCH_SIZE")
+GRADIENT_ACCUMULATION = BATCH_SIZE // MICRO_BATCH_SIZE
+
+LEARNING_RATE = env_float("LEARNING_RATE", 2e-4)
+FINAL_LEARNING_RATE = env_float("FINAL_LEARNING_RATE", 1e-4)
+ADAM_BETA1 = env_float("ADAM_BETA1", 0.9)
+ADAM_BETA2 = env_float("ADAM_BETA2", 0.95)
+ADAM_EPS = env_float("ADAM_EPS", 1e-8)
+WEIGHT_DECAY = env_float("WEIGHT_DECAY", 0.0)
+GRAD_CLIP_NORM = env_float("GRAD_CLIP_NORM", 1e9)
+
+NUM_EPOCHS = env_int("NUM_EPOCHS", 1)
+MAX_STEPS = env_int("MAX_STEPS", 300)
+SAVE_EVERY_STEPS = env_int("SAVE_EVERY_STEPS", 50)
+EVAL_EVERY_STEPS = env_int("EVAL_EVERY_STEPS", 50)
+EVAL_MAX_EXAMPLES = env_int("EVAL_MAX_EXAMPLES", 720)
+SCORE_PROXY_EVAL_CHECK = env_bool("SCORE_PROXY_EVAL_CHECK", True)
+SCORE_PROXY_EVAL_MAX_EXAMPLES = env_int("SCORE_PROXY_EVAL_MAX_EXAMPLES", EVAL_MAX_EXAMPLES)
+SCORE_TRAJECTORY_CHECK = env_bool("SCORE_TRAJECTORY_CHECK", True)
+REQUIRE_SCORE_TRAJECTORY_PASS = env_bool("REQUIRE_SCORE_TRAJECTORY_PASS", False)
+SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA = env_float("SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA", 0.0)
+SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP = env_float("SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP", 0.0)
+SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP = env_float("SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP", 0.0)
+SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION = env_float("SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION", 0.0)
+LOG_EVERY_STEPS = env_int("LOG_EVERY_STEPS", 5)
+MICRO_LOG_EVERY = env_int("MICRO_LOG_EVERY", 0)
+SEED = env_int("SEED", 90)
+MAX_PROMPT_TRUNCATION_RATE = env_float("MAX_PROMPT_TRUNCATION_RATE", 0.10)
+SAMPLING_MODE = env_str("SAMPLING_MODE", "shuffle")
+SUBCATEGORY_WEIGHTS = env_str("SUBCATEGORY_WEIGHTS", "")
+SOURCE_WEIGHTS = env_str("SOURCE_WEIGHTS", "")
+ABORT_EVAL_LOSS_GT = env_float("ABORT_EVAL_LOSS_GT", 0.0)
+BASELINE_EVAL_BEFORE_TRAIN = env_bool("BASELINE_EVAL_BEFORE_TRAIN", False)
+ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA = env_float(
+    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA", -1.0
+)
+REQUIRE_FINAL_EVAL_LTE_BASELINE = env_bool("REQUIRE_FINAL_EVAL_LTE_BASELINE", False)
+MAX_FINAL_EVAL_REGRESSION = env_float("MAX_FINAL_EVAL_REGRESSION", 0.0)
+REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION = env_bool("REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION", False)
+MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION = env_float("MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION", 0.0)
+MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP = env_float("MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP", 0.0)
+MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP = env_float("MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP", 0.0)
+ABORT_TRAIN_RISE_POINTS = env_int("ABORT_TRAIN_RISE_POINTS", 0)
+ABORT_MAX_RESERVED_GIB = env_float("ABORT_MAX_RESERVED_GIB", 0.0)
+COMPUTE_PROVIDER = env_str("COMPUTE_PROVIDER", "hf_jobs")
+
+OUTPUT_DIR = env_str("OUTPUT_DIR", "/tmp/kg1_v90_output")
+OUTPUT_REPO = env_str("OUTPUT_REPO", "felipesp1983/kg1-nemotron-lora-v90-category-solver")
+RUN_ID = env_str("RUN_ID", f"v90-r{LORA_R}-a{LORA_ALPHA}-mlen{MAX_LENGTH}-s{MAX_STEPS}")
+HF_TOKEN = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_HUB_TOKEN") or get_token() or ""
+INIT_ADAPTER_DIR = env_str("INIT_ADAPTER_DIR", "")
+INIT_ADAPTER_REPO = env_str("INIT_ADAPTER_REPO", "")
+INIT_ADAPTER_REVISION = env_str("INIT_ADAPTER_REVISION", "")
+INIT_ADAPTER_SUBFOLDER = env_str("INIT_ADAPTER_SUBFOLDER", "")
+INIT_ADAPTER_LOAD_MODE = env_str("INIT_ADAPTER_LOAD_MODE", "manual")
+PEFT_MANUAL_LOAD_METHOD = env_str("PEFT_MANUAL_LOAD_METHOD", "auto")
+REQUIRE_INIT_ADAPTER = env_bool("REQUIRE_INIT_ADAPTER", False)
+REQUIRE_INIT_ADAPTER_REVISION = env_bool("REQUIRE_INIT_ADAPTER_REVISION", False)
+EXPECTED_INIT_ADAPTER_CONFIG_SHA256 = env_str("EXPECTED_INIT_ADAPTER_CONFIG_SHA256", "")
+EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256 = env_str("EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256", "")
+REQUIRE_OFFSET_MASK = env_bool("REQUIRE_OFFSET_MASK", True)
+BOXED_PAYLOAD_LOSS_WEIGHT = env_float("BOXED_PAYLOAD_LOSS_WEIGHT", 1.0)
+REQUIRE_BOXED_PAYLOAD_WEIGHT = env_bool("REQUIRE_BOXED_PAYLOAD_WEIGHT", False)
+if BOXED_PAYLOAD_LOSS_WEIGHT < 1.0:
+    raise ValueError("BOXED_PAYLOAD_LOSS_WEIGHT must be >= 1.0")
+if REQUIRE_BOXED_PAYLOAD_WEIGHT and BOXED_PAYLOAD_LOSS_WEIGHT <= 1.0:
+    raise ValueError("REQUIRE_BOXED_PAYLOAD_WEIGHT=1 requires BOXED_PAYLOAD_LOSS_WEIGHT > 1.0")
+DRY_RUN_VALIDATE_ONLY = env_bool("DRY_RUN_VALIDATE_ONLY", False)
+TOKENIZE_ONLY_DRY_RUN = env_bool("TOKENIZE_ONLY_DRY_RUN", False)
+UPLOAD_TO_HF = env_bool("UPLOAD_TO_HF", True)
+UPLOAD_CHECKPOINTS_DURING_TRAINING = env_bool("UPLOAD_CHECKPOINTS_DURING_TRAINING", False)
+REQUIRE_REAL_CAUSAL_CONV1D = env_bool("REQUIRE_REAL_CAUSAL_CONV1D", False)
+FAIL_ON_MISSING_ADAPTER_KEYS = env_bool("FAIL_ON_MISSING_ADAPTER_KEYS", True)
+TRAINABLE_LORA_MODULES = env_str("TRAINABLE_LORA_MODULES", "")
+ADAPTER_LOAD_TORCH_DEVICE = env_str("ADAPTER_LOAD_TORCH_DEVICE", "")
+ADAPTER_LOAD_LOW_CPU_MEM_USAGE = env_bool("ADAPTER_LOAD_LOW_CPU_MEM_USAGE", False)
+USE_BITSANDBYTES = env_bool("USE_BITSANDBYTES", True)
+FRIENDLY_REALTIME_LOGS = env_bool("FRIENDLY_REALTIME_LOGS", True)
+FRIENDLY_LOG_SCORE_HINTS = env_bool("FRIENDLY_LOG_SCORE_HINTS", True)
+
+
+def optional_torch_device(value: str) -> str | None:
+    normalized = value.strip().lower()
+    if normalized in {"", "none", "null", "auto"}:
+        return None
+    return value
+
+
+def parse_model_device_map(value: str) -> str | dict[str, int] | None:
+    normalized = value.strip().lower()
+    if normalized in {"", "none", "null", "cpu_then_cuda", "cpu-then-cuda"}:
+        return None
+    if normalized in {"cuda", "cuda:0", "gpu", "single-gpu"}:
+        return {"": 0}
+    return value
+
+
+def model_post_load_device(value: str) -> str | None:
+    normalized = value.strip().lower()
+    if normalized in {"cpu_then_cuda", "cpu-then-cuda"}:
+        return "cuda"
+    return None
+
+
+def parse_target_modules(value: str) -> str | list[str]:
+    """Parse PEFT target_modules from env.
+
+    The default is an explicit serving-compatible module list. ``all-linear`` is
+    still accepted for deliberate diagnostics, but the trainable-parameter guard
+    below keeps it from silently expanding into a much larger recipe than
+    intended.
+    """
+
+    normalized = value.strip()
+    if normalized == "all-linear":
+        return normalized
+    modules = [item.strip() for item in normalized.split(",") if item.strip()]
+    if not modules:
+        raise ValueError("LORA_TARGET_MODULES must be 'all-linear' or a comma-separated module list")
+    return modules
+
+
+def parse_target_parameters(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def create_lora_model(model: torch.nn.Module) -> torch.nn.Module:
+    require_peft()
+    kwargs: dict[str, Any] = {
+        "r": LORA_R,
+        "lora_alpha": LORA_ALPHA,
+        "target_modules": parse_target_modules(LORA_TARGET_MODULES),
+        "lora_dropout": LORA_DROPOUT,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+    }
+    target_parameters = parse_target_parameters(LORA_TARGET_PARAMETERS)
+    if target_parameters:
+        lora_config_params = inspect.signature(LoraConfig.__init__).parameters
+        if "target_parameters" not in lora_config_params:
+            raise RuntimeError(
+                "Current PEFT LoraConfig does not support target_parameters, "
+                f"but LORA_TARGET_PARAMETERS={target_parameters!r} is required "
+                "to recreate the initial adapter namespace."
+            )
+        kwargs["target_parameters"] = target_parameters
+    lora_config = LoraConfig(**kwargs)
+    return get_peft_model(model, lora_config)
+
+
+def remap_peft_state_dict_for_direct_load(
+    weights: dict[str, torch.Tensor],
+    model_state_keys: set[str],
+    adapter_name: str = "default",
+) -> tuple[dict[str, torch.Tensor], list[str]]:
+    """Map PEFT adapter keys to the live PeftModel state dict namespace.
+
+    PEFT adapter files commonly store keys as ``lora_A.weight`` while a live
+    multi-adapter PeftModel exposes ``lora_A.default.weight``.  Recent PEFT /
+    Transformers combinations can fail in ``set_peft_model_state_dict`` before
+    applying this adapter-name conversion, so this explicit remap gives us a
+    stable direct-load path.
+    """
+
+    remapped: dict[str, torch.Tensor] = {}
+    unmapped: list[str] = []
+    replacements = (
+        (".lora_A.weight", f".lora_A.{adapter_name}.weight"),
+        (".lora_B.weight", f".lora_B.{adapter_name}.weight"),
+        (".lora_embedding_A", f".lora_embedding_A.{adapter_name}"),
+        (".lora_embedding_B", f".lora_embedding_B.{adapter_name}"),
+    )
+    for key, tensor in weights.items():
+        candidates = [key]
+        for old, new in replacements:
+            if old in key:
+                candidates.append(key.replace(old, new))
+        # Some saved adapters include a redundant PEFT prefix depending on
+        # save/load version. Keep this as a fallback rather than assuming it.
+        if key.startswith("model."):
+            candidates.append("base_model." + key)
+        mapped_key = next((candidate for candidate in candidates if candidate in model_state_keys), None)
+        if mapped_key:
+            remapped[mapped_key] = tensor
+        else:
+            unmapped.append(key)
+    return remapped, unmapped
+
+
+def load_peft_weights_with_direct_fallback(
+    loaded_model: torch.nn.Module,
+    weights: dict[str, torch.Tensor],
+    *,
+    adapter_name: str = "default",
+) -> None:
+    """Load adapter weights robustly across PEFT/Transformers versions."""
+
+    require_peft()
+    method = PEFT_MANUAL_LOAD_METHOD.strip().lower()
+    if method not in {"auto", "set_peft", "direct"}:
+        raise ValueError("PEFT_MANUAL_LOAD_METHOD must be one of: auto,set_peft,direct")
+
+    if method in {"auto", "set_peft"}:
+        try:
+            set_peft_model_state_dict(
+                loaded_model,
+                weights,
+                adapter_name=adapter_name,
+                low_cpu_mem_usage=False,
+            )
+            print("Manual adapter load used set_peft_model_state_dict successfully.")
+            return
+        except TypeError as exc:
+            if method == "set_peft":
+                raise
+            print(
+                "set_peft_model_state_dict failed; falling back to direct PEFT state_dict load: "
+                f"{type(exc).__name__}: {exc}"
+            )
+
+    model_state = loaded_model.state_dict()
+    remapped, unmapped = remap_peft_state_dict_for_direct_load(weights, set(model_state), adapter_name=adapter_name)
+    if not remapped:
+        raise RuntimeError("Direct PEFT adapter load mapped zero tensors.")
+    coverage = len(remapped) / max(1, len(weights))
+    print(
+        "Direct PEFT adapter load mapping: "
+        f"mapped={len(remapped)} unmapped={len(unmapped)} total={len(weights)} coverage={coverage:.4f}"
+    )
+    if coverage < 0.98:
+        raise RuntimeError(
+            "Direct PEFT adapter load coverage too low: "
+            f"mapped={len(remapped)} total={len(weights)} sample_unmapped={unmapped[:20]}"
+        )
+    incompatible = loaded_model.load_state_dict(remapped, strict=False)
+    missing_lora = [key for key in incompatible.missing_keys if ".lora_" in key]
+    unexpected_lora = [key for key in incompatible.unexpected_keys if ".lora_" in key]
+    print(
+        "Direct PEFT adapter load result: "
+        f"missing_lora={len(missing_lora)} unexpected_lora={len(unexpected_lora)}"
+    )
+    if missing_lora or unexpected_lora:
+        raise RuntimeError(
+            "Direct PEFT adapter load left LoRA key mismatches: "
+            f"missing_sample={missing_lora[:20]} unexpected_sample={unexpected_lora[:20]}"
+        )
+
+
+def load_trainable_adapter_or_create(model: torch.nn.Module) -> torch.nn.Module:
+    """Load an existing LoRA adapter for incremental SFT, or create a new one."""
+
+    require_peft()
+    if INIT_ADAPTER_DIR:
+        adapter_dir = Path(INIT_ADAPTER_DIR)
+        if not adapter_dir.exists():
+            raise FileNotFoundError(f"INIT_ADAPTER_DIR not found: {adapter_dir}")
+        print(f"Loading trainable initial adapter from local path: {adapter_dir}")
+        print(
+            "Adapter load settings: "
+            f"torch_device={ADAPTER_LOAD_TORCH_DEVICE or 'peft-default'} "
+            f"low_cpu_mem_usage={ADAPTER_LOAD_LOW_CPU_MEM_USAGE} "
+            f"mode={INIT_ADAPTER_LOAD_MODE}"
+        )
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        if INIT_ADAPTER_LOAD_MODE.strip().lower() == "manual":
+            loaded_model = create_lora_model(model)
+            weights = load_peft_weights(str(adapter_dir), device="cpu")
+            print(f"Manual local adapter load: tensors={len(weights)}")
+            load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
+            return loaded_model
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            loaded_model = PeftModel.from_pretrained(
+                model,
+                str(adapter_dir),
+                is_trainable=True,
+                torch_device=optional_torch_device(ADAPTER_LOAD_TORCH_DEVICE),
+                low_cpu_mem_usage=ADAPTER_LOAD_LOW_CPU_MEM_USAGE,
+            )
+        missing_adapter_warnings = [
+            str(item.message) for item in caught if "missing adapter keys" in str(item.message).lower()
+        ]
+        if missing_adapter_warnings:
+            print("MISSING_ADAPTER_KEYS_WARNING_BEGIN")
+            for message in missing_adapter_warnings:
+                print(message[:8000])
+            print("MISSING_ADAPTER_KEYS_WARNING_END")
+            if FAIL_ON_MISSING_ADAPTER_KEYS:
+                raise RuntimeError(
+                    "Initial adapter did not fully load into the HF model namespace. "
+                    "Set FAIL_ON_MISSING_ADAPTER_KEYS=0 only for diagnostics."
+                )
+        return loaded_model
+
+    if INIT_ADAPTER_REPO:
+        print(
+            "Loading trainable initial adapter from HF: "
+            f"{INIT_ADAPTER_REPO}"
+            + (f"/{INIT_ADAPTER_SUBFOLDER}" if INIT_ADAPTER_SUBFOLDER else "")
+            + (f"@{INIT_ADAPTER_REVISION}" if INIT_ADAPTER_REVISION else "")
+        )
+        print(
+            "Adapter load settings: "
+            f"torch_device={ADAPTER_LOAD_TORCH_DEVICE or 'peft-default'} "
+            f"low_cpu_mem_usage={ADAPTER_LOAD_LOW_CPU_MEM_USAGE} "
+            f"mode={INIT_ADAPTER_LOAD_MODE}"
+        )
+        if INIT_ADAPTER_LOAD_MODE.strip().lower() == "manual":
+            loaded_model = create_lora_model(model)
+            weights = load_peft_weights(
+                INIT_ADAPTER_REPO,
+                subfolder=INIT_ADAPTER_SUBFOLDER or None,
+                revision=INIT_ADAPTER_REVISION or None,
+                token=HF_TOKEN or None,
+                device="cpu",
+            )
+            print(f"Manual HF adapter load: tensors={len(weights)}")
+            load_peft_weights_with_direct_fallback(loaded_model, weights, adapter_name="default")
+            return loaded_model
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            loaded_model = PeftModel.from_pretrained(
+                model,
+                INIT_ADAPTER_REPO,
+                subfolder=INIT_ADAPTER_SUBFOLDER or None,
+                revision=INIT_ADAPTER_REVISION or None,
+                token=HF_TOKEN or None,
+                is_trainable=True,
+                torch_device=optional_torch_device(ADAPTER_LOAD_TORCH_DEVICE),
+                low_cpu_mem_usage=ADAPTER_LOAD_LOW_CPU_MEM_USAGE,
+            )
+        missing_adapter_warnings = [
+            str(item.message) for item in caught if "missing adapter keys" in str(item.message).lower()
+        ]
+        if missing_adapter_warnings:
+            print("MISSING_ADAPTER_KEYS_WARNING_BEGIN")
+            for message in missing_adapter_warnings:
+                print(message[:8000])
+            print("MISSING_ADAPTER_KEYS_WARNING_END")
+            if FAIL_ON_MISSING_ADAPTER_KEYS:
+                raise RuntimeError(
+                    "Initial adapter did not fully load into the HF model namespace. "
+                    "Set FAIL_ON_MISSING_ADAPTER_KEYS=0 only for diagnostics."
+                )
+        return loaded_model
+
+    print("Creating a new trainable LoRA adapter.")
+    return create_lora_model(model)
+
+
+def parse_weight_map(value: str) -> dict[str, float]:
+    weights: dict[str, float] = {}
+    for item in value.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        if "=" in item:
+            key, raw_weight = item.split("=", 1)
+        elif ":" in item:
+            key, raw_weight = item.split(":", 1)
+            print(f"Warning: weight entry uses ':'; normalized to key=value form: {item}")
+        else:
+            raise ValueError(f"weight entry must be key=value, got: {item}")
+        key = key.strip()
+        raw_weight = raw_weight.strip()
+        if not key:
+            raise ValueError(f"weight entry has empty key: {item}")
+        if key in weights:
+            raise ValueError(f"duplicate weight entry for key {key!r}: {item}")
+        try:
+            weight = float(raw_weight)
+        except ValueError as exc:
+            raise ValueError(f"weight entry has non-numeric value: {item}") from exc
+        if not math.isfinite(weight):
+            raise ValueError(f"weight must be finite: {item}")
+        if weight <= 0:
+            raise ValueError(f"weight must be positive: {item}")
+        weights[key] = weight
+    return weights
+
+
+SUBCATEGORY_WEIGHT_MAP = parse_weight_map(SUBCATEGORY_WEIGHTS)
+SOURCE_WEIGHT_MAP = parse_weight_map(SOURCE_WEIGHTS)
+
+
+def trainable_parameter_report(model: torch.nn.Module) -> dict[str, float | int]:
+    trainable = sum(int(p.numel()) for p in model.parameters() if p.requires_grad)
+    total = sum(int(p.numel()) for p in model.parameters())
+    ratio = trainable / total if total else 0.0
+    return {"trainable": trainable, "total": total, "ratio": ratio}
+
+
+def apply_trainable_lora_module_filter(model: torch.nn.Module) -> dict[str, Any]:
+    """Freeze loaded LoRA params except a deliberate module allowlist.
+
+    The 0.86 adapter contains a full 9-module Huikang-style adapter.  Loading it
+    as fully trainable uses roughly 888M trainable params and can OOM on long
+    examples.  For a conservative delta run, keep the full adapter active in the
+    forward pass but update only the lighter routing/attention/mamba projection
+    modules named by TRAINABLE_LORA_MODULES.
+    """
+
+    modules = [item.strip() for item in TRAINABLE_LORA_MODULES.split(",") if item.strip()]
+    if not modules:
+        return {
+            "enabled": False,
+            "modules": [],
+            "trainable_lora_params": 0,
+            "frozen_lora_params": 0,
+            "trainable_lora_tensors": 0,
+            "frozen_lora_tensors": 0,
+            "trainable_by_module": {},
+            "frozen_by_module": {},
+        }
+
+    trainable_by_module: dict[str, int] = {module: 0 for module in modules}
+    frozen_by_module: dict[str, int] = {}
+    trainable_lora_params = 0
+    frozen_lora_params = 0
+    trainable_lora_tensors = 0
+    frozen_lora_tensors = 0
+
+    for name, param in model.named_parameters():
+        if ".lora_" not in name:
+            continue
+        matched_module = next((module for module in modules if f".{module}." in name), None)
+        if matched_module:
+            param.requires_grad_(True)
+            count = int(param.numel())
+            trainable_lora_params += count
+            trainable_lora_tensors += 1
+            trainable_by_module[matched_module] = trainable_by_module.get(matched_module, 0) + count
+        else:
+            param.requires_grad_(False)
+            count = int(param.numel())
+            frozen_lora_params += count
+            frozen_lora_tensors += 1
+            module_name = "unknown"
+            for candidate in [
+                "q_proj",
+                "k_proj",
+                "v_proj",
+                "o_proj",
+                "in_proj",
+                "out_proj",
+                "up_proj",
+                "down_proj",
+                "lm_head",
+            ]:
+                if f".{candidate}." in name:
+                    module_name = candidate
+                    break
+            frozen_by_module[module_name] = frozen_by_module.get(module_name, 0) + count
+
+    if trainable_lora_params <= 0:
+        raise RuntimeError(f"TRAINABLE_LORA_MODULES matched no LoRA parameters: {TRAINABLE_LORA_MODULES}")
+
+    return {
+        "enabled": True,
+        "modules": modules,
+        "trainable_lora_params": trainable_lora_params,
+        "frozen_lora_params": frozen_lora_params,
+        "trainable_lora_tensors": trainable_lora_tensors,
+        "frozen_lora_tensors": frozen_lora_tensors,
+        "trainable_by_module": trainable_by_module,
+        "frozen_by_module": frozen_by_module,
+    }
+
+
+def cuda_memory_line() -> str:
+    if not torch.cuda.is_available():
+        return "cuda_mem=unavailable"
+    allocated = torch.cuda.memory_allocated() / (1024**3)
+    reserved = torch.cuda.memory_reserved() / (1024**3)
+    return f"mem_alloc={allocated:.1f}GiB mem_reserved={reserved:.1f}GiB"
+
+
+def cuda_reserved_gib() -> float:
+    if not torch.cuda.is_available():
+        return 0.0
+    return torch.cuda.memory_reserved() / (1024**3)
+
+
+def cuda_peak_reserved_gib() -> float:
+    if not torch.cuda.is_available():
+        return 0.0
+    return torch.cuda.max_memory_reserved() / (1024**3)
+
+
+def kg1_teach_card(
+    stage: str,
+    status: str,
+    *,
+    what: str,
+    why: str = "",
+    watch: str = "",
+    next_action: str = "",
+    data: list[tuple[str, object]] | None = None,
+) -> None:
+    """Emit a concise, real-time teaching log for humans watching a paid job."""
+
+    if not FRIENDLY_REALTIME_LOGS:
+        return
+    stamp = time.strftime("%H:%M:%S")
+    print(f"[KG1-TEACH][{stamp}][{stage}][{status}]", flush=True)
+    print(f"  O que e: {what}", flush=True)
+    if why:
+        print(f"  Por que importa: {why}", flush=True)
+    if watch:
+        print(f"  Como ler: {watch}", flush=True)
+    if data:
+        print("  Numeros-chave:", flush=True)
+        for key, value in data:
+            print(f"    - {key}: {value}", flush=True)
+    if next_action:
+        print(f"  Proxima acao: {next_action}", flush=True)
+
+
+def kg1_score_contract_teach(report: dict[str, Any]) -> None:
+    readiness = report.get("readiness", {})
+    status = str(readiness.get("status", "UNKNOWN"))
+    errors = readiness.get("errors") or []
+    warnings_out = readiness.get("warnings") or []
+    target = report.get("target_math", {})
+    phase = str(report.get("phase", "unknown"))
+    stage_status = "OK" if status == "PASS" else "STOP"
+    next_action = (
+        "Contrato passou; pode seguir para a proxima fase do job."
+        if status == "PASS"
+        else "Pare o job e corrija os erros antes de gastar mais GPU."
+    )
+    kg1_teach_card(
+        "SCORE_CONTRACT",
+        stage_status,
+        what="Checklist do caminho que realmente vira score no Kaggle.",
+        why="Loss bom nao vale se modelo, prompt, LoRA, mascara ou boxed answer estiverem desalinhados.",
+        watch="PASS libera a proxima fase; FAIL significa risco alto de score falso.",
+        data=[
+            ("phase", phase),
+            ("status", status),
+            ("errors", len(errors)),
+            ("warnings", len(warnings_out)),
+            ("target_correct_required", target.get("target_correct_required")),
+            ("additional_rows_required", target.get("additional_rows_required")),
+        ],
+        next_action=next_action,
+    )
+
+
+def kg1_score_proxy_health(report: dict[str, Any]) -> tuple[str, str]:
+    boxed_rows = int(report.get("boxed_tail_rows") or 0)
+    if boxed_rows <= 0:
+        return "STOP", "Sem tokens boxed ponderados; o proxy nao mede a parte que vira score."
+    delta = report.get("delta_vs_baseline") or {}
+    if not delta:
+        return "BASELINE", "Baseline gravado; proximas avaliacoes precisam melhorar estes numeros."
+    boxed_loss_delta = finite_float_or_none(delta.get("boxed_tail_loss"))
+    boxed_exact_delta = finite_float_or_none(delta.get("boxed_tail_exact_rate"))
+    loss_delta = finite_float_or_none(delta.get("loss"))
+    if boxed_loss_delta is not None and boxed_loss_delta < 0 and boxed_exact_delta is not None and boxed_exact_delta >= 0:
+        return "OK", "A cauda boxed esta melhor que o baseline; este e o sinal barato que queremos ver."
+    if loss_delta is not None and loss_delta < 0 and (boxed_loss_delta is None or boxed_loss_delta >= 0):
+        return "RISK", "Loss geral melhorou, mas a cauda boxed nao melhorou; possivel falso conforto."
+    if boxed_exact_delta is not None and boxed_exact_delta < 0:
+        return "RISK", "A taxa boxed exata caiu contra o baseline; risco de regressao de score."
+    return "WATCH", "Sinal ainda misto; acompanhe bit/equation antes de confiar no job."
+
+
+def kg1_score_proxy_teach(report: dict[str, Any]) -> None:
+    if not FRIENDLY_LOG_SCORE_HINTS:
+        return
+    status, next_action = kg1_score_proxy_health(report)
+    by_family = report.get("by_family") or {}
+    by_class = report.get("by_class") or {}
+    data: list[tuple[str, object]] = [
+        ("label", report.get("label")),
+        ("rows", report.get("rows")),
+        ("loss", report.get("loss")),
+        ("boxed_tail_loss", report.get("boxed_tail_loss")),
+        ("boxed_tail_token_accuracy", report.get("boxed_tail_token_accuracy")),
+        ("boxed_tail_exact_rate", report.get("boxed_tail_exact_rate")),
+    ]
+    for family in sorted(by_family):
+        values = by_family.get(family)
+        if isinstance(values, dict):
+            data.extend(
+                [
+                    (f"{family}.rows", values.get("rows")),
+                    (f"{family}.boxed_exact", values.get("boxed_tail_exact_rate")),
+                    (f"{family}.boxed_loss", values.get("boxed_tail_loss")),
+                ]
+            )
+    if by_class:
+        data.append(("score_classes", len(by_class)))
+        for class_name, values in sorted(by_class.items()):
+            if isinstance(values, dict):
+                data.extend(
+                    [
+                        (f"class.{class_name}.rows", values.get("rows")),
+                        (f"class.{class_name}.boxed_exact", values.get("boxed_tail_exact_rate")),
+                    ]
+                )
+    delta = report.get("delta_vs_baseline") or {}
+    if delta:
+        data.extend(
+            [
+                ("delta.loss", delta.get("loss")),
+                ("delta.boxed_tail_loss", delta.get("boxed_tail_loss")),
+                ("delta.boxed_tail_exact_rate", delta.get("boxed_tail_exact_rate")),
+            ]
+        )
+    kg1_teach_card(
+        "SCORE_PROXY",
+        status,
+        what="Mini-avaliacao teacher-forced da parte final que vira resposta em boxed.",
+        why="O loss pode cair por motivos que nao aumentam o score; esta leitura olha a cauda score-facing.",
+        watch="Bom: boxed_tail_loss cai e boxed_tail_exact_rate/token_accuracy sobem por familia e por classe.",
+        data=data,
+        next_action=next_action,
+    )
+
+
+def kg1_score_trajectory_teach(report: dict[str, Any]) -> None:
+    if not FRIENDLY_LOG_SCORE_HINTS:
+        return
+    status = str(report.get("status") or "WATCH")
+    if status == "OK":
+        next_action = "Continuar ate o proximo checkpoint, mas ainda exigir raw-output full947 antes de claim."
+    elif status == "BASELINE":
+        next_action = "Usar este baseline como regua; proximos checkpoints precisam mover bit/equation sem regredir protegidas."
+    elif status == "STOP":
+        next_action = "Interromper ou nao promover: a trajetoria esta contra o score alvo."
+    elif status == "RISK":
+        next_action = "Investigar antes de gastar mais GPU: loss pode estar bom sem mover o score."
+    else:
+        next_action = "Acompanhar mais um checkpoint; ainda nao ha evidencia limpa de ganho nas familias fracas."
+
+    target = report.get("target_math") or {}
+    deltas = report.get("deltas") or {}
+    data: list[tuple[str, object]] = [
+        ("label", report.get("label")),
+        ("status", status),
+        ("alignment", report.get("score_trajectory_alignment")),
+        ("target_correct_required", target.get("target_correct_required")),
+        ("additional_rows_required", target.get("additional_rows_required")),
+        ("weak_exact_delta", deltas.get("weak_exact_rate_delta")),
+        ("bit_exact_delta", deltas.get("bit_manipulation_exact_rate_delta")),
+        ("equation_exact_delta", deltas.get("equation_transform_exact_rate_delta")),
+        ("protected_exact_delta", deltas.get("protected_exact_rate_delta")),
+        ("overall_exact_delta", deltas.get("overall_exact_rate_delta")),
+        ("boxed_loss_delta", deltas.get("boxed_tail_loss_delta")),
+    ]
+    kg1_teach_card(
+        "SCORE_TRAJECTORY",
+        status,
+        what="Semaforo barato de direcao para o objetivo >=0.89.",
+        why="Treino com loss bonito pode nao ganhar linhas; aqui medimos se bit/equation melhoram sem quebrar familias protegidas.",
+        watch="OK exige ganho nas familias fracas e nenhuma regressao global/protegida acima da tolerancia.",
+        data=data,
+        next_action=next_action,
+    )
+
+
+def kg1_training_pulse_teach(
+    *,
+    global_step: int,
+    total_steps: int,
+    train_loss: float,
+    lr: float,
+    elapsed_seconds: float,
+) -> None:
+    progress = (global_step / max(1, total_steps)) * 100.0
+    kg1_teach_card(
+        "TRAIN_PULSE",
+        "RUNNING",
+        what="Batida curta do treino para confirmar que o job esta vivo.",
+        why="Mostra progresso, loss de treino, learning rate e memoria sem esperar o manifesto final.",
+        watch="Train loss sozinho nao prova score; use este pulso junto com SCORE_PROXY.",
+        data=[
+            ("step", f"{global_step}/{total_steps}"),
+            ("progress", f"{progress:.1f}%"),
+            ("train_loss", f"{train_loss:.4f}"),
+            ("lr", f"{lr:.2e}"),
+            ("elapsed_min", f"{elapsed_seconds / 60:.1f}"),
+            ("cuda", cuda_memory_line()),
+        ],
+        next_action="Se memoria explodir ou SCORE_PROXY piorar, interrompa antes de gastar mais GPU.",
+    )
+
+
+def cuda_runtime_report() -> dict[str, Any]:
+    device_count = torch.cuda.device_count() if torch.cuda.is_available() else 0
+    device_names: list[str] = []
+    for idx in range(device_count):
+        try:
+            device_names.append(torch.cuda.get_device_name(idx))
+        except RuntimeError as exc:
+            device_names.append(f"unavailable:{type(exc).__name__}:{exc}")
+    return {
+        "python_version": sys.version.split()[0],
+        "torch_version": torch.__version__,
+        "cuda_available": bool(torch.cuda.is_available()),
+        "cuda_device_count": int(device_count),
+        "cuda_device_names": device_names,
+        "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES", ""),
+        "nvidia_visible_devices": os.environ.get("NVIDIA_VISIBLE_DEVICES", ""),
+        "nvidia_driver_capabilities": os.environ.get("NVIDIA_DRIVER_CAPABILITIES", ""),
+        "torch_allow_tf32": bool(TORCH_ALLOW_TF32),
+        "torch_float32_matmul_precision": TORCH_FLOAT32_MATMUL_PRECISION,
+        "torch_disable_cudnn_sdp": bool(TORCH_DISABLE_CUDNN_SDP),
+        "torch_force_math_sdp": bool(TORCH_FORCE_MATH_SDP),
+        "attn_implementation": ATTN_IMPLEMENTATION,
+        "gradient_checkpointing": bool(GRADIENT_CHECKPOINTING),
+        "hf_xet_high_performance": os.environ.get("HF_XET_HIGH_PERFORMANCE", ""),
+    }
+
+
+def apply_runtime_performance_settings() -> None:
+    """Apply conservative H100-friendly runtime knobs and log the result."""
+
+    print("Applying runtime performance settings:")
+    print(f"  TORCH_ALLOW_TF32={TORCH_ALLOW_TF32}")
+    print(f"  TORCH_FLOAT32_MATMUL_PRECISION={TORCH_FLOAT32_MATMUL_PRECISION}")
+    print(f"  TORCH_DISABLE_CUDNN_SDP={TORCH_DISABLE_CUDNN_SDP}")
+    print(f"  TORCH_FORCE_MATH_SDP={TORCH_FORCE_MATH_SDP}")
+    print(f"  ATTN_IMPLEMENTATION={ATTN_IMPLEMENTATION or 'transformers-default'}")
+    print(f"  GRADIENT_CHECKPOINTING={GRADIENT_CHECKPOINTING}")
+    if torch.cuda.is_available() and TORCH_ALLOW_TF32:
+        try:
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+            print("  enabled torch CUDA/CUDNN TF32 flags")
+        except Exception as exc:
+            print(f"  warning: could not set TF32 flags: {type(exc).__name__}: {exc}")
+    if TORCH_FLOAT32_MATMUL_PRECISION:
+        try:
+            torch.set_float32_matmul_precision(TORCH_FLOAT32_MATMUL_PRECISION)
+            print(f"  set_float32_matmul_precision={TORCH_FLOAT32_MATMUL_PRECISION}")
+        except Exception as exc:
+            print(
+                "  warning: could not set float32 matmul precision: "
+                f"{type(exc).__name__}: {exc}"
+            )
+    if torch.cuda.is_available():
+        try:
+            if TORCH_DISABLE_CUDNN_SDP and hasattr(torch.backends.cuda, "enable_cudnn_sdp"):
+                torch.backends.cuda.enable_cudnn_sdp(False)
+                print("  disabled torch CUDA cuDNN SDPA backend")
+            if TORCH_FORCE_MATH_SDP:
+                if hasattr(torch.backends.cuda, "enable_flash_sdp"):
+                    torch.backends.cuda.enable_flash_sdp(False)
+                    print("  disabled torch CUDA flash SDPA backend")
+                if hasattr(torch.backends.cuda, "enable_mem_efficient_sdp"):
+                    torch.backends.cuda.enable_mem_efficient_sdp(False)
+                    print("  disabled torch CUDA mem-efficient SDPA backend")
+                if hasattr(torch.backends.cuda, "enable_math_sdp"):
+                    torch.backends.cuda.enable_math_sdp(True)
+                    print("  enabled torch CUDA math SDPA backend")
+            sdpa_status = {}
+            for name in [
+                "flash_sdp_enabled",
+                "mem_efficient_sdp_enabled",
+                "math_sdp_enabled",
+                "cudnn_sdp_enabled",
+            ]:
+                fn = getattr(torch.backends.cuda, name, None)
+                if callable(fn):
+                    try:
+                        sdpa_status[name] = bool(fn())
+                    except Exception as exc:
+                        sdpa_status[name] = f"{type(exc).__name__}: {exc}"
+            if sdpa_status:
+                print(f"  sdpa_backend_status={json.dumps(sdpa_status, sort_keys=True)}")
+        except Exception as exc:
+            print(f"  warning: could not configure SDPA backends: {type(exc).__name__}: {exc}")
+
+
+def setup_causal_conv1d_stub() -> None:
+    """Inject a minimal causal_conv1d stub when the optional package is absent."""
+    try:
+        import causal_conv1d  # noqa: F401
+    except ImportError:
+        import importlib.machinery
+        import types
+
+        stub = types.ModuleType("causal_conv1d")
+        stub.causal_conv1d_fn = None
+        stub.causal_conv1d_update = None
+        stub.__spec__ = importlib.machinery.ModuleSpec("causal_conv1d", loader=None)
+        sys.modules["causal_conv1d"] = stub
+        print("Injected causal_conv1d stub")
+
+
+def validate_nemotron_model_runtime_dependencies() -> None:
+    """Fail early with a clear message before Transformers dynamic module import."""
+    try:
+        from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn  # noqa: F401
+    except Exception as exc:
+        raise RuntimeError(
+            "Nemotron model load requires mamba_ssm.ops.triton.layernorm_gated.rmsnorm_fn. "
+            "Install mamba-ssm==2.3.1 with --no-build-isolation before model_dryrun/real_train."
+        ) from exc
+    causal_spec = importlib.util.find_spec("causal_conv1d")
+    causal_module = sys.modules.get("causal_conv1d")
+    causal_is_stub = (
+        causal_module is not None
+        and getattr(causal_module, "causal_conv1d_fn", object()) is None
+        and getattr(causal_module, "causal_conv1d_update", object()) is None
+    )
+    if REQUIRE_REAL_CAUSAL_CONV1D and (causal_spec is None or causal_is_stub):
+        raise RuntimeError(
+            "Nemotron model load requires real causal_conv1d when REQUIRE_REAL_CAUSAL_CONV1D=1. "
+            "Install causal-conv1d before model_dryrun/real_train; stub fallback is blocked."
+        )
+    if causal_spec is None or causal_is_stub:
+        print(
+            "Warning: causal_conv1d is absent. Nemotron may fall back to a slower path; "
+            "this is allowed only if the model dry-run still passes within time/VRAM budget.",
+            flush=True,
+        )
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def assert_file_sha256(path: Path, expected_sha256: str, label: str) -> None:
+    if not expected_sha256:
+        return
+    observed = file_sha256(path)
+    if observed.lower() != expected_sha256.lower():
+        raise RuntimeError(
+            f"{label} sha256 mismatch for {path}: observed={observed} expected={expected_sha256}"
+        )
+    print(f"{label} sha256 OK: {observed}")
+
+
+def adapter_weight_path(adapter_dir: Path) -> Path | None:
+    for name in ("adapter_model.safetensors", "adapter_model.bin"):
+        path = adapter_dir / name
+        if path.exists():
+            return path
+    return None
+
+
+def validate_initial_adapter_contract_if_required() -> dict[str, Any]:
+    report: dict[str, Any] = {
+        "required": bool(REQUIRE_INIT_ADAPTER),
+        "require_revision": bool(REQUIRE_INIT_ADAPTER_REVISION),
+        "init_adapter_dir": INIT_ADAPTER_DIR,
+        "init_adapter_repo": INIT_ADAPTER_REPO,
+        "init_adapter_revision": INIT_ADAPTER_REVISION,
+        "init_adapter_subfolder": INIT_ADAPTER_SUBFOLDER,
+        "expected_config_sha256": bool(EXPECTED_INIT_ADAPTER_CONFIG_SHA256),
+        "expected_weights_sha256": bool(EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256),
+        "status": "SKIP",
+    }
+    if not REQUIRE_INIT_ADAPTER:
+        print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+        return report
+    if not (INIT_ADAPTER_DIR or INIT_ADAPTER_REPO):
+        report["status"] = "FAIL"
+        print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+        raise RuntimeError(
+            "REQUIRE_INIT_ADAPTER=1 but neither INIT_ADAPTER_DIR nor INIT_ADAPTER_REPO is set. "
+            "V1243 baseline math must not run as a fresh LoRA."
+        )
+    if INIT_ADAPTER_DIR and INIT_ADAPTER_REPO:
+        report["status"] = "FAIL"
+        print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+        raise RuntimeError("Set exactly one initial adapter source: INIT_ADAPTER_DIR or INIT_ADAPTER_REPO, not both.")
+
+    config_path: Path | None = None
+    weights_path: Path | None = None
+    if INIT_ADAPTER_DIR:
+        adapter_dir = Path(INIT_ADAPTER_DIR)
+        config_path = adapter_dir / "adapter_config.json"
+        weights_path = adapter_weight_path(adapter_dir)
+        if not config_path.exists() or weights_path is None:
+            report["status"] = "FAIL"
+            print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+            raise RuntimeError(f"INIT_ADAPTER_DIR is incomplete: {adapter_dir}")
+    else:
+        if REQUIRE_INIT_ADAPTER_REVISION and not INIT_ADAPTER_REVISION:
+            report["status"] = "FAIL"
+            print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+            raise RuntimeError("INIT_ADAPTER_REPO requires pinned INIT_ADAPTER_REVISION when REQUIRE_INIT_ADAPTER_REVISION=1")
+        config_path = Path(
+            hf_hub_download(
+                repo_id=INIT_ADAPTER_REPO,
+                filename="adapter_config.json",
+                subfolder=INIT_ADAPTER_SUBFOLDER or None,
+                revision=INIT_ADAPTER_REVISION or None,
+                token=HF_TOKEN or None,
+            )
+        )
+        try:
+            weights_path = Path(
+                hf_hub_download(
+                    repo_id=INIT_ADAPTER_REPO,
+                    filename="adapter_model.safetensors",
+                    subfolder=INIT_ADAPTER_SUBFOLDER or None,
+                    revision=INIT_ADAPTER_REVISION or None,
+                    token=HF_TOKEN or None,
+                )
+            )
+        except Exception:
+            weights_path = Path(
+                hf_hub_download(
+                    repo_id=INIT_ADAPTER_REPO,
+                    filename="adapter_model.bin",
+                    subfolder=INIT_ADAPTER_SUBFOLDER or None,
+                    revision=INIT_ADAPTER_REVISION or None,
+                    token=HF_TOKEN or None,
+                )
+            )
+
+    assert config_path is not None
+    assert weights_path is not None
+    assert_file_sha256(config_path, EXPECTED_INIT_ADAPTER_CONFIG_SHA256, "initial adapter config")
+    assert_file_sha256(weights_path, EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256, "initial adapter weights")
+    report.update(
+        {
+            "status": "PASS",
+            "config_path": str(config_path),
+            "weights_path": str(weights_path),
+            "config_sha256": file_sha256(config_path),
+            "weights_sha256": file_sha256(weights_path),
+            "weights_bytes": weights_path.stat().st_size,
+        }
+    )
+    print("KG1_INIT_ADAPTER_CONTRACT_JSON", json.dumps(report, sort_keys=True), flush=True)
+    return report
+
+
+def resolve_data_file(filename: str) -> Path:
+    """Use local file if present, otherwise download it from DATA_REPO."""
+    local_path = Path(filename)
+    if local_path.exists():
+        print(f"Using local data file: {local_path}")
+        return local_path
+
+    print(f"Downloading dataset file from {DATA_REPO}/{filename}...")
+    return Path(
+        hf_hub_download(
+            repo_id=DATA_REPO,
+            filename=filename,
+            repo_type="dataset",
+            token=HF_TOKEN or None,
+        )
+    )
+
+
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    with path.open(encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                rows.append(json.loads(line))
+    return rows
+
+
+def parse_csv_set(value: str) -> set[str]:
+    return {item.strip() for item in value.split(",") if item.strip()}
+
+
+def load_tong_pretokenized_archive(archive_path: Path) -> list[dict[str, Any]]:
+    """Load Tong Hui Kang corpus token/mask segments directly from archive.zip.
+
+    The public Tong recipe is token-first: ``corpus.jsonl`` points to
+    ``corpus/<problem_id>/synthetic.jsonl`` segment files with masked/unmasked
+    token spans. This path avoids chat-template retokenization drift.
+    """
+
+    exclude_categories = parse_csv_set(PRETOKENIZED_EXCLUDE_CATEGORIES)
+    rows: list[dict[str, Any]] = []
+    skipped_not_included = 0
+    skipped_excluded_category = 0
+    skipped_missing_segment = 0
+    skipped_empty_loss = 0
+    mismatches: list[dict[str, Any]] = []
+
+    with zipfile.ZipFile(archive_path) as zf:
+        index_lines = zf.read("corpus.jsonl").decode("utf-8", errors="replace").splitlines()
+        for line_no, raw in enumerate(index_lines, start=1):
+            if not raw.strip():
+                continue
+            entry = json.loads(raw)
+            problem_id = str(entry.get("problem_id", ""))
+            category = str(entry.get("category", "unknown"))
+            if entry.get("included") is False:
+                skipped_not_included += 1
+                continue
+            if category in exclude_categories:
+                skipped_excluded_category += 1
+                continue
+
+            segment_name = str(entry.get("segment") or "synthetic.jsonl")
+            member = f"corpus/{problem_id}/{segment_name}"
+            try:
+                segment_lines = zf.read(member).decode("utf-8", errors="replace").splitlines()
+            except KeyError:
+                skipped_missing_segment += 1
+                continue
+
+            input_ids: list[int] = []
+            loss_mask: list[int] = []
+            for segment_raw in segment_lines:
+                if not segment_raw.strip():
+                    continue
+                segment = json.loads(segment_raw)
+                tokens = [int(token) for token in segment.get("tokens", [])]
+                is_unmasked = segment.get("type") == "unmasked"
+                input_ids.extend(tokens)
+                loss_mask.extend([1 if is_unmasked else 0] * len(tokens))
+
+            if not input_ids or sum(loss_mask) == 0:
+                skipped_empty_loss += 1
+                continue
+            if len(input_ids) > MAX_LENGTH:
+                raise RuntimeError(
+                    f"Pretokenized example {problem_id} has {len(input_ids)} tokens > MAX_LENGTH={MAX_LENGTH}. "
+                    "Use MAX_LENGTH=8192 for Tong reproduction."
+                )
+            if entry.get("token_count") is not None and int(entry["token_count"]) != len(input_ids):
+                mismatches.append({
+                    "problem_id": problem_id,
+                    "field": "token_count",
+                    "expected": int(entry["token_count"]),
+                    "observed": len(input_ids),
+                })
+            if entry.get("unmasked_token_count") is not None and int(entry["unmasked_token_count"]) != sum(loss_mask):
+                mismatches.append({
+                    "problem_id": problem_id,
+                    "field": "unmasked_token_count",
+                    "expected": int(entry["unmasked_token_count"]),
+                    "observed": int(sum(loss_mask)),
+                })
+            rows.append(
+                {
+                    "id": problem_id,
+                    "input_ids": input_ids,
+                    "loss_mask": loss_mask,
+                    "category": category,
+                    "subcategory": category,
+                    "source": "tong_pretokenized_archive",
+                    "answer": entry.get("answer"),
+                    "token_count": len(input_ids),
+                    "unmasked_token_count": int(sum(loss_mask)),
+                    "index_line": line_no,
+                }
+            )
+
+    if mismatches:
+        raise RuntimeError(f"Pretokenized token/mask count mismatch sample: {mismatches[:5]}")
+    print(
+        "Pretokenized Tong archive load summary: "
+        f"rows={len(rows)} skipped_not_included={skipped_not_included} "
+        f"skipped_excluded_category={skipped_excluded_category} "
+        f"skipped_missing_segment={skipped_missing_segment} "
+        f"skipped_empty_loss={skipped_empty_loss} "
+        f"excluded_categories={sorted(exclude_categories)}"
+    )
+    token_length_stats(rows, "Pretokenized corpus")
+    return rows
+
+
+def split_pretokenized_train_val(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Create a deterministic stratified validation split from pretokenized rows."""
+
+    if not rows:
+        raise RuntimeError("No pretokenized rows loaded")
+    by_category: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        by_category.setdefault(str(row.get("category", "unknown")), []).append(row)
+
+    rng = random.Random(SEED)
+    val_target = PRETOKENIZED_VAL_EXAMPLES
+    if val_target <= 0 and PRETOKENIZED_VAL_FRACTION > 0:
+        val_target = max(1, int(round(len(rows) * PRETOKENIZED_VAL_FRACTION)))
+    if val_target <= 0:
+        val_target = min(720, max(1, len(rows) // 20))
+
+    val_ids: set[str] = set()
+    categories = sorted(by_category)
+    base_per_category = max(1, val_target // max(1, len(categories)))
+    for category in categories:
+        items = list(by_category[category])
+        rng.shuffle(items)
+        take = min(base_per_category, len(items))
+        val_ids.update(str(item["id"]) for item in items[:take])
+
+    if len(val_ids) < val_target:
+        remaining = [row for row in rows if str(row["id"]) not in val_ids]
+        rng.shuffle(remaining)
+        val_ids.update(str(item["id"]) for item in remaining[: max(0, val_target - len(val_ids))])
+
+    train_data = list(rows) if PRETOKENIZED_VAL_COPY_ONLY else [row for row in rows if str(row["id"]) not in val_ids]
+    val_data = [row for row in rows if str(row["id"]) in val_ids]
+    print(
+        f"Pretokenized split: train={len(train_data)} validation={len(val_data)} "
+        f"target_validation={val_target} copy_only={PRETOKENIZED_VAL_COPY_ONLY}"
+    )
+    token_length_stats(train_data, "Train")
+    token_length_stats(val_data, "Validation")
+    return train_data, val_data
+
+
+def token_length_stats(tokenized: list[dict[str, Any]], label: str) -> None:
+    total_tokens = sum(len(t["input_ids"]) for t in tokenized)
+    active_loss_tokens = sum(sum(1 for value in t["loss_mask"] if float(value) > 0.0) for t in tokenized)
+    weighted_loss_tokens = sum(float(sum(t["loss_mask"])) for t in tokenized)
+    boxed_weighted_tokens = sum(
+        sum(1 for value in t["loss_mask"] if float(value) > 1.0)
+        for t in tokenized
+    )
+    print(f"\n{label}: {len(tokenized)} examples")
+    print(f"  Total tokens: {total_tokens:,}")
+    print(f"  Active loss tokens: {active_loss_tokens:,}")
+    print(f"  Weighted loss-token sum: {weighted_loss_tokens:,.2f}")
+    print(f"  Boxed boosted tokens: {boxed_weighted_tokens:,}")
+
+    cat_lens: dict[str, list[int]] = {}
+    for item in tokenized:
+        cat_lens.setdefault(item["category"], []).append(len(item["input_ids"]))
+
+    for category, lens in sorted(cat_lens.items()):
+        lens_sorted = sorted(lens)
+        n = len(lens_sorted)
+        p50 = lens_sorted[n // 2]
+        p90 = lens_sorted[int(n * 0.9)]
+        p99 = lens_sorted[int(n * 0.99)] if n >= 100 else lens_sorted[-1]
+        truncated = sum(1 for length in lens if length == MAX_LENGTH)
+        print(
+            f"  {category}: n={n} p50={p50} p90={p90} "
+            f"p99={p99} truncated={truncated}/{n}"
+        )
+
+
+def build_completion_mask(
+    full_text: str,
+    messages: list[dict[str, Any]],
+    tokenizer: Any,
+) -> tuple[list[int], list[float], bool, bool, int]:
+    """Tokenize a chat transcript and mask loss to assistant completion tokens.
+
+    Offset mappings are preferred because separate tokenization of the prompt
+    and full transcript can disagree at the prompt/completion boundary.
+    """
+
+    assistant_text = ""
+    for message in reversed(messages):
+        if message.get("role") == "assistant":
+            assistant_text = str(message.get("content", ""))
+            break
+    if not assistant_text:
+        return [], [], False, False, 0
+
+    assistant_start = full_text.rfind(assistant_text)
+    if assistant_start >= 0:
+        try:
+            encoded = tokenizer(
+                full_text,
+                add_special_tokens=False,
+                return_offsets_mapping=True,
+            )
+            input_ids = list(encoded["input_ids"])
+            offsets = encoded.get("offset_mapping")
+            if offsets and len(offsets) == len(input_ids):
+                loss_mask: list[float] = [
+                    1.0 if int(end) > assistant_start else 0.0
+                    for _, end in offsets
+                ]
+                boxed_weighted_tokens = apply_boxed_payload_loss_weight(
+                    full_text=full_text,
+                    assistant_text=assistant_text,
+                    assistant_start=assistant_start,
+                    offsets=offsets,
+                    loss_mask=loss_mask,
+                )
+                return input_ids, loss_mask, True, False, boxed_weighted_tokens
+        except (NotImplementedError, TypeError, ValueError):
+            pass
+
+    full_ids = tokenizer.encode(full_text, add_special_tokens=False)
+    prompt_messages = [m for m in messages if m.get("role") != "assistant"]
+    # enable_thinking=True aligns with Tong recipe (Progress Prize winner)
+    # so the `<think>` scaffold is preserved in the prompt and the completion
+    # can emit `</think>\n\boxed{answer}` naturally.
+    try:
+        prompt_text = tokenizer.apply_chat_template(
+            prompt_messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=True,
+        )
+    except TypeError:
+        prompt_text = tokenizer.apply_chat_template(
+            prompt_messages, tokenize=False, add_generation_prompt=True
+        )
+    prompt_ids = tokenizer.encode(prompt_text, add_special_tokens=False)
+    prefix_mismatch = full_ids[: len(prompt_ids)] != prompt_ids
+    prompt_len = min(len(prompt_ids), len(full_ids))
+    loss_mask = [0.0] * prompt_len + [1.0] * (len(full_ids) - prompt_len)
+    return full_ids, loss_mask, False, prefix_mismatch, 0
+
+
+def apply_boxed_payload_loss_weight(
+    *,
+    full_text: str,
+    assistant_text: str,
+    assistant_start: int,
+    offsets: list[Any],
+    loss_mask: list[float],
+) -> int:
+    r"""Boost loss weights on the final score-facing boxed payload.
+
+    The prompt suffix itself contains an example ``\boxed{}``, so the search is
+    deliberately limited to the assistant span and uses the final boxed marker.
+    """
+
+    if BOXED_PAYLOAD_LOSS_WEIGHT <= 1.0:
+        return 0
+    marker = "\\boxed{"
+    relative_start = assistant_text.rfind(marker)
+    if relative_start < 0:
+        return 0
+    assistant_payload = assistant_text.rstrip()
+    payload_relative_start = relative_start + len(marker)
+    payload_relative_end = len(assistant_payload)
+    if payload_relative_end > payload_relative_start and assistant_payload.endswith("}"):
+        payload_relative_end -= 1
+    if payload_relative_end <= payload_relative_start:
+        return 0
+    boxed_start = assistant_start + payload_relative_start
+    boxed_end = assistant_start + payload_relative_end
+    boosted = 0
+    for index, (start, end) in enumerate(offsets):
+        token_start = int(start)
+        token_end = int(end)
+        if loss_mask[index] <= 0.0:
+            continue
+        if token_end > boxed_start and token_start < boxed_end:
+            loss_mask[index] = max(float(loss_mask[index]), BOXED_PAYLOAD_LOSS_WEIGHT)
+            boosted += 1
+    return boosted
+
+
+def tokenize_examples(
+    examples: list[dict[str, Any]],
+    tokenizer: Any,
+    label: str,
+) -> list[dict[str, Any]]:
+    tokenized: list[dict[str, Any]] = []
+    skipped_missing_messages = 0
+    skipped_no_loss = 0
+    truncated_count = 0
+    prompt_truncated_count = 0
+    prompt_tokens_dropped_est = 0
+    offset_mask_count = 0
+    fallback_mask_count = 0
+    fallback_prefix_mismatch_count = 0
+    boxed_payload_weighted_rows = 0
+    boxed_payload_weighted_tokens = 0
+    for ex in examples:
+        metadata = ex.get("metadata") or {}
+        msgs = ex.get("messages", [])
+        if not msgs:
+            skipped_missing_messages += 1
+            continue
+
+        try:
+            full_text = tokenizer.apply_chat_template(
+                msgs,
+                tokenize=False,
+                add_generation_prompt=False,
+                enable_thinking=True,
+            )
+        except TypeError:
+            full_text = tokenizer.apply_chat_template(
+                msgs, tokenize=False, add_generation_prompt=False
+            )
+        full_ids, loss_mask, used_offsets, prefix_mismatch, boxed_tokens = build_completion_mask(
+            full_text, msgs, tokenizer
+        )
+        raw_token_count = len(full_ids)
+        example_truncated = False
+        example_prompt_truncated = False
+        example_prompt_tokens_dropped = 0
+        if used_offsets:
+            offset_mask_count += 1
+        else:
+            fallback_mask_count += 1
+        if prefix_mismatch:
+            fallback_prefix_mismatch_count += 1
+        if boxed_tokens > 0:
+            boxed_payload_weighted_rows += 1
+            boxed_payload_weighted_tokens += boxed_tokens
+
+        if len(full_ids) > MAX_LENGTH:
+            first_loss_idx = next((idx for idx, value in enumerate(loss_mask) if value), len(loss_mask))
+            overflow = len(full_ids) - MAX_LENGTH
+            dropped_prompt_tokens = min(overflow, first_loss_idx)
+            example_truncated = True
+            example_prompt_tokens_dropped = int(dropped_prompt_tokens)
+            if dropped_prompt_tokens > 0:
+                example_prompt_truncated = True
+                prompt_truncated_count += 1
+                prompt_tokens_dropped_est += dropped_prompt_tokens
+            full_ids = full_ids[overflow:]
+            loss_mask = loss_mask[overflow:]
+            if BOXED_PAYLOAD_LOSS_WEIGHT > 1.0:
+                boxed_tokens = sum(1 for value in loss_mask if float(value) > 1.0)
+            truncated_count += 1
+
+        if sum(loss_mask) == 0:
+            skipped_no_loss += 1
+            continue
+
+        tokenized.append(
+            {
+                "id": ex.get("id", ""),
+                "input_ids": full_ids,
+                "loss_mask": loss_mask,
+                "loss_mask_active_tokens": sum(1 for value in loss_mask if float(value) > 0.0),
+                "loss_mask_weight_sum": float(sum(loss_mask)),
+                "boxed_payload_weighted_tokens": sum(1 for value in loss_mask if float(value) > 1.0),
+                "used_offset_mask": bool(used_offsets),
+                "fallback_prefix_mismatch": bool(prefix_mismatch),
+                "raw_token_count": int(raw_token_count),
+                "truncated_to_max_length": bool(example_truncated),
+                "prompt_truncated": bool(example_prompt_truncated),
+                "prompt_tokens_dropped_est": int(example_prompt_tokens_dropped),
+                "row_loss_weight": row_sampling_weight(ex),
+                "category": ex.get("family", ex.get("category", "unknown")),
+                "score_class": score_class_key(ex),
+                "subcategory": (
+                    metadata.get("subcategory")
+                    or metadata.get("subtype")
+                    or ex.get("subcategory")
+                    or ex.get("subtype")
+                    or "unknown"
+                ),
+                "source": ex.get("source") or metadata.get("source") or "unknown",
+            }
+        )
+
+    print(
+        f"{label} tokenization summary: raw={len(examples)} tokenized={len(tokenized)} "
+        f"truncated={truncated_count} prompt_truncated={prompt_truncated_count} "
+        f"prompt_tokens_dropped_est={prompt_tokens_dropped_est} "
+        f"skipped_missing_messages={skipped_missing_messages} "
+        f"skipped_no_loss={skipped_no_loss} offset_masks={offset_mask_count} "
+        f"fallback_masks={fallback_mask_count} "
+        f"fallback_prefix_mismatches={fallback_prefix_mismatch_count} "
+        f"boxed_payload_weighted_rows={boxed_payload_weighted_rows} "
+        f"boxed_payload_weighted_tokens={boxed_payload_weighted_tokens}"
+    )
+    if REQUIRE_OFFSET_MASK and fallback_mask_count:
+        raise RuntimeError(
+            f"{label} tokenization used {fallback_mask_count} fallback completion masks. "
+            "Set REQUIRE_OFFSET_MASK=0 only for a deliberate diagnostic run."
+        )
+    prompt_truncation_rate = prompt_truncated_count / max(1, len(examples))
+    if prompt_truncation_rate > MAX_PROMPT_TRUNCATION_RATE:
+        raise RuntimeError(
+            f"{label} prompt truncation rate is too high: "
+            f"{prompt_truncation_rate:.4%} > {MAX_PROMPT_TRUNCATION_RATE:.4%}. "
+            "Increase MAX_LENGTH or reduce long/low-value examples before training."
+        )
+    if REQUIRE_BOXED_PAYLOAD_WEIGHT:
+        unweighted_rows = [
+            item.get("id", "")
+            for item in tokenized
+            if int(item.get("boxed_payload_weighted_tokens") or 0) <= 0
+        ]
+        if unweighted_rows:
+            raise RuntimeError(
+                f"{label} has {len(unweighted_rows)} rows without boosted boxed payload tokens. "
+                f"sample_ids={unweighted_rows[:10]}"
+            )
+    token_length_stats(tokenized, label)
+    return tokenized
+
+
+def score_class_key(item: dict[str, Any]) -> str:
+    metadata = item.get("metadata") or {}
+    family = str(item.get("family") or item.get("category") or "unknown")
+    if family == "bit_manipulation":
+        rule = (
+            metadata.get("v1240_solver_rule_kind")
+            or metadata.get("v1240_requested_rule_kind")
+            or item.get("subcategory")
+            or "unknown"
+        )
+        return f"bit_rule:{rule}"
+    if family == "equation_transform":
+        op_counts = metadata.get("v1240_op_counts")
+        if isinstance(op_counts, dict) and op_counts:
+            active = "+".join(
+                f"{key}x{value}" for key, value in sorted(op_counts.items()) if value
+            )
+            return "equation_ops:" + (active or "none")
+        transform_counts = metadata.get("v1240_transform_counts")
+        if isinstance(transform_counts, dict) and transform_counts:
+            active = "+".join(
+                f"{key}x{value}" for key, value in sorted(transform_counts.items()) if value
+            )
+            return "equation_transforms:" + (active or "none")
+    subcategory = item.get("subcategory") or metadata.get("v1243_phase_role") or "unknown"
+    return f"{family}:{subcategory}"
+
+
+def row_sampling_weight(item: dict[str, Any]) -> float:
+    metadata = item.get("metadata") or {}
+    candidates = [
+        item.get("row_loss_weight"),
+        item.get("loss_weight"),
+        item.get("sampling_weight"),
+        metadata.get("v1243_sampling_weight"),
+        metadata.get("row_loss_weight"),
+        metadata.get("loss_weight"),
+    ]
+    for value in candidates:
+        if value in (None, ""):
+            continue
+        try:
+            weight = float(value)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(weight) and weight >= 0.0:
+            return weight
+    return 1.0
+
+
+def example_sampling_weight(item: dict[str, Any]) -> float:
+    weight = row_sampling_weight(item)
+    subcategory = str(item.get("subcategory", "unknown"))
+    source = str(item.get("source", "unknown"))
+    weight *= SUBCATEGORY_WEIGHT_MAP.get(subcategory, 1.0)
+    weight *= SOURCE_WEIGHT_MAP.get(source, 1.0)
+    return weight
+
+
+def weighted_sample_report(data: list[dict[str, Any]]) -> dict[str, Any]:
+    total_weight = sum(example_sampling_weight(item) for item in data)
+    by_subcategory: dict[str, float] = {}
+    by_source: dict[str, float] = {}
+    for item in data:
+        weight = example_sampling_weight(item)
+        by_subcategory[str(item.get("subcategory", "unknown"))] = by_subcategory.get(str(item.get("subcategory", "unknown")), 0.0) + weight
+        by_source[str(item.get("source", "unknown"))] = by_source.get(str(item.get("source", "unknown")), 0.0) + weight
+
+    def normalize(values: dict[str, float]) -> dict[str, float]:
+        if total_weight <= 0:
+            return values
+        return {
+            key: round(value / total_weight, 6)
+            for key, value in sorted(values.items(), key=lambda kv: (-kv[1], kv[0]))
+        }
+
+    return {
+        "mode": SAMPLING_MODE,
+        "subcategory_weights": SUBCATEGORY_WEIGHT_MAP,
+        "source_weights": SOURCE_WEIGHT_MAP,
+        "weighted_share_by_subcategory": normalize(by_subcategory),
+        "weighted_share_by_source": normalize(by_source),
+    }
+
+
+def loss_weighting_report(data: list[dict[str, Any]]) -> dict[str, Any]:
+    rows = len(data)
+    active_tokens = sum(int(item.get("loss_mask_active_tokens") or 0) for item in data)
+    boxed_tokens = sum(int(item.get("boxed_payload_weighted_tokens") or 0) for item in data)
+    weighted_sum = sum(float(item.get("loss_mask_weight_sum") or sum(item.get("loss_mask", []))) for item in data)
+    rows_with_boxed = sum(1 for item in data if int(item.get("boxed_payload_weighted_tokens") or 0) > 0)
+    by_family: dict[str, dict[str, float | int]] = {}
+    by_class: dict[str, dict[str, float | int]] = {}
+
+    def add_bucket(target: dict[str, dict[str, float | int]], key: str, item: dict[str, Any]) -> None:
+        bucket = target.setdefault(
+            key,
+            {
+                "rows": 0,
+                "active_loss_tokens": 0,
+                "boxed_payload_weighted_tokens": 0,
+                "weighted_loss_token_sum": 0.0,
+            },
+        )
+        bucket["rows"] = int(bucket["rows"]) + 1
+        bucket["active_loss_tokens"] = int(bucket["active_loss_tokens"]) + int(item.get("loss_mask_active_tokens") or 0)
+        bucket["boxed_payload_weighted_tokens"] = int(bucket["boxed_payload_weighted_tokens"]) + int(
+            item.get("boxed_payload_weighted_tokens") or 0
+        )
+        bucket["weighted_loss_token_sum"] = float(bucket["weighted_loss_token_sum"]) + float(
+            item.get("loss_mask_weight_sum") or sum(item.get("loss_mask", []))
+        )
+
+    for item in data:
+        add_bucket(by_family, str(item.get("category") or "unknown"), item)
+        add_bucket(by_class, str(item.get("score_class") or item.get("subcategory") or "unknown"), item)
+
+    def rounded_buckets(source: dict[str, dict[str, float | int]]) -> dict[str, dict[str, float | int]]:
+        result: dict[str, dict[str, float | int]] = {}
+        for key, values in sorted(source.items()):
+            result[key] = {
+                "rows": int(values["rows"]),
+                "active_loss_tokens": int(values["active_loss_tokens"]),
+                "boxed_payload_weighted_tokens": int(values["boxed_payload_weighted_tokens"]),
+                "weighted_loss_token_sum": round(float(values["weighted_loss_token_sum"]), 6),
+            }
+        return result
+
+    return {
+        "boxed_payload_loss_weight": BOXED_PAYLOAD_LOSS_WEIGHT,
+        "require_boxed_payload_weight": REQUIRE_BOXED_PAYLOAD_WEIGHT,
+        "rows": rows,
+        "rows_with_boxed_payload_weight": rows_with_boxed,
+        "rows_without_boxed_payload_weight": max(0, rows - rows_with_boxed),
+        "active_loss_tokens": active_tokens,
+        "boxed_payload_weighted_tokens": boxed_tokens,
+        "weighted_loss_token_sum": round(weighted_sum, 6),
+        "by_family": rounded_buckets(by_family),
+        "by_class": rounded_buckets(by_class),
+    }
+
+
+def official_extract_final_answer(text: str | None) -> str:
+    if text is None:
+        return "NOT_FOUND"
+    value = str(text)
+    boxed_starts = list(re.finditer(r"\\boxed\{", value))
+    matches: list[str] = []
+    for index, match in enumerate(boxed_starts):
+        start = match.end()
+        end = boxed_starts[index + 1].start() if index + 1 < len(boxed_starts) else len(value)
+        segment = value[start:end]
+        last_brace = segment.rfind("}")
+        matches.append(segment[:last_brace] if last_brace != -1 else segment)
+    if matches:
+        non_empty = [item.strip() for item in matches if item.strip()]
+        if non_empty:
+            return non_empty[-1]
+        return matches[-1].strip()
+
+    patterns = [
+        r"The final answer is:\s*([^\n]+)",
+        r"Final answer is:\s*([^\n]+)",
+        r"Final answer\s*[:\uff1a]\s*([^\n]+)",
+        r"final answer\s*[:\uff1a]\s*([^\n]+)",
+    ]
+    for pattern in patterns:
+        found = re.findall(pattern, value, re.IGNORECASE)
+        if found:
+            return found[-1].strip()
+
+    numbers = re.findall(r"-?\d+(?:\.\d+)?", value)
+    if numbers:
+        return numbers[-1]
+    lines = [line.strip() for line in value.splitlines() if line.strip()]
+    return lines[-1] if lines else "NOT_FOUND"
+
+
+def official_verify_answer(stored_answer: object, predicted: object) -> bool:
+    expected = str(stored_answer).strip()
+    observed = str(predicted).strip()
+    if re.fullmatch(r"[01]+", expected):
+        return observed.lower() == expected.lower()
+    try:
+        return math.isclose(float(expected), float(observed), rel_tol=1e-2, abs_tol=1e-5)
+    except Exception:
+        return observed.lower() == expected.lower()
+
+
+def last_message_content(item: dict[str, Any], role: str) -> str:
+    for message in reversed(item.get("messages") or []):
+        if message.get("role") == role:
+            return str(message.get("content", ""))
+    if role == "user":
+        return str(item.get("prompt", ""))
+    return ""
+
+
+def score_contract_example_report(examples: list[dict[str, Any]], label: str) -> dict[str, Any]:
+    rows = len(examples)
+    suffix_missing = 0
+    suffix_duplicate = 0
+    suffix_once = 0
+    assistant_missing = 0
+    assistant_not_terminal_boxed = 0
+    assistant_not_exact_one_boxed = 0
+    assistant_not_verified = 0
+    gate_rows_marked_used = 0
+    family_counts: dict[str, int] = {}
+    bad_samples: list[dict[str, Any]] = []
+
+    def add_bad(row_id: object, reason: str) -> None:
+        if len(bad_samples) < 20:
+            bad_samples.append({"id": str(row_id), "reason": reason})
+
+    for item in examples:
+        row_id = item.get("id", "")
+        metadata = item.get("metadata") or {}
+        family = str(item.get("family", item.get("category", "unknown")))
+        family_counts[family] = family_counts.get(family, 0) + 1
+
+        prompt = last_message_content(item, "user")
+        suffix_count = prompt.count(OFFICIAL_PROMPT_SUFFIX.strip())
+        if suffix_count == 1:
+            suffix_once += 1
+        elif suffix_count == 0:
+            suffix_missing += 1
+            add_bad(row_id, "prompt_suffix_missing")
+        else:
+            suffix_duplicate += 1
+            add_bad(row_id, "prompt_suffix_duplicate")
+
+        assistant = last_message_content(item, "assistant")
+        if not assistant:
+            assistant_missing += 1
+            add_bad(row_id, "assistant_missing")
+            continue
+        boxed_count = assistant.count("\\boxed{")
+        if boxed_count != 1:
+            assistant_not_exact_one_boxed += 1
+            add_bad(row_id, f"assistant_boxed_count={boxed_count}")
+        stripped = assistant.strip()
+        if not stripped.startswith("</think>\n\\boxed{") or not stripped.endswith("}"):
+            assistant_not_terminal_boxed += 1
+            add_bad(row_id, "assistant_not_terminal_close_think_boxed")
+        if item.get("answer") not in (None, ""):
+            extracted = official_extract_final_answer(assistant)
+            if not official_verify_answer(item.get("answer", ""), extracted):
+                assistant_not_verified += 1
+                add_bad(row_id, "assistant_boxed_payload_not_verified")
+
+        if any(
+            bool(metadata.get(key))
+            for key in ("gate_rows_used_for_training", "weak_gate_rows_used_for_training", "full_gate_rows_used_for_training")
+        ):
+            gate_rows_marked_used += 1
+            add_bad(row_id, "gate_row_marked_used_for_training")
+
+    return {
+        "label": label,
+        "rows": rows,
+        "family_counts": dict(sorted(family_counts.items())),
+        "prompt_suffix_once": suffix_once,
+        "prompt_suffix_missing": suffix_missing,
+        "prompt_suffix_duplicate": suffix_duplicate,
+        "assistant_missing": assistant_missing,
+        "assistant_not_exact_one_boxed": assistant_not_exact_one_boxed,
+        "assistant_not_terminal_boxed": assistant_not_terminal_boxed,
+        "assistant_not_verified": assistant_not_verified,
+        "gate_rows_marked_used_for_training": gate_rows_marked_used,
+        "bad_samples": bad_samples,
+    }
+
+
+def tokenized_score_contract_report(data: list[dict[str, Any]], label: str) -> dict[str, Any]:
+    rows = len(data)
+    offset_rows = sum(1 for item in data if bool(item.get("used_offset_mask")))
+    fallback_rows = rows - offset_rows
+    prompt_truncated_rows = sum(1 for item in data if bool(item.get("prompt_truncated")))
+    truncated_rows = sum(1 for item in data if bool(item.get("truncated_to_max_length")))
+    prefix_mismatch_rows = sum(1 for item in data if bool(item.get("fallback_prefix_mismatch")))
+    max_length_rows = sum(1 for item in data if len(item.get("input_ids", [])) >= MAX_LENGTH)
+    return {
+        "label": label,
+        "rows": rows,
+        "max_length": MAX_LENGTH,
+        "rows_at_max_length": max_length_rows,
+        "truncated_to_max_length_rows": truncated_rows,
+        "prompt_truncated_rows": prompt_truncated_rows,
+        "prompt_truncation_rate": round(prompt_truncated_rows / max(1, rows), 8),
+        "offset_mask_rows": offset_rows,
+        "fallback_mask_rows": fallback_rows,
+        "fallback_prefix_mismatch_rows": prefix_mismatch_rows,
+        "loss_weighting": loss_weighting_report(data),
+    }
+
+
+def normalized_module_list(value: str) -> list[str]:
+    parsed = parse_target_modules(value)
+    if isinstance(parsed, str):
+        return [parsed]
+    return sorted(str(item) for item in parsed)
+
+
+def target_correct_for_accuracy(rows: int, accuracy: float) -> int:
+    return int(math.ceil(float(rows) * float(accuracy)))
+
+
+def score_contract_runtime_report(
+    *,
+    phase: str,
+    train_examples: list[dict[str, Any]],
+    val_examples: list[dict[str, Any]],
+    train_data: list[dict[str, Any]],
+    val_data: list[dict[str, Any]],
+    target_modules: str | list[str] | None = None,
+    lora_filter_report: dict[str, Any] | None = None,
+    trainable_report: dict[str, Any] | None = None,
+    model_loaded: bool = False,
+) -> dict[str, Any]:
+    train_examples_report = score_contract_example_report(train_examples, "train")
+    val_examples_report = score_contract_example_report(val_examples, "validation")
+    train_token_report = tokenized_score_contract_report(train_data, "train")
+    val_token_report = tokenized_score_contract_report(val_data, "validation")
+    expected_modules = normalized_module_list(SCORE_CONTRACT_EXPECTED_TARGET_MODULES)
+    expected_trainable_modules = normalized_module_list(
+        SCORE_CONTRACT_EXPECTED_TRAINABLE_MODULES or SCORE_CONTRACT_EXPECTED_TARGET_MODULES
+    )
+    active_modules = (
+        sorted(str(item) for item in target_modules)
+        if isinstance(target_modules, list)
+        else normalized_module_list(str(target_modules or LORA_TARGET_MODULES))
+    )
+    trainable_filter_modules = sorted(parse_csv_set(TRAINABLE_LORA_MODULES))
+
+    errors: list[str] = []
+    warnings_out: list[str] = []
+
+    def require(condition: bool, message: str) -> None:
+        if not condition:
+            errors.append(message)
+
+    def warn(condition: bool, message: str) -> None:
+        if not condition:
+            warnings_out.append(message)
+
+    require(MODEL_NAME == EXPECTED_SCORE_MODEL_NAME, f"MODEL_NAME mismatch: {MODEL_NAME}")
+    require(MODEL_REVISION == EXPECTED_SCORE_MODEL_REVISION, f"MODEL_REVISION mismatch: {MODEL_REVISION}")
+    require(LORA_R <= OFFICIAL_SCORE_INFERENCE_CONFIG["max_lora_rank"], f"LORA_R>{OFFICIAL_SCORE_INFERENCE_CONFIG['max_lora_rank']}")
+    require(MAX_LENGTH <= OFFICIAL_SCORE_INFERENCE_CONFIG["max_model_len"], "MAX_LENGTH exceeds official max_model_len")
+    require(active_modules == expected_modules, f"LORA_TARGET_MODULES mismatch: {active_modules} != {expected_modules}")
+    if SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER:
+        require(bool(TRAINABLE_LORA_MODULES), "TRAINABLE_LORA_MODULES required but empty")
+        require(
+            trainable_filter_modules == expected_trainable_modules,
+            "TRAINABLE_LORA_MODULES does not match expected trainable score modules",
+        )
+    elif TRAINABLE_LORA_MODULES:
+        warn(
+            trainable_filter_modules == expected_trainable_modules,
+            "TRAINABLE_LORA_MODULES differs from expected trainable score modules",
+        )
+
+    for report in (train_examples_report, val_examples_report):
+        prefix = report["label"]
+        require(report["prompt_suffix_missing"] == 0, f"{prefix}: prompt suffix missing")
+        require(report["prompt_suffix_duplicate"] == 0, f"{prefix}: prompt suffix duplicated")
+        require(report["assistant_missing"] == 0, f"{prefix}: assistant targets missing")
+        require(report["assistant_not_exact_one_boxed"] == 0, f"{prefix}: targets not exactly one boxed")
+        require(report["assistant_not_terminal_boxed"] == 0, f"{prefix}: targets not terminal close-think boxed")
+        require(report["assistant_not_verified"] == 0, f"{prefix}: boxed payload does not verify against answer")
+        require(report["gate_rows_marked_used_for_training"] == 0, f"{prefix}: gate rows marked used for training")
+
+    for report in (train_token_report, val_token_report):
+        prefix = report["label"]
+        loss_report = report["loss_weighting"]
+        require(report["fallback_mask_rows"] == 0 if REQUIRE_OFFSET_MASK else True, f"{prefix}: fallback masks present")
+        require(report["fallback_prefix_mismatch_rows"] == 0, f"{prefix}: prefix mismatches present")
+        require(
+            report["prompt_truncation_rate"] <= SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE,
+            f"{prefix}: prompt truncation rate {report['prompt_truncation_rate']} exceeds {SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE}",
+        )
+        require(
+            loss_report["rows_without_boxed_payload_weight"] == 0 if REQUIRE_BOXED_PAYLOAD_WEIGHT else True,
+            f"{prefix}: rows without boxed payload loss weight",
+        )
+        require(
+            BOXED_PAYLOAD_LOSS_WEIGHT > 1.0 if REQUIRE_BOXED_PAYLOAD_WEIGHT else True,
+            "REQUIRE_BOXED_PAYLOAD_WEIGHT needs BOXED_PAYLOAD_LOSS_WEIGHT>1",
+        )
+        warn(report["truncated_to_max_length_rows"] == 0, f"{prefix}: examples truncated to MAX_LENGTH")
+
+    if model_loaded:
+        require(trainable_report is not None, "model loaded but trainable report missing")
+        if trainable_report is not None:
+            require(float(trainable_report.get("ratio", 0.0)) <= MAX_TRAINABLE_PARAM_RATIO, "trainable parameter ratio exceeds guard")
+        if SCORE_CONTRACT_REQUIRE_TRAINABLE_FILTER:
+            require(lora_filter_report is not None and bool(lora_filter_report.get("enabled")), "trainable LoRA filter not enabled")
+            if lora_filter_report is not None:
+                observed = sorted(str(item) for item in lora_filter_report.get("modules", []))
+                require(
+                    observed == expected_trainable_modules,
+                    f"loaded trainable modules mismatch: {observed} != {expected_trainable_modules}",
+                )
+
+    target_correct = target_correct_for_accuracy(SCORE_CONTRACT_FULL_ROWS, SCORE_CONTRACT_TARGET_ACCURACY)
+    readiness = {
+        "score_ready_for_training": not errors,
+        "hard_fail_enabled": bool(REQUIRE_SCORE_CONTRACT_PASS),
+        "status": "PASS" if not errors else "FAIL",
+        "errors": errors,
+        "warnings": warnings_out,
+    }
+    return {
+        "schema_version": "kg1_score_contract_runtime_v1",
+        "phase": phase,
+        "readiness": readiness,
+        "official_score_contract": {
+            "model_name": EXPECTED_SCORE_MODEL_NAME,
+            "model_revision": EXPECTED_SCORE_MODEL_REVISION,
+            "prompt_suffix": OFFICIAL_PROMPT_SUFFIX,
+            "inference_config": OFFICIAL_SCORE_INFERENCE_CONFIG,
+            "metric": "extract_final_answer(raw_output) -> verify_answer(answer, extracted) -> mean(correct)",
+            "raw_output_required_for_score_claim": True,
+            "loss_is_not_score": True,
+        },
+        "target_math": {
+            "baseline_correct": SCORE_CONTRACT_BASELINE_CORRECT,
+            "full_rows": SCORE_CONTRACT_FULL_ROWS,
+            "baseline_accuracy": round(SCORE_CONTRACT_BASELINE_CORRECT / max(1, SCORE_CONTRACT_FULL_ROWS), 12),
+            "target_accuracy": SCORE_CONTRACT_TARGET_ACCURACY,
+            "target_correct_required": target_correct,
+            "additional_rows_required": max(0, target_correct - SCORE_CONTRACT_BASELINE_CORRECT),
+            "score_claim_requires_raw_output_gate": "V1241 full947 with baseline and candidate raw_output CSVs",
+        },
+        "runtime_config": {
+            "model_name": MODEL_NAME,
+            "model_revision": MODEL_REVISION,
+            "max_length": MAX_LENGTH,
+            "lora_r": LORA_R,
+            "lora_alpha": LORA_ALPHA,
+            "lora_dropout": LORA_DROPOUT,
+            "target_modules": active_modules,
+            "expected_target_modules": expected_modules,
+            "trainable_lora_modules": trainable_filter_modules,
+            "expected_trainable_lora_modules": expected_trainable_modules,
+            "require_offset_mask": REQUIRE_OFFSET_MASK,
+            "require_boxed_payload_weight": REQUIRE_BOXED_PAYLOAD_WEIGHT,
+            "boxed_payload_loss_weight": BOXED_PAYLOAD_LOSS_WEIGHT,
+            "score_contract_max_prompt_truncation_rate": SCORE_CONTRACT_MAX_PROMPT_TRUNCATION_RATE,
+        },
+        "examples": {
+            "train": train_examples_report,
+            "validation": val_examples_report,
+        },
+        "tokenization": {
+            "train": train_token_report,
+            "validation": val_token_report,
+        },
+        "sampling": weighted_sample_report(train_data),
+        "model_loaded": bool(model_loaded),
+        "trainable_lora_filter": lora_filter_report,
+        "trainable_parameters": trainable_report,
+    }
+
+
+def emit_score_contract_runtime_report(**kwargs: Any) -> dict[str, Any]:
+    if not SCORE_CONTRACT_RUNTIME_CHECK:
+        return {
+            "schema_version": "kg1_score_contract_runtime_v1",
+            "readiness": {
+                "score_ready_for_training": None,
+                "hard_fail_enabled": bool(REQUIRE_SCORE_CONTRACT_PASS),
+                "status": "DISABLED",
+                "errors": [],
+                "warnings": ["SCORE_CONTRACT_RUNTIME_CHECK=0"],
+            },
+        }
+    report = score_contract_runtime_report(**kwargs)
+    readiness = report["readiness"]
+    print("KG1_SCORE_CONTRACT_RUNTIME_JSON_BEGIN", flush=True)
+    print(json.dumps(report, sort_keys=True), flush=True)
+    print("KG1_SCORE_CONTRACT_RUNTIME_JSON_END", flush=True)
+    print(
+        "KG1_SCORE_CONTRACT_STATUS="
+        f"{readiness['status']} score_ready_for_training={readiness['score_ready_for_training']} "
+        f"errors={len(readiness['errors'])} warnings={len(readiness['warnings'])} "
+        f"target_correct_required={report['target_math']['target_correct_required']} "
+        f"additional_rows_required={report['target_math']['additional_rows_required']}",
+        flush=True,
+    )
+    kg1_score_contract_teach(report)
+    if REQUIRE_SCORE_CONTRACT_PASS and readiness["errors"]:
+        raise RuntimeError(
+            "score_contract_runtime_failed: "
+            + "; ".join(str(error) for error in readiness["errors"][:20])
+        )
+    return report
+
+
+def build_epoch_train_data(train_data: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if SAMPLING_MODE == "shuffle":
+        epoch_data = list(train_data)
+        random.shuffle(epoch_data)
+        return epoch_data
+    if SAMPLING_MODE != "weighted_replacement":
+        raise ValueError("SAMPLING_MODE must be 'shuffle' or 'weighted_replacement'")
+    weights = [example_sampling_weight(item) for item in train_data]
+    if not train_data or not any(weight > 0 for weight in weights):
+        raise ValueError("weighted_replacement sampling has no positive weights")
+    return random.choices(train_data, weights=weights, k=len(train_data))
+
+
+def masked_cross_entropy_loss(
+    logits: torch.Tensor,
+    input_ids: torch.Tensor,
+    loss_mask: torch.Tensor,
+) -> torch.Tensor:
+    shift_logits = logits[..., :-1, :].contiguous()
+    shift_labels = input_ids[..., 1:].contiguous()
+    shift_mask = loss_mask[..., 1:].contiguous().float()
+
+    batch, seq_len, vocab = shift_logits.shape
+    flat_logits = shift_logits.view(batch * seq_len, vocab)
+    flat_labels = shift_labels.view(batch * seq_len)
+    flat_mask = shift_mask.view(batch * seq_len)
+
+    per_token_loss = F.cross_entropy(flat_logits, flat_labels, reduction="none")
+    masked_loss = per_token_loss * flat_mask
+    num_unmasked = flat_mask.sum()
+
+    if num_unmasked == 0:
+        return torch.tensor(0.0, device=logits.device)
+    return masked_loss.sum() / num_unmasked
+
+
+def get_lr(global_step: int, total_steps: int) -> float:
+    if total_steps <= 1:
+        return LEARNING_RATE
+    progress = min(1.0, max(0.0, global_step / max(1, total_steps - 1)))
+    return FINAL_LEARNING_RATE + (LEARNING_RATE - FINAL_LEARNING_RATE) * (1.0 - progress)
+
+
+def tensorize_batch(
+    batch: list[dict[str, Any]],
+    pad_token_id: int,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    max_len = max(len(ex["input_ids"]) for ex in batch)
+    input_ids_batch: list[list[int]] = []
+    attention_mask_batch: list[list[int]] = []
+    loss_mask_batch: list[list[int]] = []
+    for ex in batch:
+        pad_len = max_len - len(ex["input_ids"])
+        input_ids_batch.append(ex["input_ids"] + [pad_token_id] * pad_len)
+        attention_mask_batch.append([1] * len(ex["input_ids"]) + [0] * pad_len)
+        loss_mask_batch.append(ex["loss_mask"] + [0] * pad_len)
+
+    input_ids = torch.tensor(input_ids_batch, dtype=torch.long, device="cuda")
+    attention_mask = torch.tensor(attention_mask_batch, dtype=torch.long, device="cuda")
+    loss_mask = torch.tensor(loss_mask_batch, dtype=torch.float32, device="cuda")
+    return input_ids, attention_mask, loss_mask
+
+
+def select_eval_sample(val_data: list[dict[str, Any]], max_examples: int) -> list[dict[str, Any]]:
+    if max_examples <= 0 or not val_data:
+        return []
+    if max_examples >= len(val_data):
+        return list(val_data)
+
+    by_category: dict[str, list[dict[str, Any]]] = {}
+    for item in val_data:
+        by_category.setdefault(str(item.get("category", "unknown")), []).append(item)
+
+    categories = sorted(by_category)
+    sample: list[dict[str, Any]] = []
+    per_category = max(1, max_examples // max(1, len(categories)))
+    for category in categories:
+        sample.extend(by_category[category][:per_category])
+
+    cursor = per_category
+    while len(sample) < max_examples:
+        added = False
+        for category in categories:
+            values = by_category[category]
+            if cursor < len(values):
+                sample.append(values[cursor])
+                added = True
+                if len(sample) >= max_examples:
+                    break
+        if not added:
+            break
+        cursor += 1
+    return sample[:max_examples]
+
+
+def finite_float_or_none(value: object) -> float | None:
+    try:
+        parsed = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(parsed):
+        return None
+    return parsed
+
+
+def score_proxy_delta(
+    current: dict[str, Any],
+    baseline: dict[str, Any] | None,
+) -> dict[str, float | None]:
+    if not baseline:
+        return {}
+    deltas: dict[str, float | None] = {}
+    for key in [
+        "loss",
+        "active_token_accuracy",
+        "boxed_tail_loss",
+        "boxed_tail_token_accuracy",
+        "boxed_tail_exact_rate",
+    ]:
+        current_value = finite_float_or_none(current.get(key))
+        baseline_value = finite_float_or_none(baseline.get(key))
+        deltas[key] = (
+            round(current_value - baseline_value, 8)
+            if current_value is not None and baseline_value is not None
+            else None
+        )
+    deltas["loss_delta_better_when_negative"] = deltas.get("loss")
+    deltas["boxed_tail_loss_delta_better_when_negative"] = deltas.get("boxed_tail_loss")
+    deltas["boxed_tail_exact_rate_delta_better_when_positive"] = deltas.get("boxed_tail_exact_rate")
+    return deltas
+
+
+def average_present(values: list[float | None]) -> float | None:
+    present = [value for value in values if value is not None]
+    if not present:
+        return None
+    return round(sum(present) / len(present), 8)
+
+
+def family_metric_delta(
+    current: dict[str, Any],
+    baseline: dict[str, Any],
+    family: str,
+    metric: str,
+) -> float | None:
+    current_family = current.get("by_family") or {}
+    baseline_family = baseline.get("by_family") or {}
+    current_values = current_family.get(family) if isinstance(current_family, dict) else None
+    baseline_values = baseline_family.get(family) if isinstance(baseline_family, dict) else None
+    if not isinstance(current_values, dict) or not isinstance(baseline_values, dict):
+        return None
+    current_value = finite_float_or_none(current_values.get(metric))
+    baseline_value = finite_float_or_none(baseline_values.get(metric))
+    if current_value is None or baseline_value is None:
+        return None
+    return round(current_value - baseline_value, 8)
+
+
+def score_trajectory_report(
+    current: dict[str, Any],
+    baseline: dict[str, Any] | None,
+) -> dict[str, Any]:
+    target_correct_required = int(math.ceil(SCORE_CONTRACT_TARGET_ACCURACY * SCORE_CONTRACT_FULL_ROWS))
+    target_math = {
+        "target_accuracy": SCORE_CONTRACT_TARGET_ACCURACY,
+        "full_rows": SCORE_CONTRACT_FULL_ROWS,
+        "baseline_correct": SCORE_CONTRACT_BASELINE_CORRECT,
+        "baseline_accuracy": round(SCORE_CONTRACT_BASELINE_CORRECT / max(1, SCORE_CONTRACT_FULL_ROWS), 8),
+        "target_correct_required": target_correct_required,
+        "additional_rows_required": max(0, target_correct_required - SCORE_CONTRACT_BASELINE_CORRECT),
+    }
+    base_report: dict[str, Any] = {
+        "schema_version": "kg1_score_trajectory_v1",
+        "label": current.get("label"),
+        "target_math": target_math,
+        "thresholds": {
+            "min_weak_exact_delta": SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA,
+            "max_protected_exact_drop": SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP,
+            "max_overall_exact_drop": SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP,
+            "max_boxed_loss_regression": SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION,
+        },
+        "loss_is_not_score": True,
+        "proxy_is_not_score_claim": True,
+        "score_claim_gate": "V1241 full947 raw_output comparison",
+        "next_required_gate": "full947_089 raw_output >=843/947 with strict-clean boxed outputs",
+    }
+    if not baseline:
+        return {
+            **base_report,
+            "status": "BASELINE",
+            "score_trajectory_alignment": None,
+            "reasons": ["baseline_missing_for_delta; this checkpoint becomes the reference only"],
+            "deltas": {},
+            "family_deltas": {},
+        }
+
+    overall_delta = score_proxy_delta(current, baseline)
+    current_families = current.get("by_family") if isinstance(current.get("by_family"), dict) else {}
+    baseline_families = baseline.get("by_family") if isinstance(baseline.get("by_family"), dict) else {}
+    family_names = sorted(set(current_families or {}) | set(baseline_families or {}))
+    weak_families = ("bit_manipulation", "equation_transform")
+    family_deltas: dict[str, dict[str, Any]] = {}
+    for family in family_names:
+        family_deltas[family] = {
+            "boxed_tail_loss_delta": family_metric_delta(current, baseline, family, "boxed_tail_loss"),
+            "boxed_tail_token_accuracy_delta": family_metric_delta(
+                current, baseline, family, "boxed_tail_token_accuracy"
+            ),
+            "boxed_tail_exact_rate_delta": family_metric_delta(current, baseline, family, "boxed_tail_exact_rate"),
+            "is_score_weak_family": family in weak_families,
+        }
+
+    bit_exact_delta = family_deltas.get("bit_manipulation", {}).get("boxed_tail_exact_rate_delta")
+    equation_exact_delta = family_deltas.get("equation_transform", {}).get("boxed_tail_exact_rate_delta")
+    weak_exact_delta = average_present([bit_exact_delta, equation_exact_delta])
+    protected_exact_delta = average_present(
+        [
+            values.get("boxed_tail_exact_rate_delta")
+            for family, values in family_deltas.items()
+            if family not in weak_families
+        ]
+    )
+    overall_exact_delta = finite_float_or_none(overall_delta.get("boxed_tail_exact_rate"))
+    boxed_loss_delta = finite_float_or_none(overall_delta.get("boxed_tail_loss"))
+
+    reasons: list[str] = []
+    stop = False
+    risk = False
+    if boxed_loss_delta is not None and boxed_loss_delta > SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION:
+        risk = True
+        reasons.append(
+            "boxed_tail_loss_regressed "
+            f"{boxed_loss_delta:.6f} > {SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION:.6f}"
+        )
+    if overall_exact_delta is not None and overall_exact_delta < -SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP:
+        stop = True
+        reasons.append(
+            "overall_boxed_exact_regressed "
+            f"{overall_exact_delta:.6f} < -{SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP:.6f}"
+        )
+    if protected_exact_delta is not None and protected_exact_delta < -SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP:
+        stop = True
+        reasons.append(
+            "protected_family_exact_regressed "
+            f"{protected_exact_delta:.6f} < -{SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP:.6f}"
+        )
+
+    weak_improved = weak_exact_delta is not None and weak_exact_delta > SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA
+    protected_ok = protected_exact_delta is None or protected_exact_delta >= -SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP
+    overall_ok = overall_exact_delta is None or overall_exact_delta >= -SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP
+    boxed_loss_ok = boxed_loss_delta is None or boxed_loss_delta <= SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION
+    if not weak_improved:
+        reasons.append("weak_family_boxed_exact_not_above_baseline")
+        if boxed_loss_delta is not None and boxed_loss_delta >= 0:
+            risk = True
+
+    if stop:
+        status = "STOP"
+    elif risk:
+        status = "RISK"
+    elif weak_improved and protected_ok and overall_ok and boxed_loss_ok:
+        status = "OK"
+        reasons.append("weak_families_improved_without_global_or_protected_regression")
+    else:
+        status = "WATCH"
+        reasons.append("mixed_or_insufficient_evidence")
+
+    return {
+        **base_report,
+        "status": status,
+        "score_trajectory_alignment": status == "OK",
+        "reasons": reasons,
+        "deltas": {
+            "weak_exact_rate_delta": weak_exact_delta,
+            "bit_manipulation_exact_rate_delta": bit_exact_delta,
+            "equation_transform_exact_rate_delta": equation_exact_delta,
+            "protected_exact_rate_delta": protected_exact_delta,
+            "overall_exact_rate_delta": overall_exact_delta,
+            "boxed_tail_loss_delta": boxed_loss_delta,
+        },
+        "family_deltas": family_deltas,
+    }
+
+
+def enforce_final_score_proxy_non_regression(
+    final_report: dict[str, Any],
+    baseline_report: dict[str, Any] | None,
+) -> None:
+    if not REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION or not baseline_report:
+        return
+    failures: list[str] = []
+    final_boxed_loss = finite_float_or_none(final_report.get("boxed_tail_loss"))
+    baseline_boxed_loss = finite_float_or_none(baseline_report.get("boxed_tail_loss"))
+    if (
+        final_boxed_loss is not None
+        and baseline_boxed_loss is not None
+        and final_boxed_loss > baseline_boxed_loss + MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION
+    ):
+        failures.append(
+            "boxed_tail_loss "
+            f"{final_boxed_loss:.6f} > baseline {baseline_boxed_loss:.6f} + "
+            f"{MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION:.6f}"
+        )
+
+    for key, max_drop in [
+        ("boxed_tail_token_accuracy", MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP),
+        ("boxed_tail_exact_rate", MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP),
+    ]:
+        final_value = finite_float_or_none(final_report.get(key))
+        baseline_value = finite_float_or_none(baseline_report.get(key))
+        if final_value is not None and baseline_value is not None and final_value < baseline_value - max_drop:
+            failures.append(
+                f"{key} {final_value:.6f} < baseline {baseline_value:.6f} - {max_drop:.6f}"
+            )
+
+    if failures:
+        kg1_teach_card(
+            "ABORT",
+            "STOP",
+            what="Score proxy final regrediu contra o baseline.",
+            why="Loss geral pode melhorar enquanto a cauda boxed, que alimenta o score, piora.",
+            watch="Adapter salvo e apenas forense; nao promover sem raw-output gates.",
+            data=[("failures", " | ".join(failures[:3]))],
+            next_action="Reduzir LR/passos ou revisar dados por familia antes de novo treino.",
+        )
+        raise RuntimeError("final_score_proxy_regressed_vs_baseline: " + "; ".join(failures))
+
+
+def compact_score_proxy_report(report: dict[str, Any]) -> dict[str, Any]:
+    keys = [
+        "schema_version",
+        "label",
+        "rows",
+        "max_examples",
+        "loss",
+        "active_token_accuracy",
+        "boxed_tail_loss",
+        "boxed_tail_rows",
+        "boxed_tail_tokens",
+        "boxed_tail_token_accuracy",
+        "boxed_tail_exact_rate",
+        "delta_vs_baseline",
+        "score_trajectory",
+        "by_family",
+        "by_class",
+    ]
+    return {key: report[key] for key in keys if key in report}
+
+
+def format_optional_float(value: object, digits: int = 4) -> str:
+    parsed = finite_float_or_none(value)
+    if parsed is None:
+        return "nan"
+    return f"{parsed:.{digits}f}"
+
+
+@torch.no_grad()
+def evaluate_score_proxy(
+    model: torch.nn.Module,
+    val_data: list[dict[str, Any]],
+    tokenizer: Any,
+    max_examples: int,
+    *,
+    label: str,
+    emit_report: bool = True,
+    baseline_report: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    if not val_data or max_examples <= 0:
+        return {
+            "schema_version": "kg1_score_proxy_eval_v1",
+            "label": label,
+            "rows": 0,
+            "loss": float("nan"),
+            "boxed_tail_loss": float("nan"),
+            "boxed_tail_token_accuracy": float("nan"),
+            "boxed_tail_exact_rate": float("nan"),
+            "by_family": {},
+            "by_class": {},
+        }
+
+    was_training = model.training
+    model.eval()
+    sample = select_eval_sample(val_data, min(max_examples, len(val_data)))
+    losses: list[float] = []
+    boxed_tail_losses: list[float] = []
+    boxed_tail_exact_rows = 0
+    boxed_tail_rows = 0
+    boxed_tail_correct_tokens = 0
+    boxed_tail_tokens = 0
+    active_correct_tokens = 0
+    active_tokens = 0
+    by_family: dict[str, dict[str, Any]] = {}
+    by_class: dict[str, dict[str, Any]] = {}
+
+    def metric_bucket(target: dict[str, dict[str, Any]], name: str) -> dict[str, Any]:
+        if name not in target:
+            target[name] = {
+                "rows": 0,
+                "boxed_tail_rows": 0,
+                "boxed_tail_exact_rows": 0,
+                "boxed_tail_correct_tokens": 0,
+                "boxed_tail_tokens": 0,
+                "loss_sum": 0.0,
+                "boxed_tail_loss_sum": 0.0,
+            }
+        return target[name]
+
+    def family_bucket(name: str) -> dict[str, Any]:
+        return metric_bucket(by_family, name)
+
+    def class_bucket(name: str) -> dict[str, Any]:
+        return metric_bucket(by_class, name)
+
+    with torch.no_grad():
+        for item in sample:
+            input_ids, attention_mask, loss_mask = tensorize_batch([item], tokenizer.pad_token_id)
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
+            shift_logits = outputs.logits[..., :-1, :].contiguous()
+            shift_labels = input_ids[..., 1:].contiguous()
+            shift_mask = loss_mask[..., 1:].contiguous().float()
+            batch, seq_len, vocab = shift_logits.shape
+            flat_logits = shift_logits.view(batch * seq_len, vocab)
+            flat_labels = shift_labels.view(batch * seq_len)
+            flat_mask = shift_mask.view(batch * seq_len)
+            per_token_loss = F.cross_entropy(flat_logits, flat_labels, reduction="none")
+            masked = per_token_loss * flat_mask
+            mask_sum = flat_mask.sum()
+            loss = masked.sum() / mask_sum if float(mask_sum.item()) > 0.0 else torch.tensor(0.0, device=flat_logits.device)
+            loss_value = float(loss.item())
+            losses.append(loss_value)
+
+            predicted = flat_logits.argmax(dim=-1)
+            active_positions = flat_mask > 0
+            active_count = int(active_positions.sum().item())
+            if active_count:
+                active_correct_tokens += int((predicted[active_positions] == flat_labels[active_positions]).sum().item())
+                active_tokens += active_count
+
+            boxed_positions = flat_mask > 1.0
+            boxed_count = int(boxed_positions.sum().item())
+            family = str(item.get("category", "unknown"))
+            score_class = str(item.get("score_class") or item.get("subcategory") or family)
+            buckets = [family_bucket(family), class_bucket(score_class)]
+            for bucket in buckets:
+                bucket["rows"] += 1
+                bucket["loss_sum"] += loss_value
+            if boxed_count:
+                boxed_labels = flat_labels[boxed_positions]
+                boxed_pred = predicted[boxed_positions]
+                boxed_loss = float(per_token_loss[boxed_positions].mean().item())
+                boxed_correct = int((boxed_pred == boxed_labels).sum().item())
+                boxed_exact = bool(boxed_correct == boxed_count)
+                boxed_tail_losses.append(boxed_loss)
+                boxed_tail_rows += 1
+                boxed_tail_tokens += boxed_count
+                boxed_tail_correct_tokens += boxed_correct
+                boxed_tail_exact_rows += int(boxed_exact)
+                for bucket in buckets:
+                    bucket["boxed_tail_rows"] += 1
+                    bucket["boxed_tail_tokens"] += boxed_count
+                    bucket["boxed_tail_correct_tokens"] += boxed_correct
+                    bucket["boxed_tail_exact_rows"] += int(boxed_exact)
+                    bucket["boxed_tail_loss_sum"] += boxed_loss
+
+            del input_ids, attention_mask, loss_mask, outputs, loss
+
+    if was_training:
+        model.train()
+    loss_mean = sum(losses) / max(1, len(losses))
+    boxed_loss_mean = sum(boxed_tail_losses) / max(1, len(boxed_tail_losses))
+
+    def finalize_buckets(source: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        output: dict[str, dict[str, Any]] = {}
+        for name, values in sorted(source.items()):
+            boxed_rows_for_bucket = int(values["boxed_tail_rows"])
+            boxed_tokens_for_bucket = int(values["boxed_tail_tokens"])
+            output[name] = {
+                "rows": int(values["rows"]),
+                "loss": round(float(values["loss_sum"]) / max(1, int(values["rows"])), 8),
+                "boxed_tail_rows": boxed_rows_for_bucket,
+                "boxed_tail_loss": round(
+                    float(values["boxed_tail_loss_sum"]) / max(1, boxed_rows_for_bucket),
+                    8,
+                ),
+                "boxed_tail_token_accuracy": (
+                    round(float(values["boxed_tail_correct_tokens"]) / max(1, boxed_tokens_for_bucket), 8)
+                ),
+                "boxed_tail_exact_rate": (
+                    round(float(values["boxed_tail_exact_rows"]) / max(1, boxed_rows_for_bucket), 8)
+                ),
+            }
+        return output
+
+    by_family_out = finalize_buckets(by_family)
+    by_class_out = finalize_buckets(by_class)
+    report = {
+        "schema_version": "kg1_score_proxy_eval_v1",
+        "label": label,
+        "rows": len(sample),
+        "max_examples": max_examples,
+        "loss": round(loss_mean, 8),
+        "active_token_accuracy": round(active_correct_tokens / max(1, active_tokens), 8),
+        "boxed_tail_loss": round(boxed_loss_mean, 8),
+        "boxed_tail_rows": boxed_tail_rows,
+        "boxed_tail_tokens": boxed_tail_tokens,
+        "boxed_tail_token_accuracy": round(boxed_tail_correct_tokens / max(1, boxed_tail_tokens), 8),
+        "boxed_tail_exact_rate": round(boxed_tail_exact_rows / max(1, boxed_tail_rows), 8),
+        "by_family": by_family_out,
+        "by_class": by_class_out,
+        "interpretation": {
+            "what_this_measures": "teacher-forced probability/argmax quality on the terminal score-facing boxed tail",
+            "loss_is_not_score": True,
+            "raw_generation_still_required": True,
+            "score_claim_gate": "V1241 full947 raw_output comparison",
+        },
+    }
+    delta = score_proxy_delta(report, baseline_report)
+    if delta:
+        report["delta_vs_baseline"] = delta
+    trajectory = score_trajectory_report(report, baseline_report) if SCORE_TRAJECTORY_CHECK else {}
+    if trajectory:
+        report["score_trajectory"] = trajectory
+        if REQUIRE_SCORE_TRAJECTORY_PASS and trajectory.get("status") in {"RISK", "STOP"}:
+            raise RuntimeError(
+                "score_trajectory_not_pass: "
+                + "; ".join(str(reason) for reason in trajectory.get("reasons", [])[:5])
+            )
+    if emit_report and SCORE_PROXY_EVAL_CHECK:
+        print("KG1_SCORE_PROXY_EVAL_JSON_BEGIN", flush=True)
+        print(json.dumps(report, sort_keys=True), flush=True)
+        print("KG1_SCORE_PROXY_EVAL_JSON_END", flush=True)
+        print(
+            "KG1_SCORE_PROXY_STATUS="
+            f"{label} loss={report['loss']:.4f} "
+            f"boxed_tail_loss={report['boxed_tail_loss']:.4f} "
+            f"boxed_tail_token_acc={report['boxed_tail_token_accuracy']:.4f} "
+            f"boxed_tail_exact_rate={report['boxed_tail_exact_rate']:.4f} "
+            f"delta_loss={format_optional_float(delta.get('loss') if delta else None)} "
+            f"delta_boxed_tail_loss={format_optional_float(delta.get('boxed_tail_loss') if delta else None)} "
+            f"delta_boxed_tail_exact_rate={format_optional_float(delta.get('boxed_tail_exact_rate') if delta else None)}",
+            flush=True,
+        )
+        for family, values in sorted((report.get("by_family") or {}).items()):
+            if isinstance(values, dict):
+                print(
+                    "KG1_SCORE_PROXY_FAMILY_STATUS="
+                    f"{label} family={family} rows={values.get('rows')} "
+                    f"loss={format_optional_float(values.get('loss'))} "
+                    f"boxed_tail_loss={format_optional_float(values.get('boxed_tail_loss'))} "
+                    f"boxed_tail_token_acc={format_optional_float(values.get('boxed_tail_token_accuracy'))} "
+                    f"boxed_tail_exact_rate={format_optional_float(values.get('boxed_tail_exact_rate'))}",
+                    flush=True,
+                )
+        for class_name, values in sorted((report.get("by_class") or {}).items()):
+            if isinstance(values, dict):
+                safe_class_name = str(class_name).replace(" ", "_")
+                print(
+                    "KG1_SCORE_PROXY_CLASS_STATUS="
+                    f"{label} class={safe_class_name} rows={values.get('rows')} "
+                    f"loss={format_optional_float(values.get('loss'))} "
+                    f"boxed_tail_loss={format_optional_float(values.get('boxed_tail_loss'))} "
+                    f"boxed_tail_token_acc={format_optional_float(values.get('boxed_tail_token_accuracy'))} "
+                    f"boxed_tail_exact_rate={format_optional_float(values.get('boxed_tail_exact_rate'))}",
+                    flush=True,
+                )
+        kg1_score_proxy_teach(report)
+        if trajectory:
+            trajectory_deltas = trajectory.get("deltas") or {}
+            trajectory_target = trajectory.get("target_math") or {}
+            print("KG1_SCORE_TRAJECTORY_JSON_BEGIN", flush=True)
+            print(json.dumps(trajectory, sort_keys=True), flush=True)
+            print("KG1_SCORE_TRAJECTORY_JSON_END", flush=True)
+            print(
+                "KG1_SCORE_TRAJECTORY_STATUS="
+                f"{label} status={trajectory.get('status')} "
+                f"alignment={trajectory.get('score_trajectory_alignment')} "
+                f"target_correct_required={trajectory_target.get('target_correct_required')} "
+                f"additional_rows_required={trajectory_target.get('additional_rows_required')} "
+                f"weak_exact_delta={format_optional_float(trajectory_deltas.get('weak_exact_rate_delta'))} "
+                f"bit_exact_delta={format_optional_float(trajectory_deltas.get('bit_manipulation_exact_rate_delta'))} "
+                f"equation_exact_delta={format_optional_float(trajectory_deltas.get('equation_transform_exact_rate_delta'))} "
+                f"protected_exact_delta={format_optional_float(trajectory_deltas.get('protected_exact_rate_delta'))} "
+                f"overall_exact_delta={format_optional_float(trajectory_deltas.get('overall_exact_rate_delta'))} "
+                f"boxed_loss_delta={format_optional_float(trajectory_deltas.get('boxed_tail_loss_delta'))} "
+                "loss_is_not_score=True",
+                flush=True,
+            )
+            kg1_score_trajectory_teach(trajectory)
+    return report
+
+
+@torch.no_grad()
+def evaluate_loss(
+    model: torch.nn.Module,
+    val_data: list[dict[str, Any]],
+    tokenizer: Any,
+    max_examples: int,
+) -> float:
+    return float(
+        evaluate_score_proxy(
+            model,
+            val_data,
+            tokenizer,
+            max_examples,
+            label="loss_only",
+            emit_report=False,
+        )["loss"]
+    )
+
+
+def make_manifest(
+    train_path: Path | None,
+    val_path: Path | None,
+    pretokenized_archive_path: Path | None,
+    train_count: int,
+    val_count: int,
+    total_steps: int,
+    final_step: int,
+    best_eval_loss: float,
+    elapsed_seconds: float,
+) -> dict[str, Any]:
+    manifest: dict[str, Any] = {
+        "run_id": RUN_ID,
+        "model_name": MODEL_NAME,
+        "model_revision": MODEL_REVISION,
+        "data_repo": DATA_REPO,
+        "train_file": DATA_FILE,
+        "train_file_sha256": file_sha256(train_path) if train_path is not None else None,
+        "train_records": train_count,
+        "val_file": VAL_FILE,
+        "val_records": val_count,
+        "pretokenized_archive_zip": PRETOKENIZED_ARCHIVE_ZIP or None,
+        "pretokenized_archive_sha256": (
+            file_sha256(pretokenized_archive_path)
+            if pretokenized_archive_path is not None and pretokenized_archive_path.exists()
+            else None
+        ),
+        "pretokenized_exclude_categories": sorted(parse_csv_set(PRETOKENIZED_EXCLUDE_CATEGORIES)),
+        "pretokenized_validation_examples": PRETOKENIZED_VAL_EXAMPLES,
+        "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
+        "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
+        "lora": {
+            "r": LORA_R,
+            "alpha": LORA_ALPHA,
+            "dropout": LORA_DROPOUT,
+            "target_modules": LORA_TARGET_MODULES,
+            "target_parameters": LORA_TARGET_PARAMETERS,
+            "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
+        },
+        "training": {
+            "max_length": MAX_LENGTH,
+            "batch_size": BATCH_SIZE,
+            "micro_batch_size": MICRO_BATCH_SIZE,
+            "gradient_accumulation": GRADIENT_ACCUMULATION,
+            "learning_rate": LEARNING_RATE,
+            "final_learning_rate": FINAL_LEARNING_RATE,
+            "num_epochs": NUM_EPOCHS,
+            "max_steps": MAX_STEPS,
+            "planned_total_steps": total_steps,
+            "final_step": final_step,
+            "best_eval_loss": best_eval_loss,
+            "score_proxy_eval_check": SCORE_PROXY_EVAL_CHECK,
+            "score_proxy_eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
+            "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
+            "friendly_realtime_logs": FRIENDLY_REALTIME_LOGS,
+            "friendly_log_score_hints": FRIENDLY_LOG_SCORE_HINTS,
+            "seed": SEED,
+            "elapsed_seconds": elapsed_seconds,
+            "elapsed_hours": elapsed_seconds / 3600,
+            "compute_provider": COMPUTE_PROVIDER,
+            "vram_peak_gib": cuda_peak_reserved_gib(),
+            "performance": {
+                "model_device_map": MODEL_DEVICE_MAP,
+                "attn_implementation": ATTN_IMPLEMENTATION,
+                "torch_allow_tf32": TORCH_ALLOW_TF32,
+                "torch_float32_matmul_precision": TORCH_FLOAT32_MATMUL_PRECISION,
+                "torch_disable_cudnn_sdp": TORCH_DISABLE_CUDNN_SDP,
+                "torch_force_math_sdp": TORCH_FORCE_MATH_SDP,
+                "gradient_checkpointing": GRADIENT_CHECKPOINTING,
+                "hf_xet_high_performance": os.environ.get("HF_XET_HIGH_PERFORMANCE", ""),
+                "tokenizers_parallelism": os.environ.get("TOKENIZERS_PARALLELISM", ""),
+                "pytorch_cuda_alloc_conf": os.environ.get("PYTORCH_CUDA_ALLOC_CONF", ""),
+            },
+            "abort_policy": {
+                "eval_loss_gt": ABORT_EVAL_LOSS_GT,
+                "baseline_eval_before_train": BASELINE_EVAL_BEFORE_TRAIN,
+                "eval_relative_to_baseline_delta": ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA,
+                "require_final_eval_lte_baseline": REQUIRE_FINAL_EVAL_LTE_BASELINE,
+                "max_final_eval_regression": MAX_FINAL_EVAL_REGRESSION,
+                "require_final_score_proxy_non_regression": REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION,
+                "max_final_boxed_tail_loss_regression": MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION,
+                "max_final_boxed_tail_token_accuracy_drop": MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP,
+                "max_final_boxed_tail_exact_rate_drop": MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP,
+                "require_score_trajectory_pass": REQUIRE_SCORE_TRAJECTORY_PASS,
+                "score_trajectory_min_weak_exact_delta": SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA,
+                "score_trajectory_max_protected_exact_drop": SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP,
+                "score_trajectory_max_overall_exact_drop": SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP,
+                "score_trajectory_max_boxed_loss_regression": SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION,
+                "train_rise_points": ABORT_TRAIN_RISE_POINTS,
+                "max_reserved_gib": ABORT_MAX_RESERVED_GIB,
+            },
+            "initial_adapter": {
+                "required": REQUIRE_INIT_ADAPTER,
+                "require_revision": REQUIRE_INIT_ADAPTER_REVISION,
+                "dir": INIT_ADAPTER_DIR,
+                "repo": INIT_ADAPTER_REPO,
+                "revision": INIT_ADAPTER_REVISION,
+                "subfolder": INIT_ADAPTER_SUBFOLDER,
+                "load_mode": INIT_ADAPTER_LOAD_MODE,
+                "manual_load_method": PEFT_MANUAL_LOAD_METHOD,
+                "expected_config_sha256": EXPECTED_INIT_ADAPTER_CONFIG_SHA256,
+                "expected_weights_sha256": EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256,
+            },
+            "sampling": {
+                "mode": SAMPLING_MODE,
+                "subcategory_weights": SUBCATEGORY_WEIGHT_MAP,
+                "source_weights": SOURCE_WEIGHT_MAP,
+            },
+            "loss_weighting": {
+                "boxed_payload_loss_weight": BOXED_PAYLOAD_LOSS_WEIGHT,
+                "require_boxed_payload_weight": REQUIRE_BOXED_PAYLOAD_WEIGHT,
+                "contract": "completion loss mask with optional boosted final boxed payload tokens",
+            },
+        },
+        "output_repo": OUTPUT_REPO,
+    }
+    if val_path is not None and val_path.exists():
+        manifest["val_file_sha256"] = file_sha256(val_path)
+    return manifest
+
+
+def upload_outputs(final_dir: Path) -> None:
+    if not UPLOAD_TO_HF:
+        print("UPLOAD_TO_HF=0; skipping adapter upload to Hugging Face.")
+        return
+    if not OUTPUT_REPO:
+        raise RuntimeError("UPLOAD_TO_HF=1 requires OUTPUT_REPO for final adapter upload.")
+    if not HF_TOKEN:
+        raise RuntimeError("UPLOAD_TO_HF=1 requires HF_TOKEN or HUGGINGFACE_HUB_TOKEN for final adapter upload.")
+
+    print(f"\nUploading final adapter and checkpoints to {OUTPUT_REPO}...")
+    api = HfApi(token=HF_TOKEN)
+    api.create_repo(OUTPUT_REPO, private=True, exist_ok=True)
+    run_prefix = f"runs/{RUN_ID}"
+    api.upload_folder(
+        folder_path=str(final_dir),
+        path_in_repo=f"{run_prefix}/final",
+        repo_id=OUTPUT_REPO,
+        commit_message=f"{RUN_ID} final adapter",
+        token=HF_TOKEN,
+    )
+
+    for checkpoint_dir in sorted(Path(OUTPUT_DIR).glob("checkpoint-*")):
+        api.upload_folder(
+            folder_path=str(checkpoint_dir),
+            path_in_repo=f"{run_prefix}/{checkpoint_dir.name}",
+            repo_id=OUTPUT_REPO,
+            commit_message=f"{RUN_ID} {checkpoint_dir.name}",
+            token=HF_TOKEN,
+        )
+    print(f"Upload complete: {OUTPUT_REPO}")
+
+
+def upload_checkpoint_during_training(checkpoint_dir: Path) -> None:
+    if not UPLOAD_CHECKPOINTS_DURING_TRAINING:
+        return
+    if not UPLOAD_TO_HF:
+        return
+    if not OUTPUT_REPO:
+        raise RuntimeError("UPLOAD_CHECKPOINTS_DURING_TRAINING=1 requires OUTPUT_REPO.")
+    if not HF_TOKEN:
+        raise RuntimeError("UPLOAD_CHECKPOINTS_DURING_TRAINING=1 requires HF_TOKEN or HUGGINGFACE_HUB_TOKEN.")
+
+    checkpoint_path = f"runs/{RUN_ID}/{checkpoint_dir.name}"
+    print(f"Uploading checkpoint during training: {OUTPUT_REPO}/{checkpoint_path}")
+    api = HfApi(token=HF_TOKEN)
+    api.create_repo(OUTPUT_REPO, private=True, exist_ok=True)
+    api.upload_folder(
+        folder_path=str(checkpoint_dir),
+        path_in_repo=checkpoint_path,
+        repo_id=OUTPUT_REPO,
+        commit_message=f"{RUN_ID} {checkpoint_dir.name} interim",
+        token=HF_TOKEN,
+    )
+    print(f"Checkpoint uploaded: {OUTPUT_REPO}/{checkpoint_path}")
+
+
+def upload_dry_run_report(dry_run_path: Path) -> None:
+    if not UPLOAD_TO_HF:
+        print("UPLOAD_TO_HF=0; skipping dry-run report upload.")
+        return
+    if not OUTPUT_REPO:
+        raise RuntimeError("UPLOAD_TO_HF=1 requires OUTPUT_REPO for dry-run report upload.")
+    if not HF_TOKEN:
+        raise RuntimeError("UPLOAD_TO_HF=1 requires HF_TOKEN or HUGGINGFACE_HUB_TOKEN for dry-run report upload.")
+
+    path_in_repo = f"dry_runs/{RUN_ID}/dry_run_model_recipe_report.json"
+    print(f"Uploading dry-run recipe report to {OUTPUT_REPO}/{path_in_repo}...")
+    api = HfApi(token=HF_TOKEN)
+    api.create_repo(OUTPUT_REPO, private=True, exist_ok=True)
+    api.upload_file(
+        path_or_fileobj=str(dry_run_path),
+        path_in_repo=path_in_repo,
+        repo_id=OUTPUT_REPO,
+        commit_message=f"{RUN_ID} dry-run recipe report",
+        token=HF_TOKEN,
+    )
+    print(f"Dry-run report uploaded: {OUTPUT_REPO}/{path_in_repo}")
+
+
+def train() -> None:
+    print("=" * 72)
+    print("KG1 v90 category-solver remote training")
+    print("=" * 72)
+    print(f"Run ID: {RUN_ID}")
+    print(f"Model: {MODEL_NAME}")
+    print(f"Model revision: {MODEL_REVISION or 'default'}")
+    if PRETOKENIZED_ARCHIVE_ZIP:
+        print(f"Pretokenized Tong archive: {PRETOKENIZED_ARCHIVE_ZIP}")
+        print(f"Pretokenized excluded categories: {PRETOKENIZED_EXCLUDE_CATEGORIES or 'none'}")
+    else:
+        print(f"Train: {DATA_REPO}/{DATA_FILE}")
+        print(f"Validation: {DATA_REPO}/{VAL_FILE}")
+    print(f"Output repo: {OUTPUT_REPO}")
+    print(f"Upload to HF: {UPLOAD_TO_HF}")
+    print(f"Require offset masks: {REQUIRE_OFFSET_MASK}")
+    print(f"Dry-run validate only: {DRY_RUN_VALIDATE_ONLY}")
+    if INIT_ADAPTER_DIR or INIT_ADAPTER_REPO:
+        print(
+            "Initial adapter: "
+            f"{INIT_ADAPTER_DIR or INIT_ADAPTER_REPO}"
+            + (f"/{INIT_ADAPTER_SUBFOLDER}" if INIT_ADAPTER_SUBFOLDER else "")
+            + (f"@{INIT_ADAPTER_REVISION}" if INIT_ADAPTER_REVISION else "")
+        )
+    else:
+        print("Initial adapter: new LoRA")
+    print(
+        f"LoRA: r={LORA_R} alpha={LORA_ALPHA} dropout={LORA_DROPOUT} "
+        f"target_modules={LORA_TARGET_MODULES}"
+    )
+    print(f"LoRA target_parameters: {LORA_TARGET_PARAMETERS or 'disabled'}")
+    print(f"Trainable LoRA module filter: {TRAINABLE_LORA_MODULES or 'disabled'}")
+    print(f"Max trainable parameter ratio: {MAX_TRAINABLE_PARAM_RATIO:.4%}")
+    print(f"Length={MAX_LENGTH} batch={BATCH_SIZE} micro_batch={MICRO_BATCH_SIZE}")
+    print(f"LR: {LEARNING_RATE:.2e} -> {FINAL_LEARNING_RATE:.2e}")
+    print(f"Epochs={NUM_EPOCHS} max_steps={MAX_STEPS}")
+    print(f"Boxed payload loss weight: {BOXED_PAYLOAD_LOSS_WEIGHT}")
+    print(f"Require boxed payload weight: {REQUIRE_BOXED_PAYLOAD_WEIGHT}")
+    print(f"Require initial adapter: {REQUIRE_INIT_ADAPTER}")
+    print(f"Require initial adapter revision: {REQUIRE_INIT_ADAPTER_REVISION}")
+    print(f"PEFT manual load method: {PEFT_MANUAL_LOAD_METHOD}")
+    print(
+        f"Score proxy eval check: {SCORE_PROXY_EVAL_CHECK} "
+        f"max_examples={SCORE_PROXY_EVAL_MAX_EXAMPLES}"
+    )
+    print(
+        f"Score trajectory check: {SCORE_TRAJECTORY_CHECK} "
+        f"require_pass={REQUIRE_SCORE_TRAJECTORY_PASS} "
+        f"min_weak_exact_delta={SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA} "
+        f"target_correct_required={math.ceil(SCORE_CONTRACT_TARGET_ACCURACY * SCORE_CONTRACT_FULL_ROWS)}"
+    )
+    print(f"Model device map: {MODEL_DEVICE_MAP}")
+    print(f"Attention implementation: {ATTN_IMPLEMENTATION or 'transformers-default'}")
+    print(f"Gradient checkpointing: {GRADIENT_CHECKPOINTING}")
+    print(f"HF Xet high performance: {os.environ.get('HF_XET_HIGH_PERFORMANCE', '')}")
+    print()
+    kg1_teach_card(
+        "RUN_START",
+        "START",
+        what="Job KG1 iniciado com logs amigaveis em tempo real.",
+        why="Queremos enxergar cedo se o treino esta alinhado ao score, nao apenas se o loss cai.",
+        watch="Procure SCORE_CONTRACT=OK, SCORE_PROXY melhorando e SCORE_TRAJECTORY=OK antes de confiar no job.",
+        data=[
+            ("run_id", RUN_ID),
+            ("friendly_realtime_logs", FRIENDLY_REALTIME_LOGS),
+            ("model", MODEL_NAME),
+            ("max_steps", MAX_STEPS),
+            ("target_accuracy", SCORE_CONTRACT_TARGET_ACCURACY),
+        ],
+        next_action="Validar runtime, dados, tokenizacao e contrato antes de gastar GPU treinando.",
+    )
+
+    if not torch.cuda.is_available() and not (DRY_RUN_VALIDATE_ONLY and TOKENIZE_ONLY_DRY_RUN):
+        raise RuntimeError("CUDA GPU is required for this Nemotron v90 training job.")
+
+    kg1_teach_card(
+        "RUNTIME",
+        "START",
+        what="Preparando runtime CUDA/PyTorch e dependencias opcionais.",
+        why="Config errada aqui pode deixar o job lento, caro ou instavel antes mesmo do treino.",
+        watch="Depois desta fase, confira CUDA, attention, TF32 e memoria nos logs tecnicos.",
+        next_action="Aplicar knobs de performance e carregar tokenizer.",
+    )
+    apply_runtime_performance_settings()
+    setup_causal_conv1d_stub()
+    random.seed(SEED)
+    torch.manual_seed(SEED)
+    torch.cuda.manual_seed_all(SEED)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    kg1_teach_card(
+        "TOKENIZER",
+        "START",
+        what="Carregando tokenizer oficial do mesmo modelo usado pelo Kaggle.",
+        why="Mascara de loss e prompt suffix dependem da tokenizacao correta.",
+        watch="Falha aqui invalida qualquer treino ou comparacao posterior.",
+        data=[("model_revision", MODEL_REVISION or "default")],
+        next_action="Tokenizar dados e verificar offset masks.",
+    )
+    print(f"Loading tokenizer from {MODEL_NAME}...")
+    tokenizer = AutoTokenizer.from_pretrained(
+        MODEL_NAME,
+        revision=MODEL_REVISION or None,
+        trust_remote_code=True,
+        token=HF_TOKEN or None,
+    )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    train_path: Path | None = None
+    val_path: Path | None = None
+    pretokenized_archive_resolved_path: Path | None = None
+    train_examples: list[dict[str, Any]] = []
+    val_examples: list[dict[str, Any]] = []
+    if PRETOKENIZED_ARCHIVE_ZIP:
+        archive_path = Path(PRETOKENIZED_ARCHIVE_ZIP)
+        if not archive_path.exists():
+            print(
+                f"PRETOKENIZED_ARCHIVE_ZIP is not local; downloading from "
+                f"{DATA_REPO}/{PRETOKENIZED_ARCHIVE_ZIP}..."
+            )
+            archive_path = Path(
+                hf_hub_download(
+                    repo_id=DATA_REPO,
+                    filename=PRETOKENIZED_ARCHIVE_ZIP,
+                    repo_type="dataset",
+                    token=HF_TOKEN or None,
+                )
+            )
+        pretokenized_archive_resolved_path = archive_path
+        if EXPECTED_ARCHIVE_SHA256:
+            assert_file_sha256(archive_path, EXPECTED_ARCHIVE_SHA256, "pretokenized archive")
+        all_tokenized = load_tong_pretokenized_archive(archive_path)
+        train_data, val_data = split_pretokenized_train_val(all_tokenized)
+        train_examples = train_data
+        val_examples = val_data
+    else:
+        train_path = resolve_data_file(DATA_FILE)
+        val_path = resolve_data_file(VAL_FILE)
+        assert_file_sha256(train_path, EXPECTED_TRAIN_SHA256, "train dataset")
+        assert_file_sha256(val_path, EXPECTED_VAL_SHA256, "validation dataset")
+        train_examples = load_jsonl(train_path)
+        val_examples = load_jsonl(val_path)
+        print(f"Loaded train={len(train_examples)} validation={len(val_examples)}")
+        if len(train_examples) < MIN_TRAIN_EXAMPLES:
+            raise RuntimeError(
+                f"Train dataset too small: {len(train_examples)} < MIN_TRAIN_EXAMPLES={MIN_TRAIN_EXAMPLES}"
+            )
+        if len(val_examples) < MIN_VAL_EXAMPLES:
+            raise RuntimeError(
+                f"Validation dataset too small: {len(val_examples)} < MIN_VAL_EXAMPLES={MIN_VAL_EXAMPLES}"
+            )
+        train_data = tokenize_examples(train_examples, tokenizer, "Train")
+        val_data = tokenize_examples(val_examples, tokenizer, "Validation")
+    if len(train_data) < MIN_TOKENIZED_TRAIN_EXAMPLES:
+        raise RuntimeError(
+            "Too few train examples survived tokenization: "
+            f"{len(train_data)} < MIN_TOKENIZED_TRAIN_EXAMPLES={MIN_TOKENIZED_TRAIN_EXAMPLES}"
+        )
+    if len(val_data) < MIN_TOKENIZED_VAL_EXAMPLES:
+        raise RuntimeError(
+            "Too few validation examples survived tokenization: "
+            f"{len(val_data)} < MIN_TOKENIZED_VAL_EXAMPLES={MIN_TOKENIZED_VAL_EXAMPLES}"
+        )
+    kg1_teach_card(
+        "DATA_TOKENIZATION",
+        "OK",
+        what="Dados carregados e tokenizados; agora sabemos quantas linhas realmente chegaram ao treino.",
+        why="Score falso nasce quando linhas somem, truncam prompt ou perdem mascara de resposta.",
+        watch="Rows tokenizadas devem bater com o esperado; fallback masks e prompt truncation devem ficar em zero nos jobs rigidos.",
+        data=[
+            ("train_examples", len(train_examples)),
+            ("validation_examples", len(val_examples)),
+            ("tokenized_train", len(train_data)),
+            ("tokenized_validation", len(val_data)),
+            ("min_tokenized_train", MIN_TOKENIZED_TRAIN_EXAMPLES),
+            ("min_tokenized_validation", MIN_TOKENIZED_VAL_EXAMPLES),
+        ],
+        next_action="Rodar SCORE_CONTRACT depois da tokenizacao.",
+    )
+    score_contract_tokenization_report = emit_score_contract_runtime_report(
+        phase="after_tokenization",
+        train_examples=train_examples,
+        val_examples=val_examples,
+        train_data=train_data,
+        val_data=val_data,
+        model_loaded=False,
+    )
+    if DRY_RUN_VALIDATE_ONLY and TOKENIZE_ONLY_DRY_RUN:
+        dry_run_report = {
+            "run_id": RUN_ID,
+            "model_name": MODEL_NAME,
+            "model_revision": MODEL_REVISION,
+            "data": {
+                "data_repo": DATA_REPO,
+                "train_file": DATA_FILE,
+                "train_file_sha256": file_sha256(train_path) if train_path else None,
+                "train_records": len(train_examples),
+                "tokenized_train_records": len(train_data),
+                "validation_file": VAL_FILE,
+                "validation_file_sha256": file_sha256(val_path) if val_path else None,
+                "validation_records": len(val_examples),
+                "tokenized_validation_records": len(val_data),
+                "pretokenized_archive_zip": PRETOKENIZED_ARCHIVE_ZIP,
+                "pretokenized_archive_resolved_path": str(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_archive_sha256": file_sha256(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_exclude_categories": sorted(parse_csv_set(PRETOKENIZED_EXCLUDE_CATEGORIES)),
+                "pretokenized_validation_examples": PRETOKENIZED_VAL_EXAMPLES,
+                "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
+                "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
+            },
+            "lora": {
+                "r": LORA_R,
+                "alpha": LORA_ALPHA,
+                "dropout": LORA_DROPOUT,
+                "target_modules": LORA_TARGET_MODULES,
+                "target_parameters": LORA_TARGET_PARAMETERS,
+                "parsed_target_modules": parse_target_modules(LORA_TARGET_MODULES),
+                "init_adapter_dir": INIT_ADAPTER_DIR,
+                "init_adapter_repo": INIT_ADAPTER_REPO,
+                "init_adapter_revision": INIT_ADAPTER_REVISION,
+                "init_adapter_subfolder": INIT_ADAPTER_SUBFOLDER,
+                "require_init_adapter": REQUIRE_INIT_ADAPTER,
+                "require_init_adapter_revision": REQUIRE_INIT_ADAPTER_REVISION,
+                "trainable_lora_module_filter": {
+                    "enabled": bool(TRAINABLE_LORA_MODULES),
+                    "requested": sorted(parse_csv_set(TRAINABLE_LORA_MODULES)),
+                    "checked_after_model_load": False,
+                },
+            },
+            "training": {
+                "max_length": MAX_LENGTH,
+                "batch_size": BATCH_SIZE,
+                "micro_batch_size": MICRO_BATCH_SIZE,
+                "gradient_accumulation": GRADIENT_ACCUMULATION,
+                "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
+                "max_prompt_truncation_rate": MAX_PROMPT_TRUNCATION_RATE,
+                "score_proxy_eval_check": SCORE_PROXY_EVAL_CHECK,
+                "score_proxy_eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
+                "friendly_realtime_logs": FRIENDLY_REALTIME_LOGS,
+                "friendly_log_score_hints": FRIENDLY_LOG_SCORE_HINTS,
+                "sampling": weighted_sample_report(train_data),
+                "train_loss_weighting": loss_weighting_report(train_data),
+                "validation_loss_weighting": loss_weighting_report(val_data),
+            },
+            "runtime": {
+                "cuda_available": bool(torch.cuda.is_available()),
+                "tokenize_only_dry_run": True,
+                "torch": getattr(torch, "__version__", "unknown"),
+            },
+            "trainable_parameters": {
+                "checked_after_model_load": False,
+                "reason": "TOKENIZE_ONLY_DRY_RUN=1 skips the expensive model load.",
+            },
+            "score_contract_runtime": score_contract_tokenization_report,
+            "decision": {
+                "full_training_allowed": False,
+                "tokenization_contract_passed": True,
+                "next_required_gate": "DRY_RUN_VALIDATE_ONLY=1 with model/adapter load on GPU-capable runtime",
+                "note": (
+                    "Tokenize-only dry run validated dataset hashes, row counts, "
+                    "chat-template tokenization, offset masks, prompt truncation guard, "
+                    "and weighted sampling. It does not authorize full training because "
+                    "model/adapter trainability is checked only by the subsequent model-load dry run."
+                ),
+            },
+        }
+        dry_run_path = Path(OUTPUT_DIR) / "dry_run_model_recipe_report.json"
+        dry_run_path.parent.mkdir(parents=True, exist_ok=True)
+        dry_run_path.write_text(json.dumps(dry_run_report, indent=2, sort_keys=True), encoding="utf-8")
+        print(f"TOKENIZE_ONLY_DRY_RUN=1; wrote {dry_run_path} and skipped expensive model load.")
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_BEGIN")
+        print(json.dumps(dry_run_report, sort_keys=True))
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_END")
+        kg1_teach_card(
+            "DRY_RUN",
+            "OK",
+            what="Tokenize-only dry run terminou de proposito antes da fase cara.",
+            why="Este modo valida dados, hashes, prompt, mascara e contrato sem carregar o modelo grande.",
+            watch="full_training_allowed=false e esperado aqui; nao e falha.",
+            data=[("report", dry_run_path), ("next_gate", dry_run_report["decision"]["next_required_gate"])],
+            next_action="Executar dry-run com model load em runtime GPU antes de treino pago.",
+        )
+        upload_dry_run_report(dry_run_path)
+        return
+
+    initial_adapter_contract_report = validate_initial_adapter_contract_if_required()
+    validate_nemotron_model_runtime_dependencies()
+    model_device_map = parse_model_device_map(MODEL_DEVICE_MAP)
+    kg1_teach_card(
+        "MODEL_LOAD",
+        "START",
+        what="Entrando na fase cara: carregar Nemotron base e LoRA treinavel.",
+        why="Aqui confirmamos se o adapter e os modulos LoRA batem com o contrato do Kaggle.",
+        watch="Depois do load, trainable ratio precisa ficar abaixo do guard e SCORE_CONTRACT deve passar de novo.",
+        data=[("device_map", model_device_map), ("attn", ATTN_IMPLEMENTATION or "transformers-default")],
+        next_action="Carregar modelo, aplicar adapter e medir parametros treinaveis.",
+    )
+    print(
+        f"\nLoading model {MODEL_NAME} in BF16 with "
+        f"device_map={model_device_map} attn_implementation="
+        f"{ATTN_IMPLEMENTATION or 'transformers-default'}..."
+    )
+    model_kwargs = {
+        "pretrained_model_name_or_path": MODEL_NAME,
+        "revision": MODEL_REVISION or None,
+        "dtype": torch.bfloat16,
+        "device_map": model_device_map,
+        "trust_remote_code": True,
+        "token": HF_TOKEN or None,
+    }
+    if ATTN_IMPLEMENTATION:
+        model_kwargs["attn_implementation"] = ATTN_IMPLEMENTATION
+    model = AutoModelForCausalLM.from_pretrained(**model_kwargs)
+    if hasattr(model.config, "use_cache"):
+        model.config.use_cache = False
+    post_load_device = model_post_load_device(MODEL_DEVICE_MAP)
+    if post_load_device:
+        print(f"Moving fully loaded base model to {post_load_device}...")
+        model.to(post_load_device)
+        if torch.cuda.is_available():
+            print(
+                "Model moved to CUDA: "
+                f"mem_alloc={torch.cuda.memory_allocated() / 1024**3:.1f}GiB "
+                f"mem_reserved={torch.cuda.memory_reserved() / 1024**3:.1f}GiB"
+            )
+
+    target_modules = parse_target_modules(LORA_TARGET_MODULES)
+    print("Applying/loading trainable LoRA adapter...")
+    model = load_trainable_adapter_or_create(model)
+    lora_filter_report = apply_trainable_lora_module_filter(model)
+    if lora_filter_report["enabled"]:
+        print("Applied trainable LoRA module filter:")
+        print(json.dumps(lora_filter_report, indent=2, sort_keys=True))
+    model.enable_input_require_grads()
+    if GRADIENT_CHECKPOINTING:
+        model.gradient_checkpointing_enable()
+        print("Gradient checkpointing enabled.")
+    else:
+        print("Gradient checkpointing disabled by env.")
+    if hasattr(model.config, "use_cache"):
+        model.config.use_cache = False
+    model.print_trainable_parameters()
+    trainable_report = trainable_parameter_report(model)
+    print(
+        "Trainable parameter guard: "
+        f"{trainable_report['trainable']:,} / {trainable_report['total']:,} "
+        f"({float(trainable_report['ratio']) * 100:.4f}%)"
+    )
+    kg1_teach_card(
+        "LORA_TRAINABLE",
+        "CHECK",
+        what="LoRA carregado e parametros treinaveis contados.",
+        why="Se muitos parametros treinarem, o adapter pode fugir do limite/objetivo e regressar familias protegidas.",
+        watch="ratio precisa ficar abaixo de MAX_TRAINABLE_PARAM_RATIO; modulos devem ser os sete seguros.",
+        data=[
+            ("trainable", trainable_report["trainable"]),
+            ("total", trainable_report["total"]),
+            ("ratio", f"{float(trainable_report['ratio']) * 100:.4f}%"),
+            ("max_ratio", f"{MAX_TRAINABLE_PARAM_RATIO * 100:.4f}%"),
+            ("trainable_filter", TRAINABLE_LORA_MODULES or "disabled"),
+        ],
+        next_action="Se o ratio passar do guard, abortar antes de treinar.",
+    )
+    if float(trainable_report["ratio"]) > MAX_TRAINABLE_PARAM_RATIO:
+        raise RuntimeError(
+            "LoRA recipe trains too many parameters: "
+            f"{float(trainable_report['ratio']) * 100:.4f}% > "
+            f"MAX_TRAINABLE_PARAM_RATIO={MAX_TRAINABLE_PARAM_RATIO * 100:.4f}%. "
+            "This blocks silent all-linear expansion; set LORA_TARGET_MODULES "
+            "explicitly or raise the guard only for a deliberate diagnostic run."
+        )
+    score_contract_model_report = emit_score_contract_runtime_report(
+        phase="after_model_load",
+        train_examples=train_examples,
+        val_examples=val_examples,
+        train_data=train_data,
+        val_data=val_data,
+        target_modules=target_modules,
+        lora_filter_report=lora_filter_report,
+        trainable_report=trainable_report,
+        model_loaded=True,
+    )
+    if DRY_RUN_VALIDATE_ONLY:
+        dry_run_report = {
+            "run_id": RUN_ID,
+            "model_name": MODEL_NAME,
+            "model_revision": MODEL_REVISION,
+            "data": {
+                "data_repo": DATA_REPO,
+                "train_file": DATA_FILE,
+                "train_file_sha256": file_sha256(train_path) if train_path else None,
+                "train_records": len(train_examples),
+                "tokenized_train_records": len(train_data),
+                "validation_file": VAL_FILE,
+                "validation_file_sha256": file_sha256(val_path) if val_path else None,
+                "validation_records": len(val_examples),
+                "tokenized_validation_records": len(val_data),
+                "pretokenized_archive_zip": PRETOKENIZED_ARCHIVE_ZIP,
+                "pretokenized_archive_resolved_path": str(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_archive_sha256": file_sha256(pretokenized_archive_resolved_path) if pretokenized_archive_resolved_path else None,
+                "pretokenized_exclude_categories": sorted(parse_csv_set(PRETOKENIZED_EXCLUDE_CATEGORIES)),
+                "pretokenized_validation_examples": PRETOKENIZED_VAL_EXAMPLES,
+                "pretokenized_validation_fraction": PRETOKENIZED_VAL_FRACTION,
+                "pretokenized_validation_copy_only": PRETOKENIZED_VAL_COPY_ONLY,
+            },
+            "lora": {
+                "r": LORA_R,
+                "alpha": LORA_ALPHA,
+                "dropout": LORA_DROPOUT,
+                "target_modules": LORA_TARGET_MODULES,
+                "target_parameters": LORA_TARGET_PARAMETERS,
+                "parsed_target_modules": target_modules,
+                "init_adapter_dir": INIT_ADAPTER_DIR,
+                "init_adapter_repo": INIT_ADAPTER_REPO,
+                "init_adapter_revision": INIT_ADAPTER_REVISION,
+                "init_adapter_subfolder": INIT_ADAPTER_SUBFOLDER,
+                "require_init_adapter": REQUIRE_INIT_ADAPTER,
+                "require_init_adapter_revision": REQUIRE_INIT_ADAPTER_REVISION,
+                "initial_adapter_contract": initial_adapter_contract_report,
+                "trainable_lora_module_filter": lora_filter_report,
+            },
+            "training": {
+                "max_length": MAX_LENGTH,
+                "batch_size": BATCH_SIZE,
+                "micro_batch_size": MICRO_BATCH_SIZE,
+                "gradient_accumulation": GRADIENT_ACCUMULATION,
+                "max_trainable_param_ratio": MAX_TRAINABLE_PARAM_RATIO,
+                "max_prompt_truncation_rate": MAX_PROMPT_TRUNCATION_RATE,
+                "score_proxy_eval_check": SCORE_PROXY_EVAL_CHECK,
+                "score_proxy_eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
+                "friendly_realtime_logs": FRIENDLY_REALTIME_LOGS,
+                "friendly_log_score_hints": FRIENDLY_LOG_SCORE_HINTS,
+                "sampling": weighted_sample_report(train_data),
+                "train_loss_weighting": loss_weighting_report(train_data),
+                "validation_loss_weighting": loss_weighting_report(val_data),
+            },
+            "runtime": cuda_runtime_report(),
+            "trainable_parameters": trainable_report,
+            "score_contract_runtime": score_contract_model_report,
+            "decision": {
+                "full_training_allowed": True,
+                "note": "Dry run loaded model, applied LoRA, and passed the trainable-parameter guard.",
+            },
+        }
+        dry_run_path = Path(OUTPUT_DIR) / "dry_run_model_recipe_report.json"
+        dry_run_path.parent.mkdir(parents=True, exist_ok=True)
+        dry_run_path.write_text(json.dumps(dry_run_report, indent=2, sort_keys=True), encoding="utf-8")
+        print(f"DRY_RUN_VALIDATE_ONLY=1; wrote {dry_run_path} and skipped training.")
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_BEGIN")
+        print(json.dumps(dry_run_report, sort_keys=True))
+        print("DRY_RUN_MODEL_RECIPE_REPORT_JSON_END")
+        kg1_teach_card(
+            "DRY_RUN",
+            "OK",
+            what="Model-load dry run terminou antes do treino.",
+            why="Agora sabemos que o modelo, adapter, LoRA e contrato carregam juntos.",
+            watch="full_training_allowed=true neste relatorio significa que o dry-run tecnico passou, nao que ja existe ganho.",
+            data=[("report", dry_run_path), ("trainable_ratio", f"{float(trainable_report['ratio']) * 100:.4f}%")],
+            next_action="So iniciar treino pago se os gates externos tambem autorizarem.",
+        )
+        upload_dry_run_report(dry_run_path)
+        return
+
+    trainable_params = [p for p in model.parameters() if p.requires_grad]
+    if USE_BITSANDBYTES:
+        try:
+            import bitsandbytes as bnb
+
+            optimizer = bnb.optim.PagedAdam8bit(
+                trainable_params,
+                lr=LEARNING_RATE,
+                betas=(ADAM_BETA1, ADAM_BETA2),
+                eps=ADAM_EPS,
+                weight_decay=WEIGHT_DECAY,
+            )
+            print("Optimizer: bitsandbytes PagedAdam8bit")
+        except Exception as exc:
+            print(f"bitsandbytes optimizer unavailable ({exc}); using torch Adam")
+            optimizer = torch.optim.Adam(
+                trainable_params,
+                lr=LEARNING_RATE,
+                betas=(ADAM_BETA1, ADAM_BETA2),
+                eps=ADAM_EPS,
+                weight_decay=WEIGHT_DECAY,
+            )
+    else:
+        print("Optimizer: torch Adam (USE_BITSANDBYTES=0)")
+        optimizer = torch.optim.Adam(
+            trainable_params,
+            lr=LEARNING_RATE,
+            betas=(ADAM_BETA1, ADAM_BETA2),
+            eps=ADAM_EPS,
+            weight_decay=WEIGHT_DECAY,
+        )
+
+    epoch_steps = math.ceil(len(train_data) / BATCH_SIZE)
+    planned_steps = epoch_steps * NUM_EPOCHS
+    total_steps = min(planned_steps, MAX_STEPS) if MAX_STEPS > 0 else planned_steps
+    print(f"\nTraining: {len(train_data)} examples, planned_steps={total_steps}")
+    print("Sampling:")
+    print(json.dumps(weighted_sample_report(train_data), indent=2, sort_keys=True))
+    print("Loss weighting:")
+    print(json.dumps(loss_weighting_report(train_data), indent=2, sort_keys=True))
+    kg1_teach_card(
+        "TRAIN_LOOP",
+        "START",
+        what="Treino vai comecar; a partir daqui GPU esta sendo usada para atualizar LoRA.",
+        why="O objetivo nao e apenas baixar loss, e melhorar a resposta final que o Kaggle extrai.",
+        watch="Compare TRAIN_PULSE com SCORE_PROXY: loss de treino pode cair sem ganho real de boxed answer.",
+        data=[
+            ("train_rows", len(train_data)),
+            ("validation_rows", len(val_data)),
+            ("planned_steps", total_steps),
+            ("batch_size", BATCH_SIZE),
+            ("gradient_accumulation", GRADIENT_ACCUMULATION),
+            ("eval_every_steps", EVAL_EVERY_STEPS),
+        ],
+        next_action="Medir baseline score-proxy antes do primeiro update, se habilitado.",
+    )
+
+    baseline_eval_loss: float | None = None
+    baseline_score_proxy_report: dict[str, Any] | None = None
+    final_score_proxy_report: dict[str, Any] | None = None
+    score_proxy_history: list[dict[str, Any]] = []
+    if BASELINE_EVAL_BEFORE_TRAIN:
+        if not val_data:
+            raise ValueError("BASELINE_EVAL_BEFORE_TRAIN=1 requires validation data")
+        print(
+            f"Baseline score proxy before training: max_examples={SCORE_PROXY_EVAL_MAX_EXAMPLES}",
+            flush=True,
+        )
+        baseline_score_proxy_report = evaluate_score_proxy(
+            model,
+            val_data,
+            tokenizer,
+            SCORE_PROXY_EVAL_MAX_EXAMPLES,
+            label="baseline_before_train",
+        )
+        score_proxy_history.append(compact_score_proxy_report(baseline_score_proxy_report))
+        baseline_eval_loss = float(baseline_score_proxy_report["loss"])
+        if not math.isfinite(baseline_eval_loss):
+            raise FloatingPointError(
+                f"Non-finite baseline eval loss before training: {baseline_eval_loss}"
+            )
+        print(
+            "baseline_eval_loss="
+            f"{baseline_eval_loss:.4f} "
+            "baseline_boxed_tail_exact_rate="
+            f"{baseline_score_proxy_report['boxed_tail_exact_rate']:.4f}",
+            flush=True,
+        )
+
+    model.train()
+    global_step = 0
+    accum_loss = 0.0
+    accum_count = 0
+    start_time = time.time()
+    best_eval_loss = float("inf")
+    train_eval_point_losses: list[float] = []
+
+    for epoch in range(NUM_EPOCHS):
+        if global_step >= total_steps:
+            break
+
+        print(f"\n--- Epoch {epoch + 1}/{NUM_EPOCHS} ---")
+        epoch_data = build_epoch_train_data(train_data)
+
+        for i in range(0, len(epoch_data), MICRO_BATCH_SIZE):
+            if global_step >= total_steps:
+                break
+
+            batch = epoch_data[i : i + MICRO_BATCH_SIZE]
+            if not batch:
+                continue
+
+            input_ids, attention_mask, loss_mask = tensorize_batch(batch, tokenizer.pad_token_id)
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
+            loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
+            if not torch.isfinite(loss):
+                raise FloatingPointError(f"Non-finite loss at step {global_step}: {loss}")
+
+            scaled_loss = loss / GRADIENT_ACCUMULATION
+            scaled_loss.backward()
+
+            loss_value = float(loss.item())
+            accum_loss += loss_value
+            accum_count += 1
+            micro_in_step = accum_count % GRADIENT_ACCUMULATION
+            should_step_optimizer = micro_in_step == 0
+
+            del input_ids, attention_mask, loss_mask, outputs, loss, scaled_loss
+
+            if (
+                MICRO_LOG_EVERY > 0
+                and not should_step_optimizer
+                and accum_count % MICRO_LOG_EVERY == 0
+            ):
+                print(
+                    f"micro={micro_in_step}/{GRADIENT_ACCUMULATION} "
+                    f"step={global_step}/{total_steps} "
+                    f"micro_loss={loss_value:.4f} {cuda_memory_line()}",
+                    flush=True,
+                )
+
+            if not should_step_optimizer:
+                continue
+
+            lr = get_lr(global_step, total_steps)
+            for param_group in optimizer.param_groups:
+                param_group["lr"] = lr
+
+            if GRAD_CLIP_NORM < 1e8:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP_NORM)
+
+            optimizer.step()
+            optimizer.zero_grad(set_to_none=True)
+            if torch.cuda.is_available() and global_step % 5 == 0:
+                torch.cuda.empty_cache()
+
+            avg_loss = accum_loss / GRADIENT_ACCUMULATION
+            elapsed = time.time() - start_time
+            if LOG_EVERY_STEPS > 0 and global_step % LOG_EVERY_STEPS == 0:
+                print(
+                    f"step={global_step}/{total_steps} lr={lr:.2e} "
+                    f"train_loss={avg_loss:.4f} elapsed={elapsed / 60:.1f}m "
+                    f"{cuda_memory_line()}",
+                    flush=True,
+                )
+                kg1_training_pulse_teach(
+                    global_step=global_step,
+                    total_steps=total_steps,
+                    train_loss=avg_loss,
+                    lr=lr,
+                    elapsed_seconds=elapsed,
+                )
+
+            if ABORT_MAX_RESERVED_GIB > 0 and cuda_reserved_gib() > ABORT_MAX_RESERVED_GIB:
+                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                model.save_pretrained(str(checkpoint_dir))
+                tokenizer.save_pretrained(str(checkpoint_dir))
+                print(
+                    f"ABORT: mem_reserved {cuda_reserved_gib():.2f}GiB exceeded "
+                    f"ABORT_MAX_RESERVED_GIB={ABORT_MAX_RESERVED_GIB:.2f}; "
+                    f"emergency checkpoint saved: {checkpoint_dir}",
+                    flush=True,
+                )
+                kg1_teach_card(
+                    "ABORT",
+                    "STOP",
+                    what="Memoria CUDA passou do limite configurado.",
+                    why="Continuar poderia matar o job, perder checkpoint ou gastar GPU sem chance de finalizar.",
+                    watch="Use checkpoint de emergencia apenas para forense; nao submeta sem gates.",
+                    data=[
+                        ("mem_reserved_gib", f"{cuda_reserved_gib():.2f}"),
+                        ("limit_gib", f"{ABORT_MAX_RESERVED_GIB:.2f}"),
+                        ("checkpoint", checkpoint_dir),
+                    ],
+                    next_action="Reduzir batch, sequence length ou ajustar device/runtime antes de relancar.",
+                )
+                upload_checkpoint_during_training(checkpoint_dir)
+                raise RuntimeError("abort_max_reserved_gib_exceeded")
+
+            if (
+                EVAL_EVERY_STEPS > 0
+                and val_data
+                and global_step > 0
+                and global_step % EVAL_EVERY_STEPS == 0
+            ):
+                train_eval_point_losses.append(avg_loss)
+                if (
+                    ABORT_TRAIN_RISE_POINTS > 1
+                    and len(train_eval_point_losses) >= ABORT_TRAIN_RISE_POINTS
+                ):
+                    window = train_eval_point_losses[-ABORT_TRAIN_RISE_POINTS:]
+                    if all(left < right for left, right in zip(window, window[1:])):
+                        checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                        model.save_pretrained(str(checkpoint_dir))
+                        tokenizer.save_pretrained(str(checkpoint_dir))
+                        print(
+                            f"ABORT: train_loss rose across {ABORT_TRAIN_RISE_POINTS} "
+                            f"eval points: {window}; emergency checkpoint saved: {checkpoint_dir}",
+                            flush=True,
+                        )
+                        kg1_teach_card(
+                            "ABORT",
+                            "STOP",
+                            what="Train loss subiu em varios pontos consecutivos.",
+                            why="Isso indica instabilidade; continuar pode aumentar regressao e custo.",
+                            watch="Este criterio olha loss de treino, nao score; investigue junto com SCORE_PROXY.",
+                            data=[("window", window), ("checkpoint", checkpoint_dir)],
+                            next_action="Revisar LR, pesos de amostragem e dados recentes antes de relancar.",
+                        )
+                        upload_checkpoint_during_training(checkpoint_dir)
+                        raise RuntimeError("abort_train_loss_rising")
+                eval_score_proxy_report = evaluate_score_proxy(
+                    model,
+                    val_data,
+                    tokenizer,
+                    SCORE_PROXY_EVAL_MAX_EXAMPLES,
+                    label=f"step_{global_step}",
+                    baseline_report=baseline_score_proxy_report,
+                )
+                score_proxy_history.append(compact_score_proxy_report(eval_score_proxy_report))
+                eval_loss = float(eval_score_proxy_report["loss"])
+                best_eval_loss = min(best_eval_loss, eval_loss)
+                print(
+                    f"eval step={global_step} "
+                    f"loss={eval_loss:.4f} best={best_eval_loss:.4f} "
+                    f"boxed_tail_loss={eval_score_proxy_report['boxed_tail_loss']:.4f} "
+                    f"boxed_tail_token_acc={eval_score_proxy_report['boxed_tail_token_accuracy']:.4f} "
+                    f"boxed_tail_exact_rate={eval_score_proxy_report['boxed_tail_exact_rate']:.4f}"
+                )
+                if not math.isfinite(eval_loss):
+                    raise FloatingPointError(f"Non-finite eval loss at step {global_step}")
+                if ABORT_EVAL_LOSS_GT > 0 and eval_loss > ABORT_EVAL_LOSS_GT:
+                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                    model.save_pretrained(str(checkpoint_dir))
+                    tokenizer.save_pretrained(str(checkpoint_dir))
+                    print(
+                        f"ABORT: eval_loss {eval_loss:.4f} exceeded "
+                        f"ABORT_EVAL_LOSS_GT={ABORT_EVAL_LOSS_GT:.4f}; "
+                        f"emergency checkpoint saved: {checkpoint_dir}",
+                        flush=True,
+                    )
+                    kg1_teach_card(
+                        "ABORT",
+                        "STOP",
+                        what="Validation loss passou do teto configurado.",
+                        why="O job entrou em zona de risco antes de provar ganho no proxy de score.",
+                        watch="Nao use este adapter como candidato sem raw-output gates.",
+                        data=[
+                            ("eval_loss", f"{eval_loss:.4f}"),
+                            ("limit", f"{ABORT_EVAL_LOSS_GT:.4f}"),
+                            ("checkpoint", checkpoint_dir),
+                        ],
+                        next_action="Revisar dataset/LR e comparar score-proxy historico no manifesto.",
+                    )
+                    upload_checkpoint_during_training(checkpoint_dir)
+                    raise RuntimeError("abort_eval_loss_exceeded")
+                if (
+                    baseline_eval_loss is not None
+                    and ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA >= 0
+                    and eval_loss
+                    > baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
+                ):
+                    checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-abort-step{global_step}"
+                    model.save_pretrained(str(checkpoint_dir))
+                    tokenizer.save_pretrained(str(checkpoint_dir))
+                    allowed = baseline_eval_loss + ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA
+                    print(
+                        f"ABORT: eval_loss {eval_loss:.4f} exceeded baseline "
+                        f"{baseline_eval_loss:.4f} + "
+                        f"ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA="
+                        f"{ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA:.4f} "
+                        f"(allowed={allowed:.4f}); emergency checkpoint saved: "
+                        f"{checkpoint_dir}",
+                        flush=True,
+                    )
+                    kg1_teach_card(
+                        "ABORT",
+                        "STOP",
+                        what="Validation loss regrediu contra o baseline permitido.",
+                        why="Baseline existe para impedir gastar GPU quando o treino vai para direcao errada.",
+                        watch="Se boxed_tail tambem piorou, o risco de score real piorar e alto.",
+                        data=[
+                            ("eval_loss", f"{eval_loss:.4f}"),
+                            ("baseline_eval_loss", f"{baseline_eval_loss:.4f}"),
+                            ("allowed", f"{allowed:.4f}"),
+                            ("checkpoint", checkpoint_dir),
+                        ],
+                        next_action="Abrir manifesto e comparar SCORE_PROXY por familia.",
+                    )
+                    upload_checkpoint_during_training(checkpoint_dir)
+                    raise RuntimeError("abort_eval_loss_regressed_vs_baseline")
+
+            if SAVE_EVERY_STEPS > 0 and global_step > 0 and global_step % SAVE_EVERY_STEPS == 0:
+                checkpoint_dir = Path(OUTPUT_DIR) / f"checkpoint-{global_step}"
+                model.save_pretrained(str(checkpoint_dir))
+                tokenizer.save_pretrained(str(checkpoint_dir))
+                print(f"Checkpoint saved: {checkpoint_dir}")
+                upload_checkpoint_during_training(checkpoint_dir)
+
+            accum_loss = 0.0
+            global_step += 1
+
+            if global_step % 25 == 0:
+                gc.collect()
+                torch.cuda.empty_cache()
+
+    elapsed = time.time() - start_time
+    print("\n=== TRAINING COMPLETE ===")
+    print(f"Time: {elapsed / 3600:.2f}h")
+    print(f"Final step: {global_step}")
+
+    final_dir = Path(OUTPUT_DIR) / "final_adapter"
+    model.save_pretrained(str(final_dir))
+    tokenizer.save_pretrained(str(final_dir))
+
+    final_eval_loss = float("nan")
+    if val_data:
+        final_score_proxy_report = evaluate_score_proxy(
+            model,
+            val_data,
+            tokenizer,
+            SCORE_PROXY_EVAL_MAX_EXAMPLES,
+            label="final",
+            baseline_report=baseline_score_proxy_report,
+        )
+        score_proxy_history.append(compact_score_proxy_report(final_score_proxy_report))
+        final_eval_loss = float(final_score_proxy_report["loss"])
+        best_eval_loss = min(best_eval_loss, final_eval_loss)
+        enforce_final_score_proxy_non_regression(final_score_proxy_report, baseline_score_proxy_report)
+        print(
+            f"Final eval loss: {final_eval_loss:.4f}; "
+            f"best eval loss: {best_eval_loss:.4f}; "
+            f"boxed_tail_exact_rate="
+            f"{final_score_proxy_report['boxed_tail_exact_rate']:.4f}"
+        )
+        if (
+            baseline_eval_loss is not None
+            and REQUIRE_FINAL_EVAL_LTE_BASELINE
+            and final_eval_loss > baseline_eval_loss + MAX_FINAL_EVAL_REGRESSION
+        ):
+            allowed = baseline_eval_loss + MAX_FINAL_EVAL_REGRESSION
+            print(
+                f"ABORT: final_eval_loss {final_eval_loss:.4f} exceeded baseline "
+                f"{baseline_eval_loss:.4f} + MAX_FINAL_EVAL_REGRESSION="
+                f"{MAX_FINAL_EVAL_REGRESSION:.4f} (allowed={allowed:.4f}). "
+                "Final adapter was saved for forensics only and must not be submitted.",
+                flush=True,
+            )
+            kg1_teach_card(
+                "ABORT",
+                "STOP",
+                what="A avaliacao final ficou pior que o baseline permitido.",
+                why="Mesmo com adapter salvo, ele e material de forense, nao candidato de submissao.",
+                watch="Nao empacotar nem submeter este adapter sem nova prova raw-output.",
+                data=[
+                    ("final_eval_loss", f"{final_eval_loss:.4f}"),
+                    ("baseline_eval_loss", f"{baseline_eval_loss:.4f}"),
+                    ("allowed", f"{allowed:.4f}"),
+                ],
+                next_action="Usar manifesto para diagnosticar familia e relancar com ajuste menor.",
+            )
+            raise RuntimeError("final_eval_regressed_vs_baseline")
+
+    manifest = make_manifest(
+        train_path=train_path,
+        val_path=val_path,
+        pretokenized_archive_path=pretokenized_archive_resolved_path,
+        train_count=len(train_examples),
+        val_count=len(val_examples),
+        total_steps=total_steps,
+        final_step=global_step,
+        best_eval_loss=best_eval_loss,
+        elapsed_seconds=elapsed,
+    )
+    manifest["training"]["baseline_eval_loss"] = baseline_eval_loss
+    manifest["training"]["final_eval_loss"] = final_eval_loss
+    manifest["training"]["baseline_gate"] = {
+        "baseline_eval_before_train": BASELINE_EVAL_BEFORE_TRAIN,
+        "baseline_eval_loss": baseline_eval_loss,
+        "final_eval_loss": final_eval_loss,
+        "require_final_eval_lte_baseline": REQUIRE_FINAL_EVAL_LTE_BASELINE,
+        "max_final_eval_regression": MAX_FINAL_EVAL_REGRESSION,
+        "abort_eval_relative_to_baseline_delta": ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA,
+        "require_final_score_proxy_non_regression": REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION,
+        "max_final_boxed_tail_loss_regression": MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION,
+        "max_final_boxed_tail_token_accuracy_drop": MAX_FINAL_BOXED_TAIL_TOKEN_ACCURACY_DROP,
+        "max_final_boxed_tail_exact_rate_drop": MAX_FINAL_BOXED_TAIL_EXACT_RATE_DROP,
+        "require_score_trajectory_pass": REQUIRE_SCORE_TRAJECTORY_PASS,
+        "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
+    }
+    manifest["training"]["score_proxy"] = {
+        "enabled": SCORE_PROXY_EVAL_CHECK,
+        "schema_version": "kg1_score_proxy_eval_v1",
+        "eval_max_examples": SCORE_PROXY_EVAL_MAX_EXAMPLES,
+        "score_trajectory_schema_version": "kg1_score_trajectory_v1",
+        "score_trajectory_check": SCORE_TRAJECTORY_CHECK,
+        "score_trajectory_thresholds": {
+            "min_weak_exact_delta": SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA,
+            "max_protected_exact_drop": SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP,
+            "max_overall_exact_drop": SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP,
+            "max_boxed_loss_regression": SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION,
+        },
+        "baseline": baseline_score_proxy_report,
+        "final": final_score_proxy_report,
+        "history": score_proxy_history,
+        "decision_use": (
+            "Use this as a cheap training-direction indicator. Good loss alone is not enough; "
+            "boxed_tail_loss should fall and boxed_tail_token_accuracy/exact_rate should improve, "
+            "especially in bit_manipulation and equation_transform. Kaggle score claims still "
+            "require raw_generation/full947 verification."
+        ),
+    }
+    manifest["score_contract_runtime"] = score_contract_model_report
+    manifest_path = final_dir / "v90_training_manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
+    print(f"Final adapter saved: {final_dir}")
+    print(f"Manifest saved: {manifest_path}")
+    kg1_teach_card(
+        "JOB_DONE",
+        "OK",
+        what="Treino terminou e salvou adapter final com manifesto.",
+        why="O manifesto guarda score contract e score-proxy para decidir se vale gerar raw_output.",
+        watch="Este fim de treino ainda nao e score Kaggle; score real exige vLLM greedy + raw_output + V1241 full947.",
+        data=[
+            ("final_step", global_step),
+            ("best_eval_loss", f"{best_eval_loss:.4f}"),
+            ("final_eval_loss", f"{final_eval_loss:.4f}"),
+            ("final_adapter", final_dir),
+            ("manifest", manifest_path),
+        ],
+        next_action="Rodar avaliacao raw-output antes de qualquer claim ou submissao.",
+    )
+
+    upload_outputs(final_dir)
+
+
+if __name__ == "__main__":
+    train()
