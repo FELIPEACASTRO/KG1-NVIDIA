@@ -22,7 +22,7 @@ PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "1921d02b2fbfb2f2651f3fe62ac23b21f8f53e9bd0b6e10c274bcb4b084d57f6"
+PACK_SHA256 = "5404cc746106c2acfafe50a6bfc99843cf4f5d1bf3ab5773530a62b3288314bb"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
@@ -78,9 +78,6 @@ ROOT.mkdir(parents=True, exist_ok=True)
 repo_commit = os.environ.get('KG1_REPO_COMMIT', 'master-onecell-launcher')
 # release gate provenance marker: git clone is intentionally not executed because the notebook uses a pinned launch-pack zip.
 PHASE = os.environ.get('KG1_V1243_PHASE', 'bit_specialist')
-WRAPPER_RUN_ID = 'v1243_' + PHASE + '_wrapper_' + time.strftime('%Y%m%d_%H%M%S')
-WRAPPER_EVENTS_LOG = LOG_ROOT / (WRAPPER_RUN_ID + '_events.log')
-WRAPPER_STATUS_PATH = LOG_ROOT / (WRAPPER_RUN_ID + '_status.json')
 TARGET_ACCURACY = os.environ.get('KG1_TARGET_ACCURACY', '0.89')
 RUN_MODEL_DRYRUN = os.environ.get('KG1_V1243_RUN_MODEL_DRYRUN', '0')
 RUN_TRAIN = os.environ.get('KG1_V1243_RUN_TRAIN', '0')
@@ -198,6 +195,11 @@ os.environ.setdefault('KG1_DISABLE_HEALTH_WATCHDOG', '0')
 os.environ.setdefault('KG1_REQUIRE_LIVE_LOG_UPLOAD', REQUIRE_LIVE_LOG_UPLOAD)
 os.environ.setdefault('KG1_ACCEPT_GPU_SPEND', ACCEPT_GPU_SPEND)
 os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')
+
+# Create wrapper IDs only after Colab Secrets/env have finalized PHASE.
+WRAPPER_RUN_ID = 'v1243_' + PHASE + '_wrapper_' + time.strftime('%Y%m%d_%H%M%S')
+WRAPPER_EVENTS_LOG = LOG_ROOT / (WRAPPER_RUN_ID + '_events.log')
+WRAPPER_STATUS_PATH = LOG_ROOT / (WRAPPER_RUN_ID + '_status.json')
 
 def sha256_file(path):
     digest = hashlib.sha256()
@@ -363,8 +365,9 @@ def refresh_adapter_defaults_from_pack():
         'EXPECTED_INIT_ADAPTER_CONFIG_SHA256': 'EXPECTED_INIT_ADAPTER_CONFIG_SHA256_VALUE',
         'EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256': 'EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256_VALUE',
     }}
+    force_pack_adapter_defaults = os.environ.get('KG1_V1243_FORCE_PACK_ADAPTER_DEFAULTS', '0') == '1'
     for env_key in defaults:
-        if not os.environ.get(env_key) and phase_env.get(env_key):
+        if (force_pack_adapter_defaults or not os.environ.get(env_key)) and phase_env.get(env_key):
             os.environ[env_key] = str(phase_env[env_key])
     INIT_ADAPTER_REPO_VALUE = os.environ.get('INIT_ADAPTER_REPO', INIT_ADAPTER_REPO_VALUE)
     INIT_ADAPTER_REVISION_VALUE = os.environ.get('INIT_ADAPTER_REVISION', INIT_ADAPTER_REVISION_VALUE)
@@ -376,6 +379,7 @@ def refresh_adapter_defaults_from_pack():
         'init_adapter_revision_ready': bool(INIT_ADAPTER_REVISION_VALUE),
         'config_sha_ready': bool(EXPECTED_INIT_ADAPTER_CONFIG_SHA256_VALUE),
         'weights_sha_ready': bool(EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256_VALUE),
+        'force_pack_adapter_defaults': force_pack_adapter_defaults,
     }}, sort_keys=True), flush=True)
 
 def verify_import_statement(label, statement):
@@ -649,18 +653,22 @@ if RUN_MODEL_DRYRUN != '1':
     print('model_dryrun_skipped=True set KG1_V1243_RUN_MODEL_DRYRUN=1 to enable', flush=True)
     wrapper_event('MODEL_DRYRUN', 'SKIPPED', reason='KG1_V1243_RUN_MODEL_DRYRUN is not 1')
 else:
-    wrapper_event(
-        'MODEL_DRYRUN',
-        'START',
-        init_adapter_repo=INIT_ADAPTER_REPO_VALUE,
-        init_adapter_revision=INIT_ADAPTER_REVISION_VALUE,
-    )
-    verify_initial_adapter_reference()
-    ensure_gpu_model_dependencies()
     model_run_id = 'v1243_' + PHASE + '_modeldry_' + time.strftime('%Y%m%d_%H%M%S')
     os.environ['RUN_ID'] = model_run_id
     os.environ['KG1_LIVE_LOG_HF_PATH'] = 'colab/' + model_run_id + '/train.log'
     os.environ['KG1_LIVE_STATUS_HF_PATH'] = 'colab/' + model_run_id + '/status.json'
+    wrapper_event(
+        'MODEL_DRYRUN',
+        'START',
+        run_id=model_run_id,
+        hf_log_path=os.environ['KG1_LIVE_LOG_HF_PATH'],
+        init_adapter_repo=INIT_ADAPTER_REPO_VALUE,
+        init_adapter_revision=INIT_ADAPTER_REVISION_VALUE,
+    )
+    wrapper_event('MODEL_DRYRUN_PREFLIGHT', 'START', run_id=model_run_id)
+    verify_initial_adapter_reference()
+    ensure_gpu_model_dependencies()
+    wrapper_event('MODEL_DRYRUN_PREFLIGHT', 'OK', run_id=model_run_id)
     run_cmd(
         [
             sys.executable,
@@ -738,10 +746,14 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
         "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n"
         "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'\n"
         "os.environ['KG1_V1243_RUN_TRAIN'] = '0'\n"
+        "os.environ['KG1_V1243_FORCE_PACK_ADAPTER_DEFAULTS'] = '1'\n"
+        "os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'\n"
         "RUN_MODEL_DRYRUN = '1'\n"
         "ACCEPT_GPU_SPEND = '1'\n"
         "RUN_TRAIN = '0'\n"
-        "print('model_dryrun_launcher_hard_lock = true', flush=True)\n\n"
+        "INSTALL_CAUSAL_CONV1D = '1'\n"
+        "print('model_dryrun_launcher_hard_lock = true', flush=True)\n"
+        "print('force_pack_adapter_defaults = true', flush=True)\n\n"
         "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
     )
     .replace(

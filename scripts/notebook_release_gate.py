@@ -99,6 +99,174 @@ BANNED_SNIPPETS = [
     "v217_score_push_train_no_prompt_trunc",
 ]
 
+V1243_REALTIME_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
+V1243_MODEL_DRYRUN_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
+V1243_NOTEBOOK_RELS = {V1243_REALTIME_NOTEBOOK_REL, V1243_MODEL_DRYRUN_NOTEBOOK_REL}
+
+V218_NOTEBOOK_REL = "notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb"
+V218_TRAIN_REL = "data/v217/v217_short_answer_train.jsonl"
+V218_VAL_REL = "data/v217/v217_short_answer_val.jsonl"
+V218_TRAIN_SHA256 = "a56938b1ae9eb471b779ebfc415ee88c05322941732128752680317495157984"
+V218_VAL_SHA256 = "65c4cb88b8ff2fc96940ccea33b8ca493769790c7ae80d27f2b69ac818fc6451"
+V218_TRAIN_ROWS = 10206
+V218_VAL_ROWS = 681
+
+V218_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v218_decode_rescue_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V218_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "train sha constant": V218_TRAIN_SHA256,
+    "val sha constant": V218_VAL_SHA256,
+    "train sha gate": "observed_train_sha256 != EXPECTED_TRAIN_SHA256",
+    "val sha gate": "observed_val_sha256 != EXPECTED_VAL_SHA256",
+    "safetensors fallback": "pip_install_safetensors.log",
+    "adapter tensor count": "tensor_count = len(handle.keys())",
+    "v194 tensor gate": "V194 adapter tensor count mismatch",
+    "v217 size gate": "V217 final adapter size mismatch",
+    "v217 tensor floor gate": "V217 final adapter tensor count below expected floor",
+    "target modules gate": "target_modules mismatch",
+    "target parameters gate": "target_parameters mismatch",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+    "weak total gate": "WEAK_MIN_FOR_FULL = 193",
+    "weak eq gate": "WEAK_EQ_MIN_FOR_FULL = 60",
+    "weak bit gate": "WEAK_BIT_MIN_FOR_FULL = 133",
+    "weak trunc gate": "WEAK_MAX_TRUNC_FOR_FULL = 3",
+    "decode max tokens arg": "--max-tokens",
+    "decode prompt suffix arg": "--prompt-suffix",
+    "decode disable thinking arg": "--disable-thinking",
+    "full eval blocked": "Full eval is intentionally not automatic in V218 diagnostic notebook",
+}
+
+V219_NOTEBOOK_REL = "notebooks/KG1_V219_WEAK_DECODE_AB_COLAB.ipynb"
+V219_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v219_weak_decode_ab_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V219_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "train sha constant": V218_TRAIN_SHA256,
+    "val sha constant": V218_VAL_SHA256,
+    "v217 candidate": "v217_think1_mtok3584",
+    "v194 candidate": "v194_think1_mtok3584",
+    "thinking default false disable flag": "V219_DISABLE_THINKING_DEFAULT = False",
+    "thinking default guard": "V219 must keep thinking enabled by default",
+    "run train hard guard": "V219 is decode A/B only; RUN_TRAIN must stay false.",
+    "max model len arg": "--max-model-len",
+    "warmup rows arg": "--warmup-rows",
+    "weak gate": "weak_gate_pass_for_full",
+    "full eval opt in": "RUN_FULL_IF_GATE",
+    "full eval blocked by default": "Full eval is blocked by default to avoid accidental GPU spend",
+    "v220 roadmap": "Build V220 solver-trace training data for bit/equation families",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+}
+
+V220_NOTEBOOK_REL = "notebooks/KG1_V220_PUBLIC_ADAPTER_PROBE_COLAB.ipynb"
+V220_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v220_public_adapter_probe_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V220_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "public adapter repo": "NARIBOW_ADAPTER_REPO = os.environ.get('KG1_V220_PUBLIC_ADAPTER_REPO', 'Naribow/nemotron-sft-lora')",
+    "public adapter local path": "NARIBOW_ADAPTER = OUT_ROOT / 'hf_adapters'",
+    "hf snapshot download": "snapshot_download(",
+    "hf adapter allow patterns": "allow_patterns=['adapter_config.json', 'adapter_model.safetensors', 'README.md']",
+    "public adapter completeness": "NARIBOW_ADAPTER complete",
+    "public adapter candidate": "naribow_public_think1_mtok3584",
+    "init adapter public": "INIT_ADAPTER_DIR = NARIBOW_ADAPTER",
+    "thinking default false disable flag": "V220_DISABLE_THINKING_DEFAULT = False",
+    "thinking default guard": "V220 must keep thinking enabled by default",
+    "run train hard guard": "V220 is public adapter probe only; RUN_TRAIN must stay false.",
+    "max model len arg": "--max-model-len",
+    "warmup rows arg": "--warmup-rows",
+    "weak gate": "weak_gate_pass_for_full",
+    "full eval opt in": "RUN_FULL_IF_GATE",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+    "manual review roadmap": "Manual review required before packaging; notebook still has hard submit lock.",
+}
+
+V221_NOTEBOOK_REL = "notebooks/KG1_V221_CANDIDATE_REGISTRY_WEAK_AB_COLAB.ipynb"
+V221_REQUIRED_FILES = [
+    ".gitattributes",
+    V218_TRAIN_REL,
+    V218_VAL_REL,
+    "data/v217/v217_short_answer_manifest.json",
+    "scripts/analyze_eval_predictions.py",
+    "scripts/build_v221_candidate_registry_weak_ab_colab.py",
+    "scripts/evaluate_lora_adapter.py",
+    "scripts/evaluate_lora_adapters_batch.py",
+    "scripts/notebook_release_gate.py",
+    "src/__init__.py",
+    "src/competition_utils.py",
+]
+
+V221_REQUIRED_SNIPPETS = {
+    "repo clone branch": "'git', 'clone', '--depth', '1', '--branch', REPO_BRANCH",
+    "repo sys.path insert": "sys.path.insert(0, str(ROOT))",
+    "repo sys.path log": "repo_root_on_sys_path",
+    "train sha constant": V218_TRAIN_SHA256,
+    "val sha constant": V218_VAL_SHA256,
+    "registry object": "CANDIDATE_REGISTRY",
+    "registry ready candidates": "v221_ready_candidates.json",
+    "batch evaluator script": "scripts/evaluate_lora_adapters_batch.py",
+    "batch candidates arg": "--candidates-json",
+    "batch summary": "batch_candidate_summary.json",
+    "hf candidate kind": "hf_model_adapter",
+    "kaggle dataset candidate kind": "kaggle_dataset_adapter",
+    "kaggle model candidate kind": "kaggle_model_adapter",
+    "naribow candidate": "Naribow/nemotron-sft-lora",
+    "dgxchen candidate": "dgxchen/trained-adapter",
+    "konbu candidate": "konbu17/exp026-s012-lora",
+    "kienngx candidate": "kienngx/nemotron-nano-30b-trained/Triton/tinker-adapter/1",
+    "thinking default false disable flag": "V221_DISABLE_THINKING_DEFAULT = False",
+    "thinking default guard": "V221 must keep thinking enabled by default",
+    "run train hard guard": "V221 is candidate weak A/B only; RUN_TRAIN must stay false.",
+    "max candidates control": "V221_MAX_CANDIDATES",
+    "weak gate": "weak_gate_pass_for_full",
+    "full eval opt in": "RUN_FULL_IF_GATE",
+    "full eval blocked by default": "Full eval is intentionally not automatic in V221 candidate registry notebook",
+    "submit lock false": "ALLOW_KAGGLE_SUBMIT = False",
+    "submit lock guard": "Kaggle submission is disabled",
+}
+
 
 @dataclass
 class Finding:
@@ -149,6 +317,11 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def count_lines(path: Path) -> int:
+    with path.open("r", encoding="utf-8") as handle:
+        return sum(1 for _ in handle)
+
+
 def load_notebook(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -170,6 +343,13 @@ def contains_any(text: str, snippets: list[str]) -> bool:
 
 def missing_snippets(text: str, snippets: list[str]) -> list[str]:
     return [snippet for snippet in snippets if snippet not in text]
+
+
+def read_repo_text(rel_path: str) -> str:
+    path = ROOT / rel_path
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
 
 
 def is_training_or_eval_notebook(text: str) -> bool:
@@ -288,6 +468,359 @@ def audit_training_eval_contract(text: str, findings: list[Finding]) -> None:
         add(findings, "error", "hard_submit_lock_not_false", "ALLOW_KAGGLE_SUBMIT must be False")
 
 
+def audit_v218_decode_rescue_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for V218 regressions already seen in Colab.
+
+    This is intentionally inside the central release gate. When a V218 notebook
+    error is found, add the regression check here so future notebook edits fail
+    before GPU time is spent.
+    """
+
+    if repo_rel(path) != V218_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 9:
+        add(findings, "error", "v218_code_cell_count", f"expected 9 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v218_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V218_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v218_required_snippet_missing", name)
+
+    for rel_path in V218_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v218_required_file_missing", rel_path)
+
+    gitattributes = read_repo_text(".gitattributes")
+    for line in ["*.ipynb text eol=lf", "*.jsonl text eol=lf", "*.py text eol=lf"]:
+        if line not in gitattributes:
+            add(findings, "error", "v218_gitattributes_missing_lf_rule", line)
+
+    train_path = ROOT / V218_TRAIN_REL
+    val_path = ROOT / V218_VAL_REL
+    if train_path.exists():
+        observed = sha256_file(train_path)
+        if observed != V218_TRAIN_SHA256:
+            add(findings, "error", "v218_train_sha_mismatch", observed)
+        rows = count_lines(train_path)
+        if rows != V218_TRAIN_ROWS:
+            add(findings, "error", "v218_train_row_count_mismatch", str(rows))
+    if val_path.exists():
+        observed = sha256_file(val_path)
+        if observed != V218_VAL_SHA256:
+            add(findings, "error", "v218_val_sha_mismatch", observed)
+        rows = count_lines(val_path)
+        if rows != V218_VAL_ROWS:
+            add(findings, "error", "v218_val_row_count_mismatch", str(rows))
+
+    analyzer_text = read_repo_text("scripts/analyze_eval_predictions.py")
+    evaluator_text = read_repo_text("scripts/evaluate_lora_adapter.py")
+    builder_text = read_repo_text("scripts/build_v218_decode_rescue_colab.py")
+    competition_text = read_repo_text("src/competition_utils.py")
+
+    for label, script_text in [
+        ("analyze_eval_predictions", analyzer_text),
+        ("evaluate_lora_adapter", evaluator_text),
+    ]:
+        if "ROOT = Path(__file__).resolve().parents[1]" not in script_text or "sys.path.insert(0, str(ROOT))" not in script_text:
+            add(findings, "error", "v218_script_missing_repo_sys_path", label)
+
+    for option in ["--max-tokens", "--max-num-seqs", "--disable-thinking", "--prompt-suffix"]:
+        if option not in evaluator_text:
+            add(findings, "error", "v218_evaluator_cli_option_missing", option)
+
+    for snippet in V218_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v218_builder_required_snippet_missing", snippet)
+
+    for snippet in [
+        "MODEL_NAME = \"nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\"",
+        "MODEL_REVISION = \"cbd3fa9f933d55ef16a84236559f4ee2a0526848\"",
+        "\"max_lora_rank\": 32",
+        "\"max_model_len\": 8192",
+        "\"max_tokens\": 7680",
+        "def extract_final_answer",
+        "def answers_equivalent",
+    ]:
+        if snippet not in competition_text:
+            add(findings, "error", "v218_competition_utils_contract_missing", snippet)
+
+
+def audit_v219_weak_decode_ab_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for the V219 weak-only decode A/B notebook."""
+
+    if repo_rel(path) != V219_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 8:
+        add(findings, "error", "v219_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v219_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V219_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v219_required_snippet_missing", name)
+
+    if "--disable-thinking" in text:
+        add(findings, "error", "v219_disable_thinking_banned", "V219 must not run the V218 failed no-thinking decode path")
+
+    for rel_path in V219_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v219_required_file_missing", rel_path)
+
+    train_path = ROOT / V218_TRAIN_REL
+    val_path = ROOT / V218_VAL_REL
+    if train_path.exists():
+        observed = sha256_file(train_path)
+        if observed != V218_TRAIN_SHA256:
+            add(findings, "error", "v219_train_sha_mismatch", observed)
+        rows = count_lines(train_path)
+        if rows != V218_TRAIN_ROWS:
+            add(findings, "error", "v219_train_row_count_mismatch", str(rows))
+    if val_path.exists():
+        observed = sha256_file(val_path)
+        if observed != V218_VAL_SHA256:
+            add(findings, "error", "v219_val_sha_mismatch", observed)
+        rows = count_lines(val_path)
+        if rows != V218_VAL_ROWS:
+            add(findings, "error", "v219_val_row_count_mismatch", str(rows))
+
+    evaluator_text = read_repo_text("scripts/evaluate_lora_adapter.py")
+    builder_text = read_repo_text("scripts/build_v219_weak_decode_ab_colab.py")
+    for option in ["--max-tokens", "--max-model-len", "--max-num-seqs", "--warmup-rows", "--prompt-suffix"]:
+        if option not in evaluator_text:
+            add(findings, "error", "v219_evaluator_cli_option_missing", option)
+    for snippet in [
+        "warmup_rows = int(config.get(\"warmup_rows\", 4))",
+        "eval_config[\"max_model_len\"] = int(args.max_model_len)",
+        "eval_config[\"warmup_rows\"] = max(0, int(args.warmup_rows))",
+    ]:
+        if snippet not in evaluator_text:
+            add(findings, "error", "v219_evaluator_warmup_model_len_contract_missing", snippet)
+    for snippet in V219_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v219_builder_required_snippet_missing", snippet)
+
+
+def audit_v220_public_adapter_probe_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for the V220 public-adapter probe notebook."""
+
+    if repo_rel(path) != V220_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 8:
+        add(findings, "error", "v220_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v220_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V220_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v220_required_snippet_missing", name)
+
+    if "--disable-thinking" in text:
+        add(findings, "error", "v220_disable_thinking_banned", "V220 must not run the V218 failed no-thinking decode path")
+    if "RUN_FULL_IF_GATE = os.environ.get('KG1_V220_RUN_FULL_IF_GATE', '0')" not in text:
+        add(findings, "error", "v220_full_eval_default_not_blocked", "full eval must default off")
+    if "NARIBOW_ADAPTER" not in text or "V217_FINAL_ADAPTER" in text and "'adapter': V217_FINAL_ADAPTER" in text:
+        add(findings, "error", "v220_wrong_candidate_adapter", "V220 must evaluate the public Naribow adapter, not V217")
+
+    for rel_path in V220_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v220_required_file_missing", rel_path)
+
+    evaluator_text = read_repo_text("scripts/evaluate_lora_adapter.py")
+    builder_text = read_repo_text("scripts/build_v220_public_adapter_probe_colab.py")
+    for option in ["--max-tokens", "--max-model-len", "--max-num-seqs", "--warmup-rows", "--prompt-suffix"]:
+        if option not in evaluator_text:
+            add(findings, "error", "v220_evaluator_cli_option_missing", option)
+    for snippet in V220_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v220_builder_required_snippet_missing", snippet)
+
+
+def audit_v221_candidate_registry_contract(path: Path, notebook: dict[str, Any], text: str, findings: list[Finding]) -> None:
+    """Strict one-file gate for the V221 candidate-registry weak A/B notebook."""
+
+    if repo_rel(path) != V221_NOTEBOOK_REL:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 8:
+        add(findings, "error", "v221_code_cell_count", f"expected 8 code cells, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v221_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    for name, snippet in V221_REQUIRED_SNIPPETS.items():
+        if snippet not in text:
+            add(findings, "error", "v221_required_snippet_missing", name)
+
+    if "--disable-thinking" in text:
+        add(findings, "error", "v221_disable_thinking_banned", "V221 must keep thinking enabled; no no-thinking decode path in notebook")
+    if "KG1_V221_RUN_FULL_IF_GATE', '0'" not in text:
+        add(findings, "error", "v221_full_eval_default_not_blocked", "full eval must default off")
+    if "RUN_TRAIN = os.environ.get('KG1_V221_RUN_TRAIN', '0')" not in text:
+        add(findings, "error", "v221_train_default_not_blocked", "training must default off and be hard blocked")
+    if "kaggle competitions submit" in text:
+        add(findings, "error", "v221_submit_command_banned", "candidate probe notebook must not contain Kaggle submit command")
+    for bad_literal in ['"required": true', '"required": false', '"required": null']:
+        if bad_literal in text:
+            add(
+                findings,
+                "error",
+                "v221_json_boolean_literal_in_python_cell",
+                f"embedded registry must be valid Python at runtime; found {bad_literal}",
+            )
+
+    for rel_path in V221_REQUIRED_FILES:
+        if not (ROOT / rel_path).exists():
+            add(findings, "error", "v221_required_file_missing", rel_path)
+
+    train_path = ROOT / V218_TRAIN_REL
+    val_path = ROOT / V218_VAL_REL
+    if train_path.exists():
+        observed = sha256_file(train_path)
+        if observed != V218_TRAIN_SHA256:
+            add(findings, "error", "v221_train_sha_mismatch", observed)
+        rows = count_lines(train_path)
+        if rows != V218_TRAIN_ROWS:
+            add(findings, "error", "v221_train_row_count_mismatch", str(rows))
+    if val_path.exists():
+        observed = sha256_file(val_path)
+        if observed != V218_VAL_SHA256:
+            add(findings, "error", "v221_val_sha_mismatch", observed)
+        rows = count_lines(val_path)
+        if rows != V218_VAL_ROWS:
+            add(findings, "error", "v221_val_row_count_mismatch", str(rows))
+
+    batch_text = read_repo_text("scripts/evaluate_lora_adapters_batch.py")
+    builder_text = read_repo_text("scripts/build_v221_candidate_registry_weak_ab_colab.py")
+
+    for option in [
+        "--candidates-json",
+        "--max-tokens",
+        "--max-model-len",
+        "--max-num-seqs",
+        "--warmup-rows",
+        "--prompt-suffix",
+        "--continue-on-error",
+    ]:
+        if option not in batch_text:
+            add(findings, "error", "v221_batch_evaluator_cli_option_missing", option)
+
+    for snippet in [
+        "from vllm import LLM",
+        "from vllm.lora.request import LoRARequest",
+        "llm = LLM(**llm_kwargs)",
+        "render_prompts(tokenizer, questions, config)",
+        "validate_adapter_dir",
+        "for lora_id, candidate in enumerate(valid_candidates",
+        "LoRARequest(candidate[\"name\"], lora_id, str(candidate[\"adapter\"]))",
+        "batch_candidate_summary.csv",
+        "batch_candidate_summary.json",
+    ]:
+        if snippet not in batch_text:
+            add(findings, "error", "v221_batch_evaluator_contract_missing", snippet)
+
+    for snippet in [
+        "snapshot_download(",
+        "allow_patterns=['adapter_config.json', 'adapter_model.safetensors', 'adapter_model.bin', 'README.md']",
+        "cmd = ['kaggle', 'datasets', 'download'",
+        "cmd = ['kaggle', 'models', 'instances', 'versions', 'download'",
+        "has_kaggle_credentials",
+        "v221_ready_candidates.json",
+        "v221_candidate_resolution.csv",
+        "batch_candidate_summary.json",
+    ]:
+        if snippet not in builder_text:
+            add(findings, "error", "v221_builder_candidate_resolution_contract_missing", snippet)
+
+    for snippet in V221_REQUIRED_SNIPPETS.values():
+        if snippet not in builder_text:
+            add(findings, "error", "v221_builder_required_snippet_missing", snippet)
+
+
+def audit_v1243_launcher_contract(
+    path: Path,
+    notebook: dict[str, Any],
+    code_text: str,
+    findings: list[Finding],
+) -> None:
+    rel = repo_rel(path)
+    if rel not in V1243_NOTEBOOK_RELS:
+        return
+
+    code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
+    outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
+    if len(code_cells) != 1:
+        add(findings, "error", "v1243_code_cell_count", f"expected one one-click code cell, found {len(code_cells)}")
+    if outputs_total:
+        add(findings, "error", "v1243_notebook_has_outputs", f"notebook must be committed clean; outputs={outputs_total}")
+
+    required_snippets = [
+        "EXPECTED_PACK_SHA256",
+        "observed_pack_sha != EXPECTED_PACK_SHA256",
+        "refresh_adapter_defaults_from_pack()",
+        "adapter_defaults_from_pack =",
+        "WRAPPER_EVENT ",
+        "wrapper_excepthook",
+        "upload_wrapper_artifact(WRAPPER_EVENTS_LOG",
+        "MODEL_DRYRUN_PREFLIGHT",
+        "validate_gpu_phase_preconditions(cuda_available, gpu_total_gib)",
+        "verify_initial_adapter_reference()",
+        "ensure_gpu_model_dependencies()",
+        "KG1_REQUIRE_LIVE_LOG_UPLOAD",
+        "KG1_LIVE_LOG_HF_REPO",
+        "KG1_WATCHDOG_STALE_SECONDS",
+        "ALLOW_KAGGLE_SUBMIT = False",
+    ]
+    for snippet in required_snippets:
+        if snippet not in code_text:
+            add(findings, "error", "v1243_required_snippet_missing", snippet)
+
+    if code_text.count("'--run-id'") < 3 and code_text.count('"--run-id"') < 3:
+        add(findings, "error", "v1243_run_id_not_passed_all_phases", "tokenize/modeldry/real train must pass --run-id")
+    if code_text.count("'--require-live-log-upload'") < 3 and code_text.count('"--require-live-log-upload"') < 3:
+        add(findings, "error", "v1243_live_log_not_required_all_phases", "all phases must require live-log upload")
+
+    block_start = code_text.find("=== V1243 MODEL DRYRUN START ===")
+    model_run_id = code_text.find("model_run_id = 'v1243_' + PHASE + '_modeldry_'", block_start)
+    model_start = code_text.find("wrapper_event(\n        'MODEL_DRYRUN',\n        'START'", block_start)
+    model_pref_start = code_text.find("wrapper_event('MODEL_DRYRUN_PREFLIGHT', 'START'", block_start)
+    verify_adapter = code_text.find("verify_initial_adapter_reference()", block_start)
+    ensure_deps = code_text.find("ensure_gpu_model_dependencies()", block_start)
+    if not (0 <= model_run_id < model_start < model_pref_start < verify_adapter < ensure_deps):
+        add(
+            findings,
+            "error",
+            "v1243_modeldry_observability_order",
+            "modeldry run_id/HF paths and preflight event must exist before adapter/dependency preflight",
+        )
+
+    if rel == V1243_MODEL_DRYRUN_NOTEBOOK_REL:
+        model_required = [
+            "model_dryrun_launcher_hard_lock = true",
+            "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'",
+            "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'",
+            "os.environ['KG1_V1243_RUN_TRAIN'] = '0'",
+            "os.environ['KG1_V1243_FORCE_PACK_ADAPTER_DEFAULTS'] = '1'",
+            "os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'",
+            "force_pack_adapter_defaults = true",
+        ]
+        for snippet in model_required:
+            if snippet not in code_text:
+                add(findings, "error", "v1243_modeldry_hard_lock_missing", snippet)
+    elif "model_dryrun_launcher_hard_lock = true" in code_text:
+        add(findings, "error", "v1243_realtime_must_not_hard_lock_modeldry", "cheap realtime launcher must not force GPU modeldry")
+
+
 def audit_notebook(path: Path) -> NotebookAudit:
     findings: list[Finding] = []
     rel = repo_rel(path)
@@ -302,11 +835,17 @@ def audit_notebook(path: Path) -> NotebookAudit:
     if notebook.get("nbformat") != 4:
         add(findings, "error", "nbformat_not_4", f"got {notebook.get('nbformat')!r}")
     code_cells, markdown_cells = audit_cells(notebook, findings)
+    code_text = "\n".join(code_cells)
     text = "\n".join(markdown_cells + code_cells)
     if is_generated_colab(path, notebook, text):
         audit_colab_urls(path, text, findings)
-        audit_logging_and_commands("\n".join(code_cells), findings)
+        audit_logging_and_commands(code_text, findings)
         audit_training_eval_contract(text, findings)
+        audit_v1243_launcher_contract(path, notebook, code_text, findings)
+        audit_v218_decode_rescue_contract(path, notebook, text, findings)
+        audit_v219_weak_decode_ab_contract(path, notebook, text, findings)
+        audit_v220_public_adapter_probe_contract(path, notebook, text, findings)
+        audit_v221_candidate_registry_contract(path, notebook, text, findings)
     for snippet in GENERIC_REQUIRED_SNIPPETS:
         if is_training_or_eval_notebook(text) and snippet not in text:
             add(findings, "error", "generic_training_snippet_missing", snippet)
