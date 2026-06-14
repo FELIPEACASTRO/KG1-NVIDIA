@@ -217,6 +217,19 @@ def apply_safe_bool_overrides(env: dict[str, str]) -> dict[str, str]:
     return applied
 
 
+def enforce_micro_consolidation_real_train_guards(env: dict[str, str], args: argparse.Namespace) -> dict[str, str]:
+    """Force final score-trajectory guard for the deadline consolidation train."""
+
+    if args.phase != "micro_consolidation" or args.run_mode != "real_train":
+        return {}
+    enforced = {
+        "REQUIRE_SCORE_TRAJECTORY_PASS": "1",
+        "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY": "1",
+    }
+    env.update(enforced)
+    return enforced
+
+
 def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
     artifact_dir = args.artifact_dir.resolve()
     env = load_env_preview(args.env_preview.resolve(), args.phase)
@@ -263,12 +276,15 @@ def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
     applied_int_overrides = apply_safe_int_overrides(env)
     applied_float_overrides = apply_safe_float_overrides(env)
     applied_bool_overrides = apply_safe_bool_overrides(env)
+    enforced_guards = enforce_micro_consolidation_real_train_guards(env, args)
     if applied_int_overrides:
         env["KG1_V1243_APPLIED_INT_OVERRIDES_JSON"] = json.dumps(applied_int_overrides, sort_keys=True)
     if applied_float_overrides:
         env["KG1_V1243_APPLIED_FLOAT_OVERRIDES_JSON"] = json.dumps(applied_float_overrides, sort_keys=True)
     if applied_bool_overrides:
         env["KG1_V1243_APPLIED_BOOL_OVERRIDES_JSON"] = json.dumps(applied_bool_overrides, sort_keys=True)
+    if enforced_guards:
+        env["KG1_V1243_ENFORCED_GUARDS_JSON"] = json.dumps(enforced_guards, sort_keys=True)
     return env, run_id
 
 
@@ -470,6 +486,7 @@ def print_env_summary(env: dict[str, str], run_id: str, args: argparse.Namespace
         "KG1_V1243_APPLIED_INT_OVERRIDES_JSON",
         "KG1_V1243_APPLIED_FLOAT_OVERRIDES_JSON",
         "KG1_V1243_APPLIED_BOOL_OVERRIDES_JSON",
+        "KG1_V1243_ENFORCED_GUARDS_JSON",
     ]
     print("KG1_V1243_COLAB_LAUNCH_ENV_BEGIN", flush=True)
     print(json.dumps({key: env.get(key, "") for key in safe_keys}, indent=2, sort_keys=True), flush=True)

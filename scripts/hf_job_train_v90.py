@@ -2393,12 +2393,21 @@ def score_trajectory_report(
             f"{protected_exact_delta:.6f} < -{SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP:.6f}"
         )
 
-    weak_improved = weak_exact_delta is not None and weak_exact_delta > SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA
+    bit_improved = bit_exact_delta is not None and bit_exact_delta > SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA
+    equation_improved = (
+        equation_exact_delta is not None
+        and equation_exact_delta > SCORE_TRAJECTORY_MIN_WEAK_EXACT_DELTA
+    )
+    weak_improved = bit_improved and equation_improved
     protected_ok = protected_exact_delta is None or protected_exact_delta >= -SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP
     overall_ok = overall_exact_delta is None or overall_exact_delta >= -SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP
     boxed_loss_ok = boxed_loss_delta is None or boxed_loss_delta <= SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION
+    if not bit_improved:
+        reasons.append("bit_family_boxed_exact_not_above_baseline")
+    if not equation_improved:
+        reasons.append("equation_family_boxed_exact_not_above_baseline")
     if not weak_improved:
-        reasons.append("weak_family_boxed_exact_not_above_baseline")
+        reasons.append("weak_families_not_individually_above_baseline")
         if boxed_loss_delta is not None and boxed_loss_delta >= 0:
             risk = True
 
@@ -2408,7 +2417,7 @@ def score_trajectory_report(
         status = "RISK"
     elif weak_improved and protected_ok and overall_ok and boxed_loss_ok:
         status = "OK"
-        reasons.append("weak_families_improved_without_global_or_protected_regression")
+        reasons.append("bit_and_equation_improved_without_global_or_protected_regression")
     else:
         status = "WATCH"
         reasons.append("mixed_or_insufficient_evidence")
@@ -2425,6 +2434,9 @@ def score_trajectory_report(
             "protected_exact_rate_delta": protected_exact_delta,
             "overall_exact_rate_delta": overall_exact_delta,
             "boxed_tail_loss_delta": boxed_loss_delta,
+            "bit_manipulation_individually_improved": bit_improved,
+            "equation_transform_individually_improved": equation_improved,
+            "weak_families_individually_improved": weak_improved,
         },
         "family_deltas": family_deltas,
     }

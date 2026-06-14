@@ -137,9 +137,9 @@
   "env_preview": {
     "errors": []
   },
-  "env_preview_sha256": "11ff3575fea20478eb95f43895141fa4a2371a311caf8c05c80e68f2e8c7ba3f",
+  "env_preview_sha256": "5416b74ac3fdfd8325f20a526395eb36c81ac1d9269e6a993574b834493b7323",
   "errors": [],
-  "generated_at_utc": "2026-06-14T15:51:55+00:00",
+  "generated_at_utc": "2026-06-14T16:21:04+00:00",
   "manifest_commands": {
     "commands": {
       "baseline_identity_probe_086_answer_only": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
@@ -151,7 +151,7 @@
     },
     "errors": []
   },
-  "manifest_sha256": "79b383b739d036331b0687fddd16f87e9a99de9b15581a8b9af171cfc3a60c1b",
+  "manifest_sha256": "6b1653f9a76bfe5f027b53f990e9ad8794e45e1781fc974107c5c6473cc65647",
   "not_authorized": [
     "paid_gpu_launch",
     "adapter_package",
@@ -164,8 +164,8 @@
   "trainer": {
     "errors": [],
     "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\hf_job_train_v90.py",
-    "required_snippets": 43,
-    "sha256": "8f41d1f48f8780a53aa78b178b50e9b1c60c82540d0be45c6dbdf81f762f35a9"
+    "required_snippets": 45,
+    "sha256": "8c3f6d2974e33ae6154c4697ef462e592ec4663ddc6f828a0b85095915bcd44f"
   },
   "val_prompt_hashes": 170
 }

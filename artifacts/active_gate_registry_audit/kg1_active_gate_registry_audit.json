@@ -100,7 +100,7 @@
       },
       "errors": [],
       "manifest_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
-      "manifest_sha256": "79b383b739d036331b0687fddd16f87e9a99de9b15581a8b9af171cfc3a60c1b",
+      "manifest_sha256": "6b1653f9a76bfe5f027b53f990e9ad8794e45e1781fc974107c5c6473cc65647",
       "not_authorized": [
         "adapter_package",
         "kaggle_submit",
@@ -128,7 +128,7 @@
         "score_path_operational_audit": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\score_path_operational_audit\\kg1_score_path_operational_audit.json",
-          "sha256": "abc69c7b0fb5ad457ffd641d2f7429a65e64d883f0feaed37b677f3fcd945bfc"
+          "sha256": "af562348fffa38c8d69ffe1b0b724e003cd0eeb473394ab7a866ab43127dce58"
         },
         "solve_rate_gate_self_test": {
           "exists": true,
@@ -153,7 +153,7 @@
         "v1243_graft_trainer_contract_gate": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft_contract_gate\\kg1_v1243_graft_trainer_contract_gate.json",
-          "sha256": "4f6fb405bbdae5564884f8262929a5d585975bf5c326792baba419d61c51ad2c"
+          "sha256": "38876ee16187d65f918cf2a05a3caba1bc2e346892dcdcb84b0b39afce69f84f"
         }
       }
     },
@@ -173,12 +173,12 @@
         "hf_job_train_v90": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\hf_job_train_v90.py",
-          "sha256": "8f41d1f48f8780a53aa78b178b50e9b1c60c82540d0be45c6dbdf81f762f35a9"
+          "sha256": "8c3f6d2974e33ae6154c4697ef462e592ec4663ddc6f828a0b85095915bcd44f"
         },
         "notebook_release_gate": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\notebook_release_gate.py",
-          "sha256": "214a8825fc713de5b5790cbcdb4b758b699e3e76eff2210e42dea13c94e1b408"
+          "sha256": "ee284cc38be77b94b6604d5416b3cf389731c58b0155c2b993f30d55e9f34a54"
         },
         "official_metric_prescore_gate": {
           "exists": true,
@@ -188,7 +188,7 @@
         "score_path_operational_audit": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_score_path_operational_audit.py",
-          "sha256": "d0b1522c74677374a011eec6e58fb316cdb5eae6d8542733f0673ffd97cd3e37"
+          "sha256": "9574f97cae4632b001313f27bbd77d22b75615c6aa6e9b8ca1aa74cc53039eb8"
         },
         "solve_rate_gate": {
           "exists": true,
@@ -208,14 +208,14 @@
         "v1243_graft_trainer_contract_gate": {
           "exists": true,
           "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1243_graft_trainer_contract_gate.py",
-          "sha256": "87665325a7af0326448793b82f08d1557fc48ef5b98f810a057b03b42ccdebf7"
+          "sha256": "44aaaccc8cc1702c2c3d8327ea06e73df48a398bb1069013d3a6eaee2fac691c"
         }
       }
     }
   },
   "decision": "pass_active_gate_registry_no_train_no_paid_no_submit",
   "errors": [],
-  "generated_at_utc": "2026-06-14T16:00:26+00:00",
+  "generated_at_utc": "2026-06-14T16:21:04+00:00",
   "kaggle_submit_authorized": false,
   "paid_gpu_launch_authorized": false,
   "required_before_any_future_paid_launch": [

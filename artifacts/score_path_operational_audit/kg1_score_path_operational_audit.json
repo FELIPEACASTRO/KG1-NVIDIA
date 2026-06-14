@@ -734,9 +734,9 @@
             "env_preview": {
               "errors": []
             },
-            "env_preview_sha256": "11ff3575fea20478eb95f43895141fa4a2371a311caf8c05c80e68f2e8c7ba3f",
+            "env_preview_sha256": "5416b74ac3fdfd8325f20a526395eb36c81ac1d9269e6a993574b834493b7323",
             "errors": [],
-            "generated_at_utc": "2026-06-14T15:51:55+00:00",
+            "generated_at_utc": "2026-06-14T16:21:04+00:00",
             "manifest_commands": {
               "commands": {
                 "baseline_identity_probe_086_answer_only": "python 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\kg1_v1241_bit_equation_transfer_gate.py' --baseline-identity-probe --profile full947_089 --solution-csv 'C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v284_official_gate_worktree\\artifacts\\v1088_unicode_dataset_contract_audit\\hf_cli_download\\runtime_artifacts\\v276_full_eval_bridge\\v276-full947-bridge-20260511T1245Z\\official_train_seed42_stratified10_val.csv' --baseline-predictions 'path\\to\\086_answer_only_full947_raw_output.csv'",
@@ -748,7 +748,7 @@
               },
               "errors": []
             },
-            "manifest_sha256": "79b383b739d036331b0687fddd16f87e9a99de9b15581a8b9af171cfc3a60c1b",
+            "manifest_sha256": "6b1653f9a76bfe5f027b53f990e9ad8794e45e1781fc974107c5c6473cc65647",
             "not_authorized": [
               "paid_gpu_launch",
               "adapter_package",
@@ -761,12 +761,12 @@
             "trainer": {
               "errors": [],
               "path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\scripts\\hf_job_train_v90.py",
-              "required_snippets": 43,
-              "sha256": "8f41d1f48f8780a53aa78b178b50e9b1c60c82540d0be45c6dbdf81f762f35a9"
+              "required_snippets": 45,
+              "sha256": "8c3f6d2974e33ae6154c4697ef462e592ec4663ddc6f828a0b85095915bcd44f"
             },
             "val_prompt_hashes": 170
           },
-          "sha256": "4f6fb405bbdae5564884f8262929a5d585975bf5c326792baba419d61c51ad2c"
+          "sha256": "108a1de4211245ade7b52c950023f8d932051f804d394ec013098c8e09503d5d"
         }
       }
     },
@@ -878,14 +878,15 @@
       "errors": [],
       "source_sha256": {
         "active_gate_registry_audit": "0bc0b5f0eda696a4d208d32aa6919c5b0a28e00cbc789f96d9b9b9080dbd0f89",
+        "colab_launcher": "f1f4b96d0e6c1daf328d5f8fb0d0bb96c3c71f1bc77f4054d8a437b4135a2336",
         "colab_realtime_runner": "dcf9005b2b9f85b891b4e170b2fc9d48d99b3dad6e1ea2d444cd6f815ca4711a",
         "competition_utils": "a157dd736847de98af5eea4bfa349204bb12feeb654a7d23aa571ce05ab3ae4d",
         "evaluate_lora_adapter": "042d2a71d16530dfc409d5ac25b49471022b0a3346a3fde82452a0612f9c79e8",
         "evaluate_lora_adapters_batch": "469838b553c6091d982d7dfa501c7a1be1b9422b418b9e37a098957e47abe64b",
         "full947_baseline_readiness_gate": "9769bfa9218ffc79a74f20596ef0fb5be96797d9887f0d32bd1a54f77f9a4527",
-        "graft_builder": "0902fd6c4ccdcd184d6bba01b2b1e8fe04ea4d517f6a54db80fd6d87fe6618b1",
-        "graft_contract_gate": "87665325a7af0326448793b82f08d1557fc48ef5b98f810a057b03b42ccdebf7",
-        "hf_job_train_v90": "8f41d1f48f8780a53aa78b178b50e9b1c60c82540d0be45c6dbdf81f762f35a9",
+        "graft_builder": "32532f9352d9a65304f820a5fd41268371741d60ef7d9cb69ed73312122a2618",
+        "graft_contract_gate": "44aaaccc8cc1702c2c3d8327ea06e73df48a398bb1069013d3a6eaee2fac691c",
+        "hf_job_train_v90": "8c3f6d2974e33ae6154c4697ef462e592ec4663ddc6f828a0b85095915bcd44f",
         "live_log_common": "a6ab899aea48daf0ddc3f619b745e2bde836516b7b2438d8a32ada1afd627e70",
         "solve_rate_gate": "6029bee753aa6ac42cb185644ec1e2e01077045a52edb1da0f9a4d56aeb368dc",
         "v1241_transfer_gate": "0869981e061b2aafc2b25934bf473998a3c4d54cfac1a344a694948e0f252509"
@@ -1023,15 +1024,15 @@
       },
       "env_errors": [],
       "env_preview_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\v1243_hf_env_preview.json",
-      "env_preview_sha256": "11ff3575fea20478eb95f43895141fa4a2371a311caf8c05c80e68f2e8c7ba3f",
+      "env_preview_sha256": "5416b74ac3fdfd8325f20a526395eb36c81ac1d9269e6a993574b834493b7323",
       "errors": [],
       "manifest_path": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_final_publish_worktree\\artifacts\\v1243_solver_to_lora_graft\\kg1_v1243_solver_to_lora_graft_manifest.json",
-      "manifest_sha256": "79b383b739d036331b0687fddd16f87e9a99de9b15581a8b9af171cfc3a60c1b"
+      "manifest_sha256": "6b1653f9a76bfe5f027b53f990e9ad8794e45e1781fc974107c5c6473cc65647"
     }
   },
   "decision": "pass_score_path_operational_audit_no_gpu_no_submit",
   "errors": [],
-  "generated_at_utc": "2026-06-14T16:00:25+00:00",
+  "generated_at_utc": "2026-06-14T16:21:05+00:00",
   "not_authorized": [
     "paid_gpu_launch",
     "adapter_package",

@@ -766,6 +766,23 @@ def audit_v1243_launcher_contract(
     if rel not in V1243_NOTEBOOK_RELS:
         return
 
+    pack_path = ROOT / "artifacts" / "v1243_colab_launch_pack.zip"
+    pack_match = re.search(r"EXPECTED_PACK_SHA256\s*=\s*['\"]([0-9a-f]{64})['\"]", code_text)
+    if not pack_match:
+        add(findings, "error", "v1243_pack_sha_constant_missing", "EXPECTED_PACK_SHA256 literal not found")
+    elif not pack_path.exists():
+        add(findings, "error", "v1243_pack_zip_missing", repo_rel(pack_path))
+    else:
+        observed_pack_sha = sha256_file(pack_path)
+        expected_pack_sha = pack_match.group(1)
+        if expected_pack_sha != observed_pack_sha:
+            add(
+                findings,
+                "error",
+                "v1243_pack_sha_mismatch",
+                f"notebook={expected_pack_sha} zip={observed_pack_sha}",
+            )
+
     code_cells = [cell for cell in notebook.get("cells", []) if cell.get("cell_type") == "code"]
     outputs_total = sum(len(cell.get("outputs", [])) for cell in code_cells)
     if len(code_cells) != 1:

@@ -1,6 +1,6 @@
 {
   "bit_specialist": {
-    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
+    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "-1.0",
     "BASELINE_EVAL_BEFORE_TRAIN": "1",
     "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
     "DATA_FILE": "v1243_bit_specialist_train.jsonl",
@@ -68,7 +68,7 @@
     "VAL_FILE": "v1243_val170.jsonl"
   },
   "equation_specialist": {
-    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
+    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "-1.0",
     "BASELINE_EVAL_BEFORE_TRAIN": "1",
     "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
     "DATA_FILE": "v1243_equation_specialist_train.jsonl",
@@ -136,7 +136,7 @@
     "VAL_FILE": "v1243_val170.jsonl"
   },
   "micro_consolidation": {
-    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "0.0",
+    "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "-1.0",
     "BASELINE_EVAL_BEFORE_TRAIN": "1",
     "BOXED_PAYLOAD_LOSS_WEIGHT": "5.0",
     "DATA_FILE": "v1243_micro_consolidation_train.jsonl",

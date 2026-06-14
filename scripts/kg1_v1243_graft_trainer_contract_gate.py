@@ -363,6 +363,7 @@ def audit_env_preview(artifact_dir: Path, env_preview: dict[str, Any], datasets:
         "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION": "0.0",
+        "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "-1.0",
         "BASELINE_EVAL_BEFORE_TRAIN": "1",
         "EVAL_MAX_EXAMPLES": "170",
         "FRIENDLY_REALTIME_LOGS": "1",
@@ -383,9 +384,9 @@ def audit_env_preview(artifact_dir: Path, env_preview: dict[str, Any], datasets:
         "INIT_ADAPTER_LOAD_MODE": "manual",
         "PEFT_MANUAL_LOAD_METHOD": "direct",
     }
-    expected_train_rows = {"bit_specialist": "724", "equation_specialist": "544"}
+    expected_train_rows = {"bit_specialist": "724", "equation_specialist": "544", "micro_consolidation": "1084"}
 
-    for phase in ("bit_specialist", "equation_specialist"):
+    for phase in ("bit_specialist", "equation_specialist", "micro_consolidation"):
         env = env_preview.get(phase)
         if not isinstance(env, dict):
             errors.append(f"missing env preview phase: {phase}")
@@ -490,6 +491,8 @@ def audit_trainer_source(trainer_path: Path) -> dict[str, Any]:
         'SCORE_TRAJECTORY_CHECK = env_bool("SCORE_TRAJECTORY_CHECK", True)',
         'REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY = env_bool("REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY", False)',
         "def score_trajectory_report(",
+        '"weak_families_individually_improved": weak_improved',
+        "bit_and_equation_improved_without_global_or_protected_regression",
         "KG1_SCORE_TRAJECTORY_JSON_BEGIN",
         "KG1_SCORE_TRAJECTORY_STATUS=",
         '"score_trajectory"',

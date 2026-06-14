@@ -585,6 +585,7 @@ def audit_v1243_artifacts() -> dict[str, Any]:
         "SCORE_TRAJECTORY_MAX_PROTECTED_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_OVERALL_EXACT_DROP": "0.0",
         "SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION": "0.0",
+        "ABORT_EVAL_RELATIVE_TO_BASELINE_DELTA": "-1.0",
         "BASELINE_EVAL_BEFORE_TRAIN": "1",
         "EVAL_MAX_EXAMPLES": "170",
         "FRIENDLY_REALTIME_LOGS": "1",
@@ -592,7 +593,7 @@ def audit_v1243_artifacts() -> dict[str, Any]:
         "SAMPLING_MODE": "weighted_replacement",
     }
     env_errors: list[str] = []
-    for phase in ("bit_specialist", "equation_specialist"):
+    for phase in ("bit_specialist", "equation_specialist", "micro_consolidation"):
         env = env_preview.get(phase, {})
         for key, expected in required_env.items():
             expect(env_errors, str(env.get(key)) == expected, f"{phase}: {key} mismatch")
@@ -882,6 +883,7 @@ def audit_sources() -> dict[str, Any]:
         "hf_job_train_v90": ROOT / "scripts" / "hf_job_train_v90.py",
         "graft_builder": ROOT / "scripts" / "kg1_v1243_solver_to_lora_graft_builder.py",
         "graft_contract_gate": ROOT / "scripts" / "kg1_v1243_graft_trainer_contract_gate.py",
+        "colab_launcher": ROOT / "scripts" / "kg1_colab_v1243_launcher.py",
         "colab_realtime_runner": ROOT / "scripts" / "kg1_colab_realtime_runner.py",
         "live_log_common": ROOT / "scripts" / "kg1_live_log_common.py",
         "v1241_transfer_gate": ROOT / "scripts" / "kg1_v1241_bit_equation_transfer_gate.py",
@@ -920,11 +922,23 @@ def audit_sources() -> dict[str, Any]:
     expect(errors, "SCORE_PROXY_EVAL_CHECK" in text["graft_builder"], "graft builder missing score proxy env")
     expect(errors, "SCORE_TRAJECTORY_CHECK" in text["graft_builder"], "graft builder missing score trajectory env")
     expect(errors, "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY" in text["graft_builder"], "graft builder missing final-only score trajectory env")
+    expect(
+        errors,
+        "def enforce_micro_consolidation_real_train_guards(" in text["colab_launcher"],
+        "launcher missing enforced micro real_train score trajectory guard",
+    )
+    expect(
+        errors,
+        'args.phase != "micro_consolidation" or args.run_mode != "real_train"' in text["colab_launcher"],
+        "launcher micro real_train guard is not phase/run-mode scoped",
+    )
     expect(errors, "def evaluate_score_proxy(" in text["hf_job_train_v90"], "trainer missing score proxy eval")
     expect(errors, "KG1_SCORE_PROXY_STATUS=" in text["hf_job_train_v90"], "trainer missing score proxy status log")
     expect(errors, "def score_trajectory_report(" in text["hf_job_train_v90"], "trainer missing score trajectory report")
     expect(errors, "REQUIRE_SCORE_TRAJECTORY_FINAL_ONLY" in text["hf_job_train_v90"], "trainer missing final-only trajectory guard")
     expect(errors, 'str(label).lower() == "final"' in text["hf_job_train_v90"], "trainer final-only trajectory guard is not label-gated")
+    expect(errors, "weak_families_individually_improved" in text["hf_job_train_v90"], "trainer trajectory can average-mask bit/equation regression")
+    expect(errors, "bit_and_equation_improved_without_global_or_protected_regression" in text["hf_job_train_v90"], "trainer trajectory missing individual bit/equation success reason")
     expect(errors, "KG1_SCORE_TRAJECTORY_STATUS=" in text["hf_job_train_v90"], "trainer missing score trajectory status log")
     expect(errors, "score_trajectory_alignment" in text["hf_job_train_v90"], "trainer missing score trajectory alignment flag")
     expect(errors, "TRAJECTORY_RE" in text["live_log_common"], "live log parser missing score trajectory regex")
