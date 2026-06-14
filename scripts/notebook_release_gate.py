@@ -103,11 +103,13 @@ V1243_REALTIME_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb
 V1243_REALTIME_SAFE_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 V1243_MODEL_DRYRUN_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
 V1243_REALTRAIN_SMOKE_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_REALTRAIN_SMOKE_ASSERTIVE.ipynb"
+V1243_FINAL_SPRINT_NOTEBOOK_REL = "notebooks/KG1_V1243_COLAB_FINAL_SPRINT_MICRO_CONSOLIDATION.ipynb"
 V1243_NOTEBOOK_RELS = {
     V1243_REALTIME_NOTEBOOK_REL,
     V1243_REALTIME_SAFE_NOTEBOOK_REL,
     V1243_MODEL_DRYRUN_NOTEBOOK_REL,
     V1243_REALTRAIN_SMOKE_NOTEBOOK_REL,
+    V1243_FINAL_SPRINT_NOTEBOOK_REL,
 }
 
 V218_NOTEBOOK_REL = "notebooks/KG1_V218_DECODE_RESCUE_COLAB.ipynb"
@@ -846,6 +848,28 @@ def audit_v1243_launcher_contract(
         for snippet in realtrain_required:
             if snippet not in code_text:
                 add(findings, "error", "v1243_realtrain_smoke_hard_lock_missing", snippet)
+    elif rel == V1243_FINAL_SPRINT_NOTEBOOK_REL:
+        final_sprint_required = [
+            "final_sprint_micro_consolidation_hard_lock = true",
+            "os.environ['KG1_V1243_PHASE'] = 'micro_consolidation'",
+            "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'",
+            "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'",
+            "os.environ['KG1_V1243_RUN_TRAIN'] = '1'",
+            "os.environ['KG1_V1243_REQUIRE_REAL_TRAIN'] = '1'",
+            "os.environ['KG1_V1243_OVERRIDE_MAX_STEPS'] = '20'",
+            "os.environ['KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS'] = '2'",
+            "os.environ['KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS'] = '2'",
+            "os.environ['KG1_V1243_OVERRIDE_LOG_EVERY_STEPS'] = '1'",
+            "os.environ['KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES'] = '170'",
+            "os.environ['KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'] = '170'",
+            "os.environ['KG1_V1243_OVERRIDE_LEARNING_RATE'] = '0.00000075'",
+            "os.environ['KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE'] = '0.00000020'",
+            "os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-final-sprint-candidate'",
+            "Required real train was not executed; refusing to report wrapper success.",
+        ]
+        for snippet in final_sprint_required:
+            if snippet not in code_text:
+                add(findings, "error", "v1243_final_sprint_hard_lock_missing", snippet)
     elif "model_dryrun_launcher_hard_lock = true" in code_text:
         add(findings, "error", "v1243_realtime_must_not_hard_lock_modeldry", "cheap realtime launcher must not force GPU modeldry")
 

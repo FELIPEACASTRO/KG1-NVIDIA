@@ -9,16 +9,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
-SAFE_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 MODEL_DRYRUN_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
 REALTRAIN_SMOKE_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTRAIN_SMOKE_ASSERTIVE.ipynb"
+FINAL_SPRINT_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_FINAL_SPRINT_MICRO_CONSOLIDATION.ipynb"
 COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
     "blob/master/notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
-)
-SAFE_COLAB_URL = (
-    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
-    "blob/master/notebooks/KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 )
 MODEL_DRYRUN_COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
@@ -28,11 +24,15 @@ REALTRAIN_SMOKE_COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
     "blob/master/notebooks/KG1_V1243_COLAB_REALTRAIN_SMOKE_ASSERTIVE.ipynb"
 )
+FINAL_SPRINT_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
+    "blob/master/notebooks/KG1_V1243_COLAB_FINAL_SPRINT_MICRO_CONSOLIDATION.ipynb"
+)
 PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "c72bb24b3e6ab1de59381460eefd1e0a8f5c76f2b1645a7b717003dcaaf6f00a"
+PACK_SHA256 = "9107966a8d27c4be5c6f43e645b77ba3f901bc6cc7b17005c6f079e6d82bf542"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
@@ -180,6 +180,14 @@ for secret_name in [
     'KG1_V1243_OVERRIDE_LOG_EVERY_STEPS',
     'KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES',
     'KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES',
+    'KG1_V1243_OVERRIDE_LEARNING_RATE',
+    'KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE',
+    'KG1_V1243_OVERRIDE_BOXED_PAYLOAD_LOSS_WEIGHT',
+    'KG1_V1243_OVERRIDE_SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION',
+    'KG1_V1243_OVERRIDE_MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION',
+    'KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS',
+    'KG1_V1243_OVERRIDE_REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION',
+    'KG1_V1243_OVERRIDE_REQUIRE_FINAL_EVAL_LTE_BASELINE',
 ]:
     if not os.environ.get(secret_name):
         secret_value = read_colab_secret(secret_name)
@@ -943,12 +951,6 @@ print('=== V1243 ONECELL REALTIME LAUNCHER END ===', flush=True)
 """
 
 
-SAFE_ONE_CELL_SOURCE = ONE_CELL_SOURCE.replace(
-    f"COLAB_URL = '{COLAB_URL}'\n",
-    f"COLAB_URL = '{SAFE_COLAB_URL}'\n",
-)
-
-
 MODEL_DRYRUN_ONE_CELL_SOURCE = (
     ONE_CELL_SOURCE
     .replace(
@@ -1062,11 +1064,71 @@ REALTRAIN_SMOKE_ONE_CELL_SOURCE = (
 )
 
 
+FINAL_SPRINT_ONE_CELL_SOURCE = (
+    REALTRAIN_SMOKE_ONE_CELL_SOURCE
+    .replace(REALTRAIN_SMOKE_COLAB_URL, FINAL_SPRINT_COLAB_URL)
+    .replace(
+        "# This is an assertive paid smoke: it must run model dry-run and then real_train.\n",
+        "# This is the deadline sprint: micro_consolidation must run model dry-run and then real_train.\n",
+    )
+    .replace(
+        "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n",
+        "os.environ['KG1_V1243_PHASE'] = 'micro_consolidation'\n"
+        "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n",
+        1,
+    )
+    .replace(
+        "os.environ['KG1_V1243_OVERRIDE_MAX_STEPS'] = '2'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_LOG_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES'] = '32'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'] = '32'\n"
+        "if not os.environ.get('OUTPUT_REPO'):\n"
+        "    os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-bit-smoke-candidate'\n",
+        "os.environ['KG1_V1243_OVERRIDE_MAX_STEPS'] = '20'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS'] = '2'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS'] = '2'\n"
+        "os.environ['KG1_V1243_OVERRIDE_LOG_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES'] = '170'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'] = '170'\n"
+        "os.environ['KG1_V1243_OVERRIDE_LEARNING_RATE'] = '0.00000075'\n"
+        "os.environ['KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE'] = '0.00000020'\n"
+        "os.environ['KG1_V1243_OVERRIDE_BOXED_PAYLOAD_LOSS_WEIGHT'] = '5.0'\n"
+        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_FINAL_EVAL_LTE_BASELINE'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS'] = '0'\n"
+        "if not os.environ.get('OUTPUT_REPO'):\n"
+        "    os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-final-sprint-candidate'\n",
+    )
+    .replace("RUN_TRAIN = '1'\n", "PHASE = 'micro_consolidation'\nRUN_TRAIN = '1'\n", 1)
+    .replace("realtrain_smoke_assertive_hard_lock = true", "final_sprint_micro_consolidation_hard_lock = true")
+    .replace("realtrain_smoke_max_steps_override =", "final_sprint_max_steps_override =")
+    .replace("realtrain_smoke_output_repo =", "final_sprint_output_repo =")
+    .replace(
+        "print('force_pack_adapter_defaults = true', flush=True)\n\n",
+        "print('final_sprint_phase =', PHASE, flush=True)\n"
+        "print('final_sprint_lr_override =', os.environ.get('KG1_V1243_OVERRIDE_LEARNING_RATE'), flush=True)\n"
+        "print('final_sprint_final_lr_override =', os.environ.get('KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE'), flush=True)\n"
+        "print('final_sprint_eval_examples =', os.environ.get('KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'), flush=True)\n"
+        "print('force_pack_adapter_defaults = true', flush=True)\n\n",
+        1,
+    )
+    .replace(
+        "print('=== V1243 ONECELL REALTRAIN SMOKE ASSERTIVE LAUNCHER START ===', flush=True)",
+        "print('=== V1243 ONECELL FINAL SPRINT MICRO CONSOLIDATION LAUNCHER START ===', flush=True)",
+    )
+    .replace(
+        "print('=== V1243 ONECELL REALTRAIN SMOKE ASSERTIVE LAUNCHER END ===', flush=True)",
+        "print('=== V1243 ONECELL FINAL SPRINT MICRO CONSOLIDATION LAUNCHER END ===', flush=True)",
+    )
+)
+
+
 def build_notebook(
     *,
     colab_url: str,
     notebook_name: str,
-    title: str,
     one_cell_source: str,
     description: str,
 ) -> dict[str, object]:
@@ -1074,7 +1136,7 @@ def build_notebook(
         "cells": [
             markdown_cell(
                 "v1243-md-01",
-                f"""# {title}
+                f"""# KG1 V1243 Colab Realtime Launcher
 
 Colab URL:
 
@@ -1110,7 +1172,6 @@ def main() -> int:
             build_notebook(
                 colab_url=COLAB_URL,
                 notebook_name=NOTEBOOK_PATH.name,
-                title="KG1 V1243 Colab Realtime Launcher",
                 one_cell_source=ONE_CELL_SOURCE,
                 description=(
                     "One-cell launcher. Press **Run** once: it automatically checks HF live-log access, "
@@ -1128,33 +1189,11 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
-    SAFE_NOTEBOOK_PATH.write_text(
-        json.dumps(
-            build_notebook(
-                colab_url=SAFE_COLAB_URL,
-                notebook_name=SAFE_NOTEBOOK_PATH.name,
-                title="KG1 V1243 Colab Realtime Safe Launcher",
-                one_cell_source=SAFE_ONE_CELL_SOURCE,
-                description=(
-                    "One-cell safe launcher. Press **Run** once: it automatically checks HF live-log access, "
-                    "disk capacity, downloads the launch pack, installs bounded dependencies, and runs "
-                    "tokenization dry-run. GPU model-load dry-run and real training remain locked behind "
-                    "explicit Colab Secrets/env flags, baseline adapter preflight, live-log upload checks, "
-                    "and the FinOps mamba policy."
-                ),
-            ),
-            indent=2,
-            ensure_ascii=False,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
     MODEL_DRYRUN_NOTEBOOK_PATH.write_text(
         json.dumps(
             build_notebook(
                 colab_url=MODEL_DRYRUN_COLAB_URL,
                 notebook_name=MODEL_DRYRUN_NOTEBOOK_PATH.name,
-                title="KG1 V1243 Colab Model Dryrun Launcher",
                 one_cell_source=MODEL_DRYRUN_ONE_CELL_SOURCE,
                 description=(
                     "One-cell model dry-run launcher. Press **Run** once: it runs the same tokenization gate, "
@@ -1175,13 +1214,33 @@ def main() -> int:
             build_notebook(
                 colab_url=REALTRAIN_SMOKE_COLAB_URL,
                 notebook_name=REALTRAIN_SMOKE_NOTEBOOK_PATH.name,
-                title="KG1 V1243 Colab Real Train Smoke Assertive",
                 one_cell_source=REALTRAIN_SMOKE_ONE_CELL_SOURCE,
                 description=(
-                    "One-cell assertive real-train smoke. Press **Run** once: it runs tokenization, "
-                    "GPU model-load dry-run, and then a bounded real training smoke with `MAX_STEPS=2`. "
-                    "It is designed to fail loudly if real training is skipped, so we no longer confuse "
-                    "a healthy tokenize-only run with adapter training."
+                    "One-cell assertive real-train smoke launcher. Press **Run** once: it runs tokenization, "
+                    "GPU model-load/adapter dry-run, and then a real training smoke with `MAX_STEPS=2` by "
+                    "default. This notebook is intentionally not a 0.89 candidate by itself; it proves the "
+                    "paid train path creates steps and uploads an adapter instead of ending as tokenize-only. "
+                    "It hard-fails if real training is skipped."
+                ),
+            ),
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    FINAL_SPRINT_NOTEBOOK_PATH.write_text(
+        json.dumps(
+            build_notebook(
+                colab_url=FINAL_SPRINT_COLAB_URL,
+                notebook_name=FINAL_SPRINT_NOTEBOOK_PATH.name,
+                one_cell_source=FINAL_SPRINT_ONE_CELL_SOURCE,
+                description=(
+                    "One-cell final sprint launcher for the June 15 deadline. Press **Run** once: it runs "
+                    "tokenization, GPU model-load/adapter dry-run, and then real training on the "
+                    "`micro_consolidation` pack: bit + equation + protected replay. It uses conservative "
+                    "LR overrides, full val170 score-proxy checks, live HF logs, and final non-regression "
+                    "guards before any adapter upload can be treated as a candidate."
                 ),
             ),
             indent=2,
@@ -1191,13 +1250,13 @@ def main() -> int:
         encoding="utf-8",
     )
     print(f"wrote {NOTEBOOK_PATH}")
-    print(f"wrote {SAFE_NOTEBOOK_PATH}")
     print(f"wrote {MODEL_DRYRUN_NOTEBOOK_PATH}")
     print(f"wrote {REALTRAIN_SMOKE_NOTEBOOK_PATH}")
+    print(f"wrote {FINAL_SPRINT_NOTEBOOK_PATH}")
     print(f"colab_url={COLAB_URL}")
-    print(f"safe_colab_url={SAFE_COLAB_URL}")
     print(f"model_dryrun_colab_url={MODEL_DRYRUN_COLAB_URL}")
     print(f"realtrain_smoke_colab_url={REALTRAIN_SMOKE_COLAB_URL}")
+    print(f"final_sprint_colab_url={FINAL_SPRINT_COLAB_URL}")
     return 0
 
 

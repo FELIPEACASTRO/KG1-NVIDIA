@@ -11,10 +11,10 @@
     "tokenized_train_records": 544,
     "tokenized_validation_records": 170,
     "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
-    "train_file_sha256": "3b5913959defdda8f63e8cb364e39981f2cbb996aae0fb4085e700c737033240",
+    "train_file_sha256": "63aad59bf01cc38ad1cf0822326b3f4541335cf30d6cdbc053891b52edccbd84",
     "train_records": 544,
     "validation_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
-    "validation_file_sha256": "ff364a0e359cba3394976c7029c20138b7cff099c4684df2faf0ea0f1e9d336a",
+    "validation_file_sha256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
     "validation_records": 170
   },
   "decision": {
@@ -62,7 +62,7 @@
   },
   "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
   "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
-  "run_id": "v1243_equation_refresh_lf_hash_20260614",
+  "run_id": "v1243_local_equation_tokenize_refresh_20260614",
   "runtime": {
     "cuda_available": false,
     "tokenize_only_dry_run": true,

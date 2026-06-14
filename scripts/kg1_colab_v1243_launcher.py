@@ -21,7 +21,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARTIFACT_DIR = ROOT / "artifacts" / "v1243_solver_to_lora_graft"
 ENV_PREVIEW = DEFAULT_ARTIFACT_DIR / "v1243_hf_env_preview.json"
-SAFE_PHASES = {"bit_specialist", "equation_specialist"}
+SAFE_PHASES = {"bit_specialist", "equation_specialist", "micro_consolidation"}
 RUN_MODES = {"tokenize_dryrun", "model_dryrun", "real_train"}
 GPU_RUN_MODES = {"model_dryrun", "real_train"}
 RUN_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{2,180}$")
@@ -32,6 +32,18 @@ INT_ENV_OVERRIDES = {
     "KG1_V1243_OVERRIDE_LOG_EVERY_STEPS": "LOG_EVERY_STEPS",
     "KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES": "EVAL_MAX_EXAMPLES",
     "KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES": "SCORE_PROXY_EVAL_MAX_EXAMPLES",
+}
+FLOAT_OVERRIDE_ENV = {
+    "KG1_V1243_OVERRIDE_LEARNING_RATE": "LEARNING_RATE",
+    "KG1_V1243_OVERRIDE_FINAL_LEARNING_RATE": "FINAL_LEARNING_RATE",
+    "KG1_V1243_OVERRIDE_BOXED_PAYLOAD_LOSS_WEIGHT": "BOXED_PAYLOAD_LOSS_WEIGHT",
+    "KG1_V1243_OVERRIDE_SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION": "SCORE_TRAJECTORY_MAX_BOXED_LOSS_REGRESSION",
+    "KG1_V1243_OVERRIDE_MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION": "MAX_FINAL_BOXED_TAIL_LOSS_REGRESSION",
+}
+BOOL_OVERRIDE_ENV = {
+    "KG1_V1243_OVERRIDE_REQUIRE_SCORE_TRAJECTORY_PASS": "REQUIRE_SCORE_TRAJECTORY_PASS",
+    "KG1_V1243_OVERRIDE_REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION": "REQUIRE_FINAL_SCORE_PROXY_NON_REGRESSION",
+    "KG1_V1243_OVERRIDE_REQUIRE_FINAL_EVAL_LTE_BASELINE": "REQUIRE_FINAL_EVAL_LTE_BASELINE",
 }
 
 
@@ -168,6 +180,42 @@ def apply_safe_int_overrides(env: dict[str, str]) -> dict[str, str]:
     return applied
 
 
+def apply_safe_float_overrides(env: dict[str, str]) -> dict[str, str]:
+    """Apply explicit non-negative float overrides after env preview load."""
+
+    applied: dict[str, str] = {}
+    for override_name, target_name in FLOAT_OVERRIDE_ENV.items():
+        raw_value = os.environ.get(override_name)
+        if raw_value in (None, ""):
+            continue
+        try:
+            float_value = float(str(raw_value))
+        except ValueError as exc:
+            raise ValueError(f"{override_name} must be a float, got {raw_value!r}") from exc
+        if float_value < 0:
+            raise ValueError(f"{override_name} must be >= 0, got {float_value}")
+        env[target_name] = str(float_value)
+        applied[target_name] = str(float_value)
+    return applied
+
+
+def apply_safe_bool_overrides(env: dict[str, str]) -> dict[str, str]:
+    """Apply explicit boolean overrides using 0/1 values only."""
+
+    applied: dict[str, str] = {}
+    for override_name, target_name in BOOL_OVERRIDE_ENV.items():
+        raw_value = os.environ.get(override_name)
+        if raw_value in (None, ""):
+            continue
+        normalized = str(raw_value).strip().lower()
+        if normalized not in {"0", "1", "false", "true"}:
+            raise ValueError(f"{override_name} must be boolean 0/1/false/true, got {raw_value!r}")
+        value = "1" if normalized in {"1", "true"} else "0"
+        env[target_name] = value
+        applied[target_name] = value
+    return applied
+
+
 def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
     artifact_dir = args.artifact_dir.resolve()
     env = load_env_preview(args.env_preview.resolve(), args.phase)
@@ -211,9 +259,15 @@ def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
         env["REQUIRE_INIT_ADAPTER_REVISION"] = "1"
 
     apply_run_mode(env, args)
-    applied_overrides = apply_safe_int_overrides(env)
-    if applied_overrides:
-        env["KG1_V1243_APPLIED_INT_OVERRIDES_JSON"] = json.dumps(applied_overrides, sort_keys=True)
+    applied_int_overrides = apply_safe_int_overrides(env)
+    applied_float_overrides = apply_safe_float_overrides(env)
+    applied_bool_overrides = apply_safe_bool_overrides(env)
+    if applied_int_overrides:
+        env["KG1_V1243_APPLIED_INT_OVERRIDES_JSON"] = json.dumps(applied_int_overrides, sort_keys=True)
+    if applied_float_overrides:
+        env["KG1_V1243_APPLIED_FLOAT_OVERRIDES_JSON"] = json.dumps(applied_float_overrides, sort_keys=True)
+    if applied_bool_overrides:
+        env["KG1_V1243_APPLIED_BOOL_OVERRIDES_JSON"] = json.dumps(applied_bool_overrides, sort_keys=True)
     return env, run_id
 
 
@@ -388,6 +442,9 @@ def print_env_summary(env: dict[str, str], run_id: str, args: argparse.Namespace
         "TOKENIZE_ONLY_DRY_RUN",
         "UPLOAD_TO_HF",
         "MAX_STEPS",
+        "LEARNING_RATE",
+        "FINAL_LEARNING_RATE",
+        "BOXED_PAYLOAD_LOSS_WEIGHT",
         "SAVE_EVERY_STEPS",
         "EVAL_EVERY_STEPS",
         "LOG_EVERY_STEPS",
@@ -409,6 +466,8 @@ def print_env_summary(env: dict[str, str], run_id: str, args: argparse.Namespace
         "INIT_ADAPTER_REVISION",
         "REQUIRE_REAL_CAUSAL_CONV1D",
         "KG1_V1243_APPLIED_INT_OVERRIDES_JSON",
+        "KG1_V1243_APPLIED_FLOAT_OVERRIDES_JSON",
+        "KG1_V1243_APPLIED_BOOL_OVERRIDES_JSON",
     ]
     print("KG1_V1243_COLAB_LAUNCH_ENV_BEGIN", flush=True)
     print(json.dumps({key: env.get(key, "") for key in safe_keys}, indent=2, sort_keys=True), flush=True)
