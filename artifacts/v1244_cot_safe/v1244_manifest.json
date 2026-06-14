@@ -1,0 +1,32 @@
+{
+ "counts": {
+  "v1244_bit_cot_train.jsonl": 262,
+  "v1244_eq_numeric_cot_train.jsonl": 423,
+  "v1244_eq_symbolic_cot_train.jsonl": 228,
+  "v1244_protected_replay_train.jsonl": 184,
+  "v1244_micro_consolidation_train.jsonl": 979
+ },
+ "sha256": {
+  "v1244_bit_cot_train.jsonl": "67a90228af1c9a731540f99945ad45ae0e88b4b5e7015cc25751a130971f6578",
+  "v1244_eq_numeric_cot_train.jsonl": "aa51a1b7e3ceb3e7777f86177bc68dcb05338b82efbc753dbb1f723b3b409580",
+  "v1244_eq_symbolic_cot_train.jsonl": "5b173dafa25b75e695fdef6b8ec01ea42a0bcb04378242f82c754475edf45117",
+  "v1244_protected_replay_train.jsonl": "422bd02267a3bd91a34b63c0899d85efa81ae749118eca7c3b5146f199eea20c",
+  "v1244_micro_consolidation_train.jsonl": "c486a8a8ccb0c973ec7f16e2207316ed9d326e4947e94638342b68c4fa488d60"
+ },
+ "drops": {
+  "bit": {
+   "leak_full947": 27
+  },
+  "eq": {
+   "leak_full947": 66,
+   "eq_resolve_fail": 52
+  }
+ },
+ "revalidation_bad_rows": {
+  "v1244_bit_cot_train.jsonl": 0,
+  "v1244_eq_numeric_cot_train.jsonl": 0,
+  "v1244_eq_symbolic_cot_train.jsonl": 0,
+  "v1244_protected_replay_train.jsonl": 0,
+  "v1244_micro_consolidation_train.jsonl": 0
+ }
+}
