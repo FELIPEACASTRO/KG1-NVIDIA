@@ -9,10 +9,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
+SAFE_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 MODEL_DRYRUN_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
 COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
     "blob/master/notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
+)
+SAFE_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
+    "blob/master/notebooks/KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 )
 MODEL_DRYRUN_COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
@@ -927,6 +932,12 @@ print('=== V1243 ONECELL REALTIME LAUNCHER END ===', flush=True)
 """
 
 
+SAFE_ONE_CELL_SOURCE = ONE_CELL_SOURCE.replace(
+    f"COLAB_URL = '{COLAB_URL}'\n",
+    f"COLAB_URL = '{SAFE_COLAB_URL}'\n",
+)
+
+
 MODEL_DRYRUN_ONE_CELL_SOURCE = (
     ONE_CELL_SOURCE
     .replace(
@@ -984,6 +995,7 @@ def build_notebook(
     *,
     colab_url: str,
     notebook_name: str,
+    title: str,
     one_cell_source: str,
     description: str,
 ) -> dict[str, object]:
@@ -991,7 +1003,7 @@ def build_notebook(
         "cells": [
             markdown_cell(
                 "v1243-md-01",
-                f"""# KG1 V1243 Colab Realtime Launcher
+                f"""# {title}
 
 Colab URL:
 
@@ -1027,6 +1039,7 @@ def main() -> int:
             build_notebook(
                 colab_url=COLAB_URL,
                 notebook_name=NOTEBOOK_PATH.name,
+                title="KG1 V1243 Colab Realtime Launcher",
                 one_cell_source=ONE_CELL_SOURCE,
                 description=(
                     "One-cell launcher. Press **Run** once: it automatically checks HF live-log access, "
@@ -1044,11 +1057,33 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
+    SAFE_NOTEBOOK_PATH.write_text(
+        json.dumps(
+            build_notebook(
+                colab_url=SAFE_COLAB_URL,
+                notebook_name=SAFE_NOTEBOOK_PATH.name,
+                title="KG1 V1243 Colab Realtime Safe Launcher",
+                one_cell_source=SAFE_ONE_CELL_SOURCE,
+                description=(
+                    "One-cell safe launcher. Press **Run** once: it automatically checks HF live-log access, "
+                    "disk capacity, downloads the launch pack, installs bounded dependencies, and runs "
+                    "tokenization dry-run. GPU model-load dry-run and real training remain locked behind "
+                    "explicit Colab Secrets/env flags, baseline adapter preflight, live-log upload checks, "
+                    "and the FinOps mamba policy."
+                ),
+            ),
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     MODEL_DRYRUN_NOTEBOOK_PATH.write_text(
         json.dumps(
             build_notebook(
                 colab_url=MODEL_DRYRUN_COLAB_URL,
                 notebook_name=MODEL_DRYRUN_NOTEBOOK_PATH.name,
+                title="KG1 V1243 Colab Model Dryrun Launcher",
                 one_cell_source=MODEL_DRYRUN_ONE_CELL_SOURCE,
                 description=(
                     "One-cell model dry-run launcher. Press **Run** once: it runs the same tokenization gate, "
@@ -1065,8 +1100,10 @@ def main() -> int:
         encoding="utf-8",
     )
     print(f"wrote {NOTEBOOK_PATH}")
+    print(f"wrote {SAFE_NOTEBOOK_PATH}")
     print(f"wrote {MODEL_DRYRUN_NOTEBOOK_PATH}")
     print(f"colab_url={COLAB_URL}")
+    print(f"safe_colab_url={SAFE_COLAB_URL}")
     print(f"model_dryrun_colab_url={MODEL_DRYRUN_COLAB_URL}")
     return 0
 
