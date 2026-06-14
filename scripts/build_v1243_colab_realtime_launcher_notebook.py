@@ -186,6 +186,10 @@ EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256_VALUE = os.environ.get('EXPECTED_INIT_ADAPT
 MAMBA_SSM_PIP_SPEC = os.environ.get('KG1_MAMBA_SSM_PIP_SPEC', MAMBA_SSM_PIP_SPEC)
 CAUSAL_CONV1D_PIP_SPEC = os.environ.get('KG1_CAUSAL_CONV1D_PIP_SPEC', CAUSAL_CONV1D_PIP_SPEC)
 INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)
+if (RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1') and INSTALL_CAUSAL_CONV1D != '1':
+    print('auto_enable_causal_conv1d_install=True reason=GPU phase requires real causal-conv1d', flush=True)
+    INSTALL_CAUSAL_CONV1D = '1'
+    os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'
 
 os.environ.setdefault('PYTHONUNBUFFERED', '1')
 os.environ.setdefault('HF_XET_HIGH_PERFORMANCE', '1')
@@ -807,7 +811,12 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
         "ACCEPT_GPU_SPEND = os.environ.get('KG1_ACCEPT_GPU_SPEND', '1')\n",
     )
     .replace(
-        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n\nos.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
+        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n"
+        "if (RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1') and INSTALL_CAUSAL_CONV1D != '1':\n"
+        "    print('auto_enable_causal_conv1d_install=True reason=GPU phase requires real causal-conv1d', flush=True)\n"
+        "    INSTALL_CAUSAL_CONV1D = '1'\n"
+        "    os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'\n\n"
+        "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
         "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n\n"
         "# Hard-lock this dedicated notebook against stale Colab Secrets from tokenize-only runs.\n"
         "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n"
