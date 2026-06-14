@@ -97,6 +97,8 @@ EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256_VALUE = os.environ.get('EXPECTED_INIT_ADAPT
 MAMBA_SSM_PIP_SPEC = os.environ.get('KG1_MAMBA_SSM_PIP_SPEC', 'mamba-ssm==2.3.1')
 CAUSAL_CONV1D_PIP_SPEC = os.environ.get('KG1_CAUSAL_CONV1D_PIP_SPEC', 'causal-conv1d==1.6.1')
 INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', '0')
+MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', 'block_for_train')
+ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', '0')
 
 # Static release-gate contract snippets. These names are intentionally visible.
 TOKENIZE_ONLY_DRY_RUN = '1'
@@ -160,6 +162,8 @@ for secret_name in [
     'KG1_MAMBA_SSM_PIP_SPEC',
     'KG1_CAUSAL_CONV1D_PIP_SPEC',
     'KG1_INSTALL_CAUSAL_CONV1D',
+    'KG1_V1243_MAMBA_SOURCE_BUILD_POLICY',
+    'KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD',
 ]:
     if not os.environ.get(secret_name):
         secret_value = read_colab_secret(secret_name)
@@ -186,6 +190,8 @@ EXPECTED_INIT_ADAPTER_WEIGHTS_SHA256_VALUE = os.environ.get('EXPECTED_INIT_ADAPT
 MAMBA_SSM_PIP_SPEC = os.environ.get('KG1_MAMBA_SSM_PIP_SPEC', MAMBA_SSM_PIP_SPEC)
 CAUSAL_CONV1D_PIP_SPEC = os.environ.get('KG1_CAUSAL_CONV1D_PIP_SPEC', CAUSAL_CONV1D_PIP_SPEC)
 INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)
+MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', MAMBA_SOURCE_BUILD_POLICY)
+ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', ALLOW_MAMBA_SOURCE_BUILD)
 if (RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1') and INSTALL_CAUSAL_CONV1D != '1':
     print('auto_enable_causal_conv1d_install=True reason=GPU phase requires real causal-conv1d', flush=True)
     INSTALL_CAUSAL_CONV1D = '1'
@@ -310,6 +316,8 @@ def validate_gpu_phase_preconditions(cuda_available, gpu_total_gib):
         'init_adapter_repo_ready': bool(INIT_ADAPTER_REPO_VALUE),
         'init_adapter_revision_ready': bool(INIT_ADAPTER_REVISION_VALUE),
         'output_repo_ready': bool(OUTPUT_REPO),
+        'final_adapter_upload_required': RUN_TRAIN == '1',
+        'hf_token_ready_for_upload': bool(os.environ.get('HF_TOKEN')),
     }}, sort_keys=True), flush=True)
     if not needs_gpu:
         print('gpu_phase_preflight_skipped=True tokenization-only path', flush=True)
@@ -327,12 +335,53 @@ def validate_gpu_phase_preconditions(cuda_available, gpu_total_gib):
         raise RuntimeError('Real train requires KG1_V1243_RUN_MODEL_DRYRUN=1 in the same launch so model/adapter dry-run runs first.')
     if RUN_TRAIN == '1' and not OUTPUT_REPO:
         raise RuntimeError('Real train requires OUTPUT_REPO so the final adapter is uploaded.')
+    if RUN_TRAIN == '1' and not os.environ.get('HF_TOKEN'):
+        raise RuntimeError('Real train requires HF_TOKEN/HF_KEY in Colab Secrets so the final adapter can be uploaded to OUTPUT_REPO.')
     if not cuda_available:
         raise RuntimeError('GPU is required for model dry-run or real train. Enable a Colab GPU runtime before running.')
     if gpu_total_gib < MIN_GPU_TOTAL_GIB:
         raise RuntimeError(f'GPU memory too small for safe Nemotron model dry-run/train: {{gpu_total_gib:.2f}} GiB < {{MIN_GPU_TOTAL_GIB:.2f}} GiB.')
     print('gpu_phase_preflight_pass=True', flush=True)
     print('=== V1243 GPU PHASE PREFLIGHT END ===', flush=True)
+
+def pip_spec_looks_like_direct_wheel(spec):
+    value = str(spec or '').strip().lower()
+    return '.whl' in value
+
+def validate_mamba_finops_policy():
+    needs_gpu = RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1'
+    direct_wheel = pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC)
+    allow_source = ALLOW_MAMBA_SOURCE_BUILD == '1'
+    policy = MAMBA_SOURCE_BUILD_POLICY
+    if policy not in ('warn', 'block_for_train', 'block_for_gpu'):
+        raise RuntimeError(
+            'KG1_V1243_MAMBA_SOURCE_BUILD_POLICY must be warn, block_for_train, or block_for_gpu; got '
+            + repr(policy)
+        )
+    report = {{
+        'needs_gpu': needs_gpu,
+        'run_model_dryrun': RUN_MODEL_DRYRUN,
+        'run_train': RUN_TRAIN,
+        'mamba_ssm_pip_spec': MAMBA_SSM_PIP_SPEC,
+        'direct_wheel_spec': direct_wheel,
+        'source_build_possible': not direct_wheel,
+        'policy': policy,
+        'allow_source_build_override': allow_source,
+    }}
+    print('mamba_finops_policy =', json.dumps(report, sort_keys=True), flush=True)
+    if not needs_gpu or direct_wheel or allow_source:
+        return
+    should_block = policy == 'block_for_gpu' or (policy == 'block_for_train' and RUN_TRAIN == '1')
+    if should_block:
+        raise RuntimeError(
+            'Mamba source-build risk blocked before GPU spend. Set KG1_MAMBA_SSM_PIP_SPEC to a direct .whl URL/path, '
+            'or set KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD=1 if you intentionally accept the compile-time cost/risk.'
+        )
+    print(
+        'mamba_source_build_warning=True reason=KG1_MAMBA_SSM_PIP_SPEC is not a direct .whl; '
+        'pip may compile mamba-ssm and burn A100 time. Prefer a matching wheel.',
+        flush=True,
+    )
 
 def validate_launch_intent_contract():
     print('launch_intent_contract =', json.dumps({{
@@ -342,6 +391,8 @@ def validate_launch_intent_contract():
         'run_train': RUN_TRAIN,
         'accept_gpu_spend': ACCEPT_GPU_SPEND,
         'output_repo_ready': bool(OUTPUT_REPO),
+        'mamba_source_build_policy': MAMBA_SOURCE_BUILD_POLICY,
+        'allow_mamba_source_build': ALLOW_MAMBA_SOURCE_BUILD,
     }}, sort_keys=True), flush=True)
     if REQUIRE_REAL_TRAIN == '1' and RUN_TRAIN != '1':
         raise RuntimeError(
@@ -432,6 +483,8 @@ def ensure_gpu_model_dependencies():
     print('mamba_ssm_pip_spec =', MAMBA_SSM_PIP_SPEC, flush=True)
     print('causal_conv1d_pip_spec =', CAUSAL_CONV1D_PIP_SPEC, flush=True)
     print('install_causal_conv1d =', INSTALL_CAUSAL_CONV1D, flush=True)
+    validate_mamba_finops_policy()
+    print('mamba_install_strategy =', 'direct_wheel' if pip_spec_looks_like_direct_wheel(MAMBA_SSM_PIP_SPEC) else 'possible_source_build', flush=True)
     run_cmd([sys.executable, '-m', 'pip', 'install', '-q', 'packaging', 'wheel', 'ninja', 'setuptools'], cwd=ROOT, log_path=LOG_ROOT / 'pip_install_gpu_build_tools.log')
     run_cmd([sys.executable, '-m', 'pip', 'install', '--progress-bar', 'off', '--no-build-isolation', MAMBA_SSM_PIP_SPEC], cwd=ROOT, log_path=LOG_ROOT / 'pip_install_mamba_ssm.log')
     if not verify_import_statement('mamba_ssm.rmsnorm_fn', 'from mamba_ssm.ops.triton.layernorm_gated import rmsnorm_fn; print(\"mamba_ssm rmsnorm OK\")'):
@@ -567,6 +620,8 @@ print('init_adapter_dir_ready =', bool(INIT_ADAPTER_DIR_VALUE), flush=True)
 print('init_adapter_repo_ready =', bool(INIT_ADAPTER_REPO_VALUE), flush=True)
 print('init_adapter_revision_ready =', bool(INIT_ADAPTER_REVISION_VALUE), flush=True)
 print('mamba_ssm_pip_spec =', MAMBA_SSM_PIP_SPEC, flush=True)
+print('mamba_source_build_policy =', MAMBA_SOURCE_BUILD_POLICY, flush=True)
+print('allow_mamba_source_build =', ALLOW_MAMBA_SOURCE_BUILD, flush=True)
 print('install_causal_conv1d =', INSTALL_CAUSAL_CONV1D, flush=True)
 print('allow_kaggle_submit =', ALLOW_KAGGLE_SUBMIT, flush=True)
 wrapper_event(
@@ -582,8 +637,11 @@ wrapper_event(
     require_live_log_upload=REQUIRE_LIVE_LOG_UPLOAD,
     require_model_dryrun=REQUIRE_MODEL_DRYRUN,
     require_real_train=REQUIRE_REAL_TRAIN,
+    mamba_source_build_policy=MAMBA_SOURCE_BUILD_POLICY,
+    allow_mamba_source_build=ALLOW_MAMBA_SOURCE_BUILD,
 )
 validate_launch_intent_contract()
+validate_mamba_finops_policy()
 cuda_available, gpu_total_gib, content_free_gib = runtime_probe()
 needs_gpu = RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1'
 if REQUIRE_LIVE_LOG_UPLOAD == '1' and not os.environ.get('HF_TOKEN'):
@@ -748,6 +806,7 @@ if RUN_TRAIN != '1':
     print('real_train_skipped=True set KG1_V1243_RUN_TRAIN=1 and OUTPUT_REPO only after dry runs pass', flush=True)
     print('TRAIN_NOT_EXECUTED_NO_ADAPTER_CREATED=True', flush=True)
     print('TRAIN_ENABLE_FLAGS=KG1_ACCEPT_GPU_SPEND=1 KG1_V1243_RUN_MODEL_DRYRUN=1 KG1_V1243_RUN_TRAIN=1 KG1_V1243_REQUIRE_REAL_TRAIN=1 OUTPUT_REPO=<hf-output-repo>', flush=True)
+    print('TRAIN_FINOPS_FLAGS=prefer KG1_MAMBA_SSM_PIP_SPEC=<direct-wheel.whl>; otherwise set KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD=1 to knowingly accept source-build time/risk', flush=True)
     wrapper_event('REAL_TRAIN', 'SKIPPED', reason='KG1_V1243_RUN_TRAIN is not 1')
 else:
     if not OUTPUT_REPO:
@@ -812,6 +871,8 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
     )
     .replace(
         "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n"
+        "MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', MAMBA_SOURCE_BUILD_POLICY)\n"
+        "ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', ALLOW_MAMBA_SOURCE_BUILD)\n"
         "if (RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1') and INSTALL_CAUSAL_CONV1D != '1':\n"
         "    print('auto_enable_causal_conv1d_install=True reason=GPU phase requires real causal-conv1d', flush=True)\n"
         "    INSTALL_CAUSAL_CONV1D = '1'\n"
@@ -830,6 +891,8 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
         "RUN_TRAIN = '0'\n"
         "REQUIRE_MODEL_DRYRUN = '1'\n"
         "INSTALL_CAUSAL_CONV1D = '1'\n"
+        "MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', MAMBA_SOURCE_BUILD_POLICY)\n"
+        "ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', ALLOW_MAMBA_SOURCE_BUILD)\n"
         "print('model_dryrun_launcher_hard_lock = true', flush=True)\n"
         "print('force_pack_adapter_defaults = true', flush=True)\n\n"
         "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
@@ -898,7 +961,9 @@ def main() -> int:
                     "disk capacity, downloads the launch pack, installs bounded dependencies, and runs "
                     "tokenization dry-run. GPU model-load dry-run is locked behind `KG1_ACCEPT_GPU_SPEND=1`, "
                     "`KG1_V1243_RUN_MODEL_DRYRUN=1`, and a pinned baseline adapter. Real training remains "
-                    "locked behind `KG1_V1243_RUN_TRAIN=1`, model dry-run, and `OUTPUT_REPO`."
+                    "locked behind `KG1_V1243_RUN_TRAIN=1`, model dry-run, `OUTPUT_REPO`, and a FinOps "
+                    "mamba policy: prefer `KG1_MAMBA_SSM_PIP_SPEC=<direct-wheel.whl>` or explicitly set "
+                    "`KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD=1`."
                 ),
             ),
             indent=2,
@@ -917,7 +982,8 @@ def main() -> int:
                     "One-cell model dry-run launcher. Press **Run** once: it runs the same tokenization gate, "
                     "then automatically enters GPU model-load/adapter dry-run with `KG1_V1243_RUN_MODEL_DRYRUN=1` "
                     "and `KG1_ACCEPT_GPU_SPEND=1` by default. Real training stays disabled because "
-                    "`KG1_V1243_RUN_TRAIN=0` remains the default."
+                    "`KG1_V1243_RUN_TRAIN=0` remains the default. It logs whether `mamba-ssm` is installed from "
+                    "a direct wheel or a possible source build before model load."
                 ),
             ),
             indent=2,
