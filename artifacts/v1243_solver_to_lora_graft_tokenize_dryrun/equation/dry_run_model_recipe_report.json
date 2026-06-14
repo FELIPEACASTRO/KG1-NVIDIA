@@ -1,6 +1,6 @@
 {
   "data": {
-    "data_repo": "local-v1243-solver-to-lora-graft",
+    "data_repo": "local-v1243-colab-launch",
     "pretokenized_archive_resolved_path": null,
     "pretokenized_archive_sha256": null,
     "pretokenized_archive_zip": "",
@@ -11,10 +11,10 @@
     "tokenized_train_records": 544,
     "tokenized_validation_records": 170,
     "train_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_equation_specialist_train.jsonl",
-    "train_file_sha256": "63aad59bf01cc38ad1cf0822326b3f4541335cf30d6cdbc053891b52edccbd84",
+    "train_file_sha256": "3b5913959defdda8f63e8cb364e39981f2cbb996aae0fb4085e700c737033240",
     "train_records": 544,
     "validation_file": "C:\\Users\\davis\\Workspace\\KG1 -NVIDIA\\artifacts\\v1243_solver_to_lora_graft\\v1243_val170.jsonl",
-    "validation_file_sha256": "ebca02adfeeafbfdfd9334410483b4fc0d5b8a191bb32fce704c22824f119f46",
+    "validation_file_sha256": "ff364a0e359cba3394976c7029c20138b7cff099c4684df2faf0ea0f1e9d336a",
     "validation_records": 170
   },
   "decision": {
@@ -62,7 +62,7 @@
   },
   "model_name": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
   "model_revision": "cbd3fa9f933d55ef16a84236559f4ee2a0526848",
-  "run_id": "v1243_equation_tokenize_dryrun_current",
+  "run_id": "v1243_equation_refresh_lf_hash_20260614",
   "runtime": {
     "cuda_available": false,
     "tokenize_only_dry_run": true,
@@ -222,6 +222,154 @@
           "active_loss_tokens": 6598,
           "boxed_payload_loss_weight": 5.0,
           "boxed_payload_weighted_tokens": 1749,
+          "by_class": {
+            "equation_ops:absdiffx1": {
+              "active_loss_tokens": 509,
+              "boxed_payload_weighted_tokens": 86,
+              "rows": 47,
+              "weighted_loss_token_sum": 853.0
+            },
+            "equation_ops:absdiffx1+add_minus1x1": {
+              "active_loss_tokens": 69,
+              "boxed_payload_weighted_tokens": 15,
+              "rows": 6,
+              "weighted_loss_token_sum": 129.0
+            },
+            "equation_ops:absdiffx1+add_plus1x1": {
+              "active_loss_tokens": 195,
+              "boxed_payload_weighted_tokens": 42,
+              "rows": 17,
+              "weighted_loss_token_sum": 363.0
+            },
+            "equation_ops:absdiffx1+addx1": {
+              "active_loss_tokens": 64,
+              "boxed_payload_weighted_tokens": 10,
+              "rows": 6,
+              "weighted_loss_token_sum": 104.0
+            },
+            "equation_ops:absdiffx1+mulx1": {
+              "active_loss_tokens": 88,
+              "boxed_payload_weighted_tokens": 25,
+              "rows": 7,
+              "weighted_loss_token_sum": 188.0
+            },
+            "equation_ops:add_minus1x1": {
+              "active_loss_tokens": 632,
+              "boxed_payload_weighted_tokens": 137,
+              "rows": 55,
+              "weighted_loss_token_sum": 1180.0
+            },
+            "equation_ops:add_minus1x1+add_plus1x1": {
+              "active_loss_tokens": 138,
+              "boxed_payload_weighted_tokens": 30,
+              "rows": 12,
+              "weighted_loss_token_sum": 258.0
+            },
+            "equation_ops:add_minus1x1+mulx1": {
+              "active_loss_tokens": 118,
+              "boxed_payload_weighted_tokens": 28,
+              "rows": 10,
+              "weighted_loss_token_sum": 230.0
+            },
+            "equation_ops:add_plus1x1": {
+              "active_loss_tokens": 690,
+              "boxed_payload_weighted_tokens": 150,
+              "rows": 60,
+              "weighted_loss_token_sum": 1290.0
+            },
+            "equation_ops:add_plus1x1+mulx1": {
+              "active_loss_tokens": 257,
+              "boxed_payload_weighted_tokens": 68,
+              "rows": 21,
+              "weighted_loss_token_sum": 529.0
+            },
+            "equation_ops:addx1": {
+              "active_loss_tokens": 523,
+              "boxed_payload_weighted_tokens": 118,
+              "rows": 45,
+              "weighted_loss_token_sum": 995.0
+            },
+            "equation_ops:addx1+add_minus1x1": {
+              "active_loss_tokens": 90,
+              "boxed_payload_weighted_tokens": 18,
+              "rows": 8,
+              "weighted_loss_token_sum": 162.0
+            },
+            "equation_ops:addx1+add_plus1x1": {
+              "active_loss_tokens": 127,
+              "boxed_payload_weighted_tokens": 28,
+              "rows": 11,
+              "weighted_loss_token_sum": 239.0
+            },
+            "equation_ops:addx1+mulx1": {
+              "active_loss_tokens": 108,
+              "boxed_payload_weighted_tokens": 27,
+              "rows": 9,
+              "weighted_loss_token_sum": 216.0
+            },
+            "equation_ops:mulx1": {
+              "active_loss_tokens": 584,
+              "boxed_payload_weighted_tokens": 170,
+              "rows": 46,
+              "weighted_loss_token_sum": 1264.0
+            },
+            "gravity_constant:v1243_protected_replay": {
+              "active_loss_tokens": 648,
+              "boxed_payload_weighted_tokens": 234,
+              "rows": 46,
+              "weighted_loss_token_sum": 1584.0
+            },
+            "numeral_system:v1243_protected_replay": {
+              "active_loss_tokens": 494,
+              "boxed_payload_weighted_tokens": 110,
+              "rows": 46,
+              "weighted_loss_token_sum": 934.0
+            },
+            "text_encryption:v1243_protected_replay": {
+              "active_loss_tokens": 623,
+              "boxed_payload_weighted_tokens": 226,
+              "rows": 46,
+              "weighted_loss_token_sum": 1527.0
+            },
+            "unit_conversion:v1243_protected_replay": {
+              "active_loss_tokens": 641,
+              "boxed_payload_weighted_tokens": 227,
+              "rows": 46,
+              "weighted_loss_token_sum": 1549.0
+            }
+          },
+          "by_family": {
+            "equation_transform": {
+              "active_loss_tokens": 4192,
+              "boxed_payload_weighted_tokens": 952,
+              "rows": 360,
+              "weighted_loss_token_sum": 8000.0
+            },
+            "gravity_constant": {
+              "active_loss_tokens": 648,
+              "boxed_payload_weighted_tokens": 234,
+              "rows": 46,
+              "weighted_loss_token_sum": 1584.0
+            },
+            "numeral_system": {
+              "active_loss_tokens": 494,
+              "boxed_payload_weighted_tokens": 110,
+              "rows": 46,
+              "weighted_loss_token_sum": 934.0
+            },
+            "text_encryption": {
+              "active_loss_tokens": 623,
+              "boxed_payload_weighted_tokens": 226,
+              "rows": 46,
+              "weighted_loss_token_sum": 1527.0
+            },
+            "unit_conversion": {
+              "active_loss_tokens": 641,
+              "boxed_payload_weighted_tokens": 227,
+              "rows": 46,
+              "weighted_loss_token_sum": 1549.0
+            }
+          },
           "require_boxed_payload_weight": true,
           "rows": 544,
           "rows_with_boxed_payload_weight": 544,
@@ -244,6 +392,202 @@
           "active_loss_tokens": 2478,
           "boxed_payload_loss_weight": 5.0,
           "boxed_payload_weighted_tokens": 952,
+          "by_class": {
+            "bit_rule:a256": {
+              "active_loss_tokens": 187,
+              "boxed_payload_weighted_tokens": 88,
+              "rows": 11,
+              "weighted_loss_token_sum": 539.0
+            },
+            "bit_rule:b": {
+              "active_loss_tokens": 187,
+              "boxed_payload_weighted_tokens": 88,
+              "rows": 11,
+              "weighted_loss_token_sum": 539.0
+            },
+            "bit_rule:bxc": {
+              "active_loss_tokens": 170,
+              "boxed_payload_weighted_tokens": 80,
+              "rows": 10,
+              "weighted_loss_token_sum": 490.0
+            },
+            "bit_rule:choice": {
+              "active_loss_tokens": 68,
+              "boxed_payload_weighted_tokens": 32,
+              "rows": 4,
+              "weighted_loss_token_sum": 196.0
+            },
+            "bit_rule:d2": {
+              "active_loss_tokens": 136,
+              "boxed_payload_weighted_tokens": 64,
+              "rows": 8,
+              "weighted_loss_token_sum": 392.0
+            },
+            "bit_rule:majority": {
+              "active_loss_tokens": 170,
+              "boxed_payload_weighted_tokens": 80,
+              "rows": 10,
+              "weighted_loss_token_sum": 490.0
+            },
+            "bit_rule:u": {
+              "active_loss_tokens": 204,
+              "boxed_payload_weighted_tokens": 96,
+              "rows": 12,
+              "weighted_loss_token_sum": 588.0
+            },
+            "bit_rule:uac": {
+              "active_loss_tokens": 170,
+              "boxed_payload_weighted_tokens": 80,
+              "rows": 10,
+              "weighted_loss_token_sum": 490.0
+            },
+            "bit_rule:uxc": {
+              "active_loss_tokens": 238,
+              "boxed_payload_weighted_tokens": 112,
+              "rows": 14,
+              "weighted_loss_token_sum": 686.0
+            },
+            "equation_ops:absdiffx1": {
+              "active_loss_tokens": 117,
+              "boxed_payload_weighted_tokens": 18,
+              "rows": 11,
+              "weighted_loss_token_sum": 189.0
+            },
+            "equation_ops:absdiffx1+add_plus1x1": {
+              "active_loss_tokens": 47,
+              "boxed_payload_weighted_tokens": 11,
+              "rows": 4,
+              "weighted_loss_token_sum": 91.0
+            },
+            "equation_ops:absdiffx1+addx1": {
+              "active_loss_tokens": 11,
+              "boxed_payload_weighted_tokens": 2,
+              "rows": 1,
+              "weighted_loss_token_sum": 19.0
+            },
+            "equation_ops:absdiffx1+mulx1": {
+              "active_loss_tokens": 13,
+              "boxed_payload_weighted_tokens": 4,
+              "rows": 1,
+              "weighted_loss_token_sum": 29.0
+            },
+            "equation_ops:add_minus1x1": {
+              "active_loss_tokens": 79,
+              "boxed_payload_weighted_tokens": 16,
+              "rows": 7,
+              "weighted_loss_token_sum": 143.0
+            },
+            "equation_ops:add_minus1x1+add_plus1x1": {
+              "active_loss_tokens": 35,
+              "boxed_payload_weighted_tokens": 8,
+              "rows": 3,
+              "weighted_loss_token_sum": 67.0
+            },
+            "equation_ops:add_minus1x1+mulx1": {
+              "active_loss_tokens": 11,
+              "boxed_payload_weighted_tokens": 2,
+              "rows": 1,
+              "weighted_loss_token_sum": 19.0
+            },
+            "equation_ops:add_plus1x1": {
+              "active_loss_tokens": 56,
+              "boxed_payload_weighted_tokens": 11,
+              "rows": 5,
+              "weighted_loss_token_sum": 100.0
+            },
+            "equation_ops:add_plus1x1+mulx1": {
+              "active_loss_tokens": 34,
+              "boxed_payload_weighted_tokens": 7,
+              "rows": 3,
+              "weighted_loss_token_sum": 62.0
+            },
+            "equation_ops:addx1": {
+              "active_loss_tokens": 82,
+              "boxed_payload_weighted_tokens": 19,
+              "rows": 7,
+              "weighted_loss_token_sum": 158.0
+            },
+            "equation_ops:addx1+add_plus1x1": {
+              "active_loss_tokens": 58,
+              "boxed_payload_weighted_tokens": 13,
+              "rows": 5,
+              "weighted_loss_token_sum": 110.0
+            },
+            "equation_ops:addx1+mulx1": {
+              "active_loss_tokens": 23,
+              "boxed_payload_weighted_tokens": 5,
+              "rows": 2,
+              "weighted_loss_token_sum": 43.0
+            },
+            "equation_ops:mulx1": {
+              "active_loss_tokens": 125,
+              "boxed_payload_weighted_tokens": 35,
+              "rows": 10,
+              "weighted_loss_token_sum": 265.0
+            },
+            "gravity_constant:v1243_holdout": {
+              "active_loss_tokens": 69,
+              "boxed_payload_weighted_tokens": 24,
+              "rows": 5,
+              "weighted_loss_token_sum": 165.0
+            },
+            "numeral_system:v1243_holdout": {
+              "active_loss_tokens": 52,
+              "boxed_payload_weighted_tokens": 11,
+              "rows": 5,
+              "weighted_loss_token_sum": 96.0
+            },
+            "text_encryption:v1243_holdout": {
+              "active_loss_tokens": 67,
+              "boxed_payload_weighted_tokens": 22,
+              "rows": 5,
+              "weighted_loss_token_sum": 155.0
+            },
+            "unit_conversion:v1243_holdout": {
+              "active_loss_tokens": 69,
+              "boxed_payload_weighted_tokens": 24,
+              "rows": 5,
+              "weighted_loss_token_sum": 165.0
+            }
+          },
+          "by_family": {
+            "bit_manipulation": {
+              "active_loss_tokens": 1530,
+              "boxed_payload_weighted_tokens": 720,
+              "rows": 90,
+              "weighted_loss_token_sum": 4410.0
+            },
+            "equation_transform": {
+              "active_loss_tokens": 691,
+              "boxed_payload_weighted_tokens": 151,
+              "rows": 60,
+              "weighted_loss_token_sum": 1295.0
+            },
+            "gravity_constant": {
+              "active_loss_tokens": 69,
+              "boxed_payload_weighted_tokens": 24,
+              "rows": 5,
+              "weighted_loss_token_sum": 165.0
+            },
+            "numeral_system": {
+              "active_loss_tokens": 52,
+              "boxed_payload_weighted_tokens": 11,
+              "rows": 5,
+              "weighted_loss_token_sum": 96.0
+            },
+            "text_encryption": {
+              "active_loss_tokens": 67,
+              "boxed_payload_weighted_tokens": 22,
+              "rows": 5,
+              "weighted_loss_token_sum": 155.0
+            },
+            "unit_conversion": {
+              "active_loss_tokens": 69,
+              "boxed_payload_weighted_tokens": 24,
+              "rows": 5,
+              "weighted_loss_token_sum": 165.0
+            }
+          },
           "require_boxed_payload_weight": true,
           "rows": 170,
           "rows_with_boxed_payload_weight": 170,
@@ -294,6 +638,154 @@
       "active_loss_tokens": 6598,
       "boxed_payload_loss_weight": 5.0,
       "boxed_payload_weighted_tokens": 1749,
+      "by_class": {
+        "equation_ops:absdiffx1": {
+          "active_loss_tokens": 509,
+          "boxed_payload_weighted_tokens": 86,
+          "rows": 47,
+          "weighted_loss_token_sum": 853.0
+        },
+        "equation_ops:absdiffx1+add_minus1x1": {
+          "active_loss_tokens": 69,
+          "boxed_payload_weighted_tokens": 15,
+          "rows": 6,
+          "weighted_loss_token_sum": 129.0
+        },
+        "equation_ops:absdiffx1+add_plus1x1": {
+          "active_loss_tokens": 195,
+          "boxed_payload_weighted_tokens": 42,
+          "rows": 17,
+          "weighted_loss_token_sum": 363.0
+        },
+        "equation_ops:absdiffx1+addx1": {
+          "active_loss_tokens": 64,
+          "boxed_payload_weighted_tokens": 10,
+          "rows": 6,
+          "weighted_loss_token_sum": 104.0
+        },
+        "equation_ops:absdiffx1+mulx1": {
+          "active_loss_tokens": 88,
+          "boxed_payload_weighted_tokens": 25,
+          "rows": 7,
+          "weighted_loss_token_sum": 188.0
+        },
+        "equation_ops:add_minus1x1": {
+          "active_loss_tokens": 632,
+          "boxed_payload_weighted_tokens": 137,
+          "rows": 55,
+          "weighted_loss_token_sum": 1180.0
+        },
+        "equation_ops:add_minus1x1+add_plus1x1": {
+          "active_loss_tokens": 138,
+          "boxed_payload_weighted_tokens": 30,
+          "rows": 12,
+          "weighted_loss_token_sum": 258.0
+        },
+        "equation_ops:add_minus1x1+mulx1": {
+          "active_loss_tokens": 118,
+          "boxed_payload_weighted_tokens": 28,
+          "rows": 10,
+          "weighted_loss_token_sum": 230.0
+        },
+        "equation_ops:add_plus1x1": {
+          "active_loss_tokens": 690,
+          "boxed_payload_weighted_tokens": 150,
+          "rows": 60,
+          "weighted_loss_token_sum": 1290.0
+        },
+        "equation_ops:add_plus1x1+mulx1": {
+          "active_loss_tokens": 257,
+          "boxed_payload_weighted_tokens": 68,
+          "rows": 21,
+          "weighted_loss_token_sum": 529.0
+        },
+        "equation_ops:addx1": {
+          "active_loss_tokens": 523,
+          "boxed_payload_weighted_tokens": 118,
+          "rows": 45,
+          "weighted_loss_token_sum": 995.0
+        },
+        "equation_ops:addx1+add_minus1x1": {
+          "active_loss_tokens": 90,
+          "boxed_payload_weighted_tokens": 18,
+          "rows": 8,
+          "weighted_loss_token_sum": 162.0
+        },
+        "equation_ops:addx1+add_plus1x1": {
+          "active_loss_tokens": 127,
+          "boxed_payload_weighted_tokens": 28,
+          "rows": 11,
+          "weighted_loss_token_sum": 239.0
+        },
+        "equation_ops:addx1+mulx1": {
+          "active_loss_tokens": 108,
+          "boxed_payload_weighted_tokens": 27,
+          "rows": 9,
+          "weighted_loss_token_sum": 216.0
+        },
+        "equation_ops:mulx1": {
+          "active_loss_tokens": 584,
+          "boxed_payload_weighted_tokens": 170,
+          "rows": 46,
+          "weighted_loss_token_sum": 1264.0
+        },
+        "gravity_constant:v1243_protected_replay": {
+          "active_loss_tokens": 648,
+          "boxed_payload_weighted_tokens": 234,
+          "rows": 46,
+          "weighted_loss_token_sum": 1584.0
+        },
+        "numeral_system:v1243_protected_replay": {
+          "active_loss_tokens": 494,
+          "boxed_payload_weighted_tokens": 110,
+          "rows": 46,
+          "weighted_loss_token_sum": 934.0
+        },
+        "text_encryption:v1243_protected_replay": {
+          "active_loss_tokens": 623,
+          "boxed_payload_weighted_tokens": 226,
+          "rows": 46,
+          "weighted_loss_token_sum": 1527.0
+        },
+        "unit_conversion:v1243_protected_replay": {
+          "active_loss_tokens": 641,
+          "boxed_payload_weighted_tokens": 227,
+          "rows": 46,
+          "weighted_loss_token_sum": 1549.0
+        }
+      },
+      "by_family": {
+        "equation_transform": {
+          "active_loss_tokens": 4192,
+          "boxed_payload_weighted_tokens": 952,
+          "rows": 360,
+          "weighted_loss_token_sum": 8000.0
+        },
+        "gravity_constant": {
+          "active_loss_tokens": 648,
+          "boxed_payload_weighted_tokens": 234,
+          "rows": 46,
+          "weighted_loss_token_sum": 1584.0
+        },
+        "numeral_system": {
+          "active_loss_tokens": 494,
+          "boxed_payload_weighted_tokens": 110,
+          "rows": 46,
+          "weighted_loss_token_sum": 934.0
+        },
+        "text_encryption": {
+          "active_loss_tokens": 623,
+          "boxed_payload_weighted_tokens": 226,
+          "rows": 46,
+          "weighted_loss_token_sum": 1527.0
+        },
+        "unit_conversion": {
+          "active_loss_tokens": 641,
+          "boxed_payload_weighted_tokens": 227,
+          "rows": 46,
+          "weighted_loss_token_sum": 1549.0
+        }
+      },
       "require_boxed_payload_weight": true,
       "rows": 544,
       "rows_with_boxed_payload_weight": 544,
@@ -304,6 +796,202 @@
       "active_loss_tokens": 2478,
       "boxed_payload_loss_weight": 5.0,
       "boxed_payload_weighted_tokens": 952,
+      "by_class": {
+        "bit_rule:a256": {
+          "active_loss_tokens": 187,
+          "boxed_payload_weighted_tokens": 88,
+          "rows": 11,
+          "weighted_loss_token_sum": 539.0
+        },
+        "bit_rule:b": {
+          "active_loss_tokens": 187,
+          "boxed_payload_weighted_tokens": 88,
+          "rows": 11,
+          "weighted_loss_token_sum": 539.0
+        },
+        "bit_rule:bxc": {
+          "active_loss_tokens": 170,
+          "boxed_payload_weighted_tokens": 80,
+          "rows": 10,
+          "weighted_loss_token_sum": 490.0
+        },
+        "bit_rule:choice": {
+          "active_loss_tokens": 68,
+          "boxed_payload_weighted_tokens": 32,
+          "rows": 4,
+          "weighted_loss_token_sum": 196.0
+        },
+        "bit_rule:d2": {
+          "active_loss_tokens": 136,
+          "boxed_payload_weighted_tokens": 64,
+          "rows": 8,
+          "weighted_loss_token_sum": 392.0
+        },
+        "bit_rule:majority": {
+          "active_loss_tokens": 170,
+          "boxed_payload_weighted_tokens": 80,
+          "rows": 10,
+          "weighted_loss_token_sum": 490.0
+        },
+        "bit_rule:u": {
+          "active_loss_tokens": 204,
+          "boxed_payload_weighted_tokens": 96,
+          "rows": 12,
+          "weighted_loss_token_sum": 588.0
+        },
+        "bit_rule:uac": {
+          "active_loss_tokens": 170,
+          "boxed_payload_weighted_tokens": 80,
+          "rows": 10,
+          "weighted_loss_token_sum": 490.0
+        },
+        "bit_rule:uxc": {
+          "active_loss_tokens": 238,
+          "boxed_payload_weighted_tokens": 112,
+          "rows": 14,
+          "weighted_loss_token_sum": 686.0
+        },
+        "equation_ops:absdiffx1": {
+          "active_loss_tokens": 117,
+          "boxed_payload_weighted_tokens": 18,
+          "rows": 11,
+          "weighted_loss_token_sum": 189.0
+        },
+        "equation_ops:absdiffx1+add_plus1x1": {
+          "active_loss_tokens": 47,
+          "boxed_payload_weighted_tokens": 11,
+          "rows": 4,
+          "weighted_loss_token_sum": 91.0
+        },
+        "equation_ops:absdiffx1+addx1": {
+          "active_loss_tokens": 11,
+          "boxed_payload_weighted_tokens": 2,
+          "rows": 1,
+          "weighted_loss_token_sum": 19.0
+        },
+        "equation_ops:absdiffx1+mulx1": {
+          "active_loss_tokens": 13,
+          "boxed_payload_weighted_tokens": 4,
+          "rows": 1,
+          "weighted_loss_token_sum": 29.0
+        },
+        "equation_ops:add_minus1x1": {
+          "active_loss_tokens": 79,
+          "boxed_payload_weighted_tokens": 16,
+          "rows": 7,
+          "weighted_loss_token_sum": 143.0
+        },
+        "equation_ops:add_minus1x1+add_plus1x1": {
+          "active_loss_tokens": 35,
+          "boxed_payload_weighted_tokens": 8,
+          "rows": 3,
+          "weighted_loss_token_sum": 67.0
+        },
+        "equation_ops:add_minus1x1+mulx1": {
+          "active_loss_tokens": 11,
+          "boxed_payload_weighted_tokens": 2,
+          "rows": 1,
+          "weighted_loss_token_sum": 19.0
+        },
+        "equation_ops:add_plus1x1": {
+          "active_loss_tokens": 56,
+          "boxed_payload_weighted_tokens": 11,
+          "rows": 5,
+          "weighted_loss_token_sum": 100.0
+        },
+        "equation_ops:add_plus1x1+mulx1": {
+          "active_loss_tokens": 34,
+          "boxed_payload_weighted_tokens": 7,
+          "rows": 3,
+          "weighted_loss_token_sum": 62.0
+        },
+        "equation_ops:addx1": {
+          "active_loss_tokens": 82,
+          "boxed_payload_weighted_tokens": 19,
+          "rows": 7,
+          "weighted_loss_token_sum": 158.0
+        },
+        "equation_ops:addx1+add_plus1x1": {
+          "active_loss_tokens": 58,
+          "boxed_payload_weighted_tokens": 13,
+          "rows": 5,
+          "weighted_loss_token_sum": 110.0
+        },
+        "equation_ops:addx1+mulx1": {
+          "active_loss_tokens": 23,
+          "boxed_payload_weighted_tokens": 5,
+          "rows": 2,
+          "weighted_loss_token_sum": 43.0
+        },
+        "equation_ops:mulx1": {
+          "active_loss_tokens": 125,
+          "boxed_payload_weighted_tokens": 35,
+          "rows": 10,
+          "weighted_loss_token_sum": 265.0
+        },
+        "gravity_constant:v1243_holdout": {
+          "active_loss_tokens": 69,
+          "boxed_payload_weighted_tokens": 24,
+          "rows": 5,
+          "weighted_loss_token_sum": 165.0
+        },
+        "numeral_system:v1243_holdout": {
+          "active_loss_tokens": 52,
+          "boxed_payload_weighted_tokens": 11,
+          "rows": 5,
+          "weighted_loss_token_sum": 96.0
+        },
+        "text_encryption:v1243_holdout": {
+          "active_loss_tokens": 67,
+          "boxed_payload_weighted_tokens": 22,
+          "rows": 5,
+          "weighted_loss_token_sum": 155.0
+        },
+        "unit_conversion:v1243_holdout": {
+          "active_loss_tokens": 69,
+          "boxed_payload_weighted_tokens": 24,
+          "rows": 5,
+          "weighted_loss_token_sum": 165.0
+        }
+      },
+      "by_family": {
+        "bit_manipulation": {
+          "active_loss_tokens": 1530,
+          "boxed_payload_weighted_tokens": 720,
+          "rows": 90,
+          "weighted_loss_token_sum": 4410.0
+        },
+        "equation_transform": {
+          "active_loss_tokens": 691,
+          "boxed_payload_weighted_tokens": 151,
+          "rows": 60,
+          "weighted_loss_token_sum": 1295.0
+        },
+        "gravity_constant": {
+          "active_loss_tokens": 69,
+          "boxed_payload_weighted_tokens": 24,
+          "rows": 5,
+          "weighted_loss_token_sum": 165.0
+        },
+        "numeral_system": {
+          "active_loss_tokens": 52,
+          "boxed_payload_weighted_tokens": 11,
+          "rows": 5,
+          "weighted_loss_token_sum": 96.0
+        },
+        "text_encryption": {
+          "active_loss_tokens": 67,
+          "boxed_payload_weighted_tokens": 22,
+          "rows": 5,
+          "weighted_loss_token_sum": 155.0
+        },
+        "unit_conversion": {
+          "active_loss_tokens": 69,
+          "boxed_payload_weighted_tokens": 24,
+          "rows": 5,
+          "weighted_loss_token_sum": 165.0
+        }
+      },
       "require_boxed_payload_weight": true,
       "rows": 170,
       "rows_with_boxed_payload_weight": 170,

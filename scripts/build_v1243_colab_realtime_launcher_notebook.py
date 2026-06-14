@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
 SAFE_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTIME_SAFE_LAUNCHER.ipynb"
 MODEL_DRYRUN_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
+REALTRAIN_SMOKE_NOTEBOOK_PATH = ROOT / "notebooks" / "KG1_V1243_COLAB_REALTRAIN_SMOKE_ASSERTIVE.ipynb"
 COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
     "blob/master/notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb"
@@ -23,11 +24,15 @@ MODEL_DRYRUN_COLAB_URL = (
     "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
     "blob/master/notebooks/KG1_V1243_COLAB_MODEL_DRYRUN_LAUNCHER.ipynb"
 )
+REALTRAIN_SMOKE_COLAB_URL = (
+    "https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/"
+    "blob/master/notebooks/KG1_V1243_COLAB_REALTRAIN_SMOKE_ASSERTIVE.ipynb"
+)
 PACK_URL = (
     "https://raw.githubusercontent.com/FELIPEACASTRO/KG1-NVIDIA/"
     "master/artifacts/v1243_colab_launch_pack.zip"
 )
-PACK_SHA256 = "b18e99dcb6f8d4bfea5033816635eab49bba988e766502bf2da44c6946260146"
+PACK_SHA256 = "c72bb24b3e6ab1de59381460eefd1e0a8f5c76f2b1645a7b717003dcaaf6f00a"
 
 
 def code_cell(cell_id: str, source: str) -> dict[str, object]:
@@ -169,6 +174,12 @@ for secret_name in [
     'KG1_INSTALL_CAUSAL_CONV1D',
     'KG1_V1243_MAMBA_SOURCE_BUILD_POLICY',
     'KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD',
+    'KG1_V1243_OVERRIDE_MAX_STEPS',
+    'KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS',
+    'KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS',
+    'KG1_V1243_OVERRIDE_LOG_EVERY_STEPS',
+    'KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES',
+    'KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES',
 ]:
     if not os.environ.get(secret_name):
         secret_value = read_colab_secret(secret_name)
@@ -991,6 +1002,66 @@ MODEL_DRYRUN_ONE_CELL_SOURCE = (
 )
 
 
+REALTRAIN_SMOKE_ONE_CELL_SOURCE = (
+    ONE_CELL_SOURCE
+    .replace(
+        "COLAB_URL = 'https://colab.research.google.com/github/FELIPEACASTRO/KG1-NVIDIA/blob/master/notebooks/KG1_V1243_COLAB_REALTIME_LAUNCHER.ipynb'\n",
+        f"COLAB_URL = '{REALTRAIN_SMOKE_COLAB_URL}'\n",
+    )
+    .replace(
+        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n"
+        "MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', MAMBA_SOURCE_BUILD_POLICY)\n"
+        "ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', ALLOW_MAMBA_SOURCE_BUILD)\n"
+        "if (RUN_MODEL_DRYRUN == '1' or RUN_TRAIN == '1') and INSTALL_CAUSAL_CONV1D != '1':\n"
+        "    print('auto_enable_causal_conv1d_install=True reason=GPU phase requires real causal-conv1d', flush=True)\n"
+        "    INSTALL_CAUSAL_CONV1D = '1'\n"
+        "    os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'\n\n"
+        "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
+        "INSTALL_CAUSAL_CONV1D = os.environ.get('KG1_INSTALL_CAUSAL_CONV1D', INSTALL_CAUSAL_CONV1D)\n\n"
+        "# Hard-lock this dedicated notebook against stale tokenize-only Colab Secrets.\n"
+        "# This is an assertive paid smoke: it must run model dry-run and then real_train.\n"
+        "os.environ['KG1_V1243_RUN_MODEL_DRYRUN'] = '1'\n"
+        "os.environ['KG1_ACCEPT_GPU_SPEND'] = '1'\n"
+        "os.environ['KG1_V1243_RUN_TRAIN'] = '1'\n"
+        "os.environ['KG1_V1243_REQUIRE_MODEL_DRYRUN'] = '1'\n"
+        "os.environ['KG1_V1243_REQUIRE_REAL_TRAIN'] = '1'\n"
+        "os.environ['KG1_V1243_FORCE_PACK_ADAPTER_DEFAULTS'] = '1'\n"
+        "os.environ['KG1_INSTALL_CAUSAL_CONV1D'] = '1'\n"
+        "os.environ.setdefault('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', '1')\n"
+        "os.environ['KG1_V1243_OVERRIDE_MAX_STEPS'] = '2'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_LOG_EVERY_STEPS'] = '1'\n"
+        "os.environ['KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES'] = '32'\n"
+        "os.environ['KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES'] = '32'\n"
+        "if not os.environ.get('OUTPUT_REPO'):\n"
+        "    os.environ['OUTPUT_REPO'] = 'felipesp1983/kg1-v1243-bit-smoke-candidate'\n"
+        "RUN_MODEL_DRYRUN = '1'\n"
+        "ACCEPT_GPU_SPEND = '1'\n"
+        "RUN_TRAIN = '1'\n"
+        "REQUIRE_MODEL_DRYRUN = '1'\n"
+        "REQUIRE_REAL_TRAIN = '1'\n"
+        "OUTPUT_REPO = os.environ['OUTPUT_REPO']\n"
+        "INSTALL_CAUSAL_CONV1D = '1'\n"
+        "MAMBA_SOURCE_BUILD_POLICY = os.environ.get('KG1_V1243_MAMBA_SOURCE_BUILD_POLICY', MAMBA_SOURCE_BUILD_POLICY)\n"
+        "ALLOW_MAMBA_SOURCE_BUILD = os.environ.get('KG1_V1243_ALLOW_MAMBA_SOURCE_BUILD', ALLOW_MAMBA_SOURCE_BUILD)\n"
+        "print('realtrain_smoke_assertive_hard_lock = true', flush=True)\n"
+        "print('realtrain_smoke_max_steps_override =', os.environ.get('KG1_V1243_OVERRIDE_MAX_STEPS'), flush=True)\n"
+        "print('realtrain_smoke_output_repo =', OUTPUT_REPO, flush=True)\n"
+        "print('force_pack_adapter_defaults = true', flush=True)\n\n"
+        "os.environ.setdefault('PYTHONUNBUFFERED', '1')\n",
+    )
+    .replace(
+        "print('=== V1243 ONECELL REALTIME LAUNCHER START ===', flush=True)\n",
+        "print('=== V1243 ONECELL REALTRAIN SMOKE ASSERTIVE LAUNCHER START ===', flush=True)\n",
+    )
+    .replace(
+        "print('=== V1243 ONECELL REALTIME LAUNCHER END ===', flush=True)\n",
+        "print('=== V1243 ONECELL REALTRAIN SMOKE ASSERTIVE LAUNCHER END ===', flush=True)\n",
+    )
+)
+
+
 def build_notebook(
     *,
     colab_url: str,
@@ -1099,12 +1170,34 @@ def main() -> int:
         + "\n",
         encoding="utf-8",
     )
+    REALTRAIN_SMOKE_NOTEBOOK_PATH.write_text(
+        json.dumps(
+            build_notebook(
+                colab_url=REALTRAIN_SMOKE_COLAB_URL,
+                notebook_name=REALTRAIN_SMOKE_NOTEBOOK_PATH.name,
+                title="KG1 V1243 Colab Real Train Smoke Assertive",
+                one_cell_source=REALTRAIN_SMOKE_ONE_CELL_SOURCE,
+                description=(
+                    "One-cell assertive real-train smoke. Press **Run** once: it runs tokenization, "
+                    "GPU model-load dry-run, and then a bounded real training smoke with `MAX_STEPS=2`. "
+                    "It is designed to fail loudly if real training is skipped, so we no longer confuse "
+                    "a healthy tokenize-only run with adapter training."
+                ),
+            ),
+            indent=2,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     print(f"wrote {NOTEBOOK_PATH}")
     print(f"wrote {SAFE_NOTEBOOK_PATH}")
     print(f"wrote {MODEL_DRYRUN_NOTEBOOK_PATH}")
+    print(f"wrote {REALTRAIN_SMOKE_NOTEBOOK_PATH}")
     print(f"colab_url={COLAB_URL}")
     print(f"safe_colab_url={SAFE_COLAB_URL}")
     print(f"model_dryrun_colab_url={MODEL_DRYRUN_COLAB_URL}")
+    print(f"realtrain_smoke_colab_url={REALTRAIN_SMOKE_COLAB_URL}")
     return 0
 
 

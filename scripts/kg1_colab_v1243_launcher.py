@@ -25,6 +25,14 @@ SAFE_PHASES = {"bit_specialist", "equation_specialist"}
 RUN_MODES = {"tokenize_dryrun", "model_dryrun", "real_train"}
 GPU_RUN_MODES = {"model_dryrun", "real_train"}
 RUN_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{2,180}$")
+INT_ENV_OVERRIDES = {
+    "KG1_V1243_OVERRIDE_MAX_STEPS": "MAX_STEPS",
+    "KG1_V1243_OVERRIDE_SAVE_EVERY_STEPS": "SAVE_EVERY_STEPS",
+    "KG1_V1243_OVERRIDE_EVAL_EVERY_STEPS": "EVAL_EVERY_STEPS",
+    "KG1_V1243_OVERRIDE_LOG_EVERY_STEPS": "LOG_EVERY_STEPS",
+    "KG1_V1243_OVERRIDE_EVAL_MAX_EXAMPLES": "EVAL_MAX_EXAMPLES",
+    "KG1_V1243_OVERRIDE_SCORE_PROXY_EVAL_MAX_EXAMPLES": "SCORE_PROXY_EVAL_MAX_EXAMPLES",
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -137,6 +145,29 @@ def apply_run_mode(env: dict[str, str], args: argparse.Namespace) -> None:
         raise ValueError(f"unknown run mode: {args.run_mode}")
 
 
+def apply_safe_int_overrides(env: dict[str, str]) -> dict[str, str]:
+    """Apply allowlisted integer env overrides after env-preview load.
+
+    The env preview carries production defaults. For a paid smoke run we need
+    MAX_STEPS=2 to survive those defaults, while still rejecting arbitrary env
+    injection into the trainer configuration.
+    """
+    applied: dict[str, str] = {}
+    for source_key, target_key in INT_ENV_OVERRIDES.items():
+        raw = os.environ.get(source_key)
+        if raw in (None, ""):
+            continue
+        try:
+            value = int(str(raw))
+        except ValueError as exc:
+            raise ValueError(f"{source_key} must be an integer; got {raw!r}") from exc
+        if value < 0:
+            raise ValueError(f"{source_key} must be non-negative; got {value}")
+        env[target_key] = str(value)
+        applied[target_key] = str(value)
+    return applied
+
+
 def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
     artifact_dir = args.artifact_dir.resolve()
     env = load_env_preview(args.env_preview.resolve(), args.phase)
@@ -180,6 +211,9 @@ def build_env(args: argparse.Namespace) -> tuple[dict[str, str], str]:
         env["REQUIRE_INIT_ADAPTER_REVISION"] = "1"
 
     apply_run_mode(env, args)
+    applied_overrides = apply_safe_int_overrides(env)
+    if applied_overrides:
+        env["KG1_V1243_APPLIED_INT_OVERRIDES_JSON"] = json.dumps(applied_overrides, sort_keys=True)
     return env, run_id
 
 
@@ -353,6 +387,11 @@ def print_env_summary(env: dict[str, str], run_id: str, args: argparse.Namespace
         "DRY_RUN_VALIDATE_ONLY",
         "TOKENIZE_ONLY_DRY_RUN",
         "UPLOAD_TO_HF",
+        "MAX_STEPS",
+        "SAVE_EVERY_STEPS",
+        "EVAL_EVERY_STEPS",
+        "LOG_EVERY_STEPS",
+        "EVAL_MAX_EXAMPLES",
         "SCORE_CONTRACT_TARGET_ACCURACY",
         "SCORE_PROXY_EVAL_MAX_EXAMPLES",
         "SCORE_TRAJECTORY_CHECK",
@@ -369,6 +408,7 @@ def print_env_summary(env: dict[str, str], run_id: str, args: argparse.Namespace
         "INIT_ADAPTER_REPO",
         "INIT_ADAPTER_REVISION",
         "REQUIRE_REAL_CAUSAL_CONV1D",
+        "KG1_V1243_APPLIED_INT_OVERRIDES_JSON",
     ]
     print("KG1_V1243_COLAB_LAUNCH_ENV_BEGIN", flush=True)
     print(json.dumps({key: env.get(key, "") for key in safe_keys}, indent=2, sort_keys=True), flush=True)
