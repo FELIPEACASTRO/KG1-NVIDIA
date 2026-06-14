@@ -73,10 +73,18 @@ STEP_RE = re.compile(
     r"train_loss=(?P<loss>\S+).*?(?P<mem>mem_alloc=.*|cuda_mem=unavailable)"
 )
 END_RE = re.compile(r"KG1_COLAB_REALTIME_RUNNER_END\s+return_code=(?P<return_code>-?\d+)")
+# PRECISO (anti falso-positivo): so casa ERRO REAL, nao mencao benigna no meio do texto.
+#  - cabecalho de traceback real (coluna 0)
+#  - excecao levantada de verdade: "XxxError: ..." no inicio da linha (RuntimeError:, ValueError:, OutOfMemoryError:)
+#  - mensagens especificas de OOM/NaN/contrato/abort
 FATAL_RE = re.compile(
-    r"Traceback|OutOfMemory|CUDA out of memory|RuntimeError|FloatingPointError|"
-    r"Non-finite|ABORT:|score_contract_runtime_failed|KG1_WATCHDOG_STOP",
-    re.IGNORECASE,
+    r"^Traceback \(most recent call last\):"
+    r"|^[A-Za-z_][A-Za-z0-9_.]*Error: "
+    r"|CUDA out of memory"
+    r"|torch\.cuda\.OutOfMemoryError"
+    r"|FloatingPointError"
+    r"|Non-finite (?:loss|baseline|eval)"
+    r"|ABORT:|score_contract_runtime_failed|KG1_WATCHDOG_STOP"
 )
 
 
