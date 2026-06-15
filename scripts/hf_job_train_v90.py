@@ -261,6 +261,10 @@ GRADIENT_ACCUMULATION = BATCH_SIZE // MICRO_BATCH_SIZE
 # memoria + seq_len (com cuda.synchronize p/ timing real). Mostra exatamente onde
 # o tempo de cada step e gasto. Vai pro HF E pro Colab (wrapper espelha os dois).
 DEBUG_MICRO = env_bool("KG1_DEBUG_MICRO", False)
+# TRACE-alvo (GATILHO, default OFF): cronometra UM forward por TIPO de bloco do
+# decoder (Mamba / Attention / MoE-MLP). Liga so quando o DEBUG por micro nao bastar
+# p/ achar onde o forward gasta. Cirurgico (1 passada, hooks removidos depois).
+TRACE_LAYER_TYPES = env_bool("KG1_TRACE_LAYER_TYPES", False)
 
 LEARNING_RATE = env_float("LEARNING_RATE", 2e-4)
 FINAL_LEARNING_RATE = env_float("FINAL_LEARNING_RATE", 1e-4)
@@ -2982,6 +2986,107 @@ def upload_dry_run_report(dry_run_path: Path) -> None:
     print(f"Dry-run report uploaded: {OUTPUT_REPO}/{path_in_repo}")
 
 
+def trace_layer_types_once(model, tokenizer, train_data) -> None:
+    """TRACE-alvo (gatilho, default OFF via KG1_TRACE_LAYER_TYPES).
+
+    Cronometra UM unico forward, separando o tempo por TIPO de bloco do decoder
+    (Mamba / Attention / MoE-MLP), p/ localizar onde o forward gasta quando o DEBUG
+    por micro-passo nao basta. Cirurgico: hooka SO os filhos diretos de cada decoder
+    layer (1 nivel -> sem aninhamento/dupla contagem), roda 1 passada com no_grad,
+    agrega, imprime e REMOVE os hooks. Envolto em try/except: um diagnostico NUNCA
+    pode quebrar o treino.
+    """
+    import collections
+
+    try:
+        if not torch.cuda.is_available():
+            print("[KG1-TRACE] CUDA indisponivel; pulando trace por tipo de camada", flush=True)
+            return
+        # localizar a ModuleList das decoder layers (desce model.model... ate achar .layers)
+        layers = None
+        node = model
+        for _ in range(5):
+            cand = getattr(node, "layers", None)
+            if isinstance(cand, torch.nn.ModuleList):
+                layers = cand
+                break
+            if hasattr(node, "model"):
+                node = node.model
+            elif hasattr(node, "base_model"):
+                node = node.base_model
+            else:
+                break
+        if layers is None:
+            for _name, mod in model.named_modules():
+                if isinstance(mod, torch.nn.ModuleList) and len(mod) >= 8:
+                    layers = mod
+                    break
+        if layers is None:
+            print("[KG1-TRACE] nao localizei as decoder layers; pulando", flush=True)
+            return
+
+        def classify(mod) -> str | None:
+            n = type(mod).__name__.lower()
+            if "mamba" in n or "mixer" in n:
+                return "mamba"
+            if "attention" in n or "attn" in n:
+                return "attention"
+            if "moe" in n or "expert" in n or "mlp" in n or "feedforward" in n:
+                return "moe/mlp"
+            return None
+
+        timings: dict[str, float] = collections.defaultdict(float)
+        counts: dict[str, int] = collections.defaultdict(int)
+        starts: dict[int, float] = {}
+        handles = []
+
+        def pre_hook(mod, _inp):
+            torch.cuda.synchronize()
+            starts[id(mod)] = time.time()
+
+        def post_hook(mod, _inp, _out):
+            torch.cuda.synchronize()
+            cls = classify(mod)
+            if cls is not None:
+                timings[cls] += time.time() - starts.get(id(mod), time.time())
+                counts[cls] += 1
+
+        for layer in layers:
+            for child in layer.children():
+                if classify(child) is not None:
+                    handles.append(child.register_forward_pre_hook(pre_hook))
+                    handles.append(child.register_forward_hook(post_hook))
+        if not handles:
+            print("[KG1-TRACE] nenhum bloco classificavel nos filhos das layers; pulando", flush=True)
+            return
+
+        sample = train_data[: max(1, MICRO_BATCH_SIZE)]
+        input_ids, attention_mask, loss_mask = tensorize_batch(sample, tokenizer.pad_token_id)
+        torch.cuda.synchronize()
+        _t0 = time.time()
+        with torch.no_grad():
+            model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
+        torch.cuda.synchronize()
+        total = time.time() - _t0
+        for h in handles:
+            h.remove()
+        print(
+            f"[KG1-TRACE] === Forward por TIPO de bloco (1 passada, seq_len="
+            f"{int(input_ids.shape[-1])}, total={total:.2f}s) ===",
+            flush=True,
+        )
+        for cls in sorted(timings, key=lambda k: -timings[k]):
+            print(
+                f"[KG1-TRACE]   {cls:10} soma={timings[cls]:.3f}s blocos={counts[cls]} "
+                f"media={timings[cls] / max(1, counts[cls]) * 1000:.1f}ms/bloco "
+                f"({timings[cls] / max(1e-9, total) * 100:.0f}% do forward)",
+                flush=True,
+            )
+        del input_ids, attention_mask, loss_mask
+    except Exception as exc:  # diagnostico NUNCA quebra o treino
+        print(f"[KG1-TRACE] trace falhou (ignorado, treino segue): {type(exc).__name__}: {exc}", flush=True)
+
+
 def train() -> None:
     print("=" * 72)
     print("KG1 v90 category-solver remote training")
@@ -3543,6 +3648,9 @@ def train() -> None:
     start_time = time.time()
     best_eval_loss = float("inf")
     train_eval_point_losses: list[float] = []
+
+    if TRACE_LAYER_TYPES:
+        trace_layer_types_once(model, tokenizer, train_data)
 
     for epoch in range(NUM_EPOCHS):
         if global_step >= total_steps:
