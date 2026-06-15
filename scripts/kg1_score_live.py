@@ -380,3 +380,132 @@ def render_marker(telemetry: dict[str, Any]) -> str:
     )
     status = f"KG1_SCORE_LIVE_STATUS={a['decision']}"
     return machine + "\n" + human + "\n" + status
+
+
+# ---------------------------------------------------------------------------
+# DASHBOARD DIDATICO (Use a Cabeca) -- camada de leitura HUMANA, muito detalhada.
+# Reusado no treino (SCORE-LIVE) e no Job B (eval full947). Nao substitui os
+# marcadores de maquina (render_marker); complementa.
+# ---------------------------------------------------------------------------
+
+FULL947_FAMILY_SIZE = {"bit_manipulation": 160, "equation_transform": 155}
+FULL947_PROTECTED_TOTAL = 632
+FULL947_TOTAL = 947
+SCORE_TARGETS = {"086_piso": 823, "meta_0.87": 824, "stretch_0.89": 843}
+PROTECTED_FAMILIES = ("gravity_constant", "unit_conversion", "numeral_system", "text_encryption")
+WEAK_FAMILIES = ("bit_manipulation", "equation_transform")
+_FAMILY_LABEL = {
+    "bit_manipulation": "bit (ALVO)",
+    "equation_transform": "equation (ALVO)",
+    "gravity_constant": "gravity (protegida)",
+    "unit_conversion": "unit (protegida)",
+    "numeral_system": "numeral (protegida)",
+    "text_encryption": "text (protegida)",
+}
+
+
+def _bar(frac: float | None, width: int = 12) -> str:
+    f = 0.0 if frac is None else max(0.0, min(1.0, float(frac)))
+    n = int(round(f * width))
+    return "[" + "#" * n + "." * (width - n) + "]"
+
+
+def _delta_icon(delta: int | None) -> str:
+    if delta is None:
+        return " ?"
+    if delta > 0:
+        return f"+{delta} UP"
+    if delta < 0:
+        return f"{delta} DOWN"
+    return " 0 ="
+
+
+def project_full947(tel: dict[str, Any]) -> dict[str, Any]:
+    """Projecao INDICATIVA do full947 a partir das taxas por familia (amostra pequena =>
+    ruidosa). Termometro -- o juiz real e o Notebook B (vLLM full947)."""
+    fam = tel.get("by_family") or {}
+
+    def acc(name: str) -> float | None:
+        f = fam.get(name)
+        return float(f["accuracy"]) if f and f.get("rows") else None
+
+    bit_acc, eq_acc = acc("bit_manipulation"), acc("equation_transform")
+    prot_correct = sum(fam[f]["correct"] for f in PROTECTED_FAMILIES if f in fam)
+    prot_rows = sum(fam[f]["rows"] for f in PROTECTED_FAMILIES if f in fam)
+    prot_acc = (prot_correct / prot_rows) if prot_rows else None
+    proj = 0.0
+    if bit_acc is not None:
+        proj += bit_acc * FULL947_FAMILY_SIZE["bit_manipulation"]
+    if eq_acc is not None:
+        proj += eq_acc * FULL947_FAMILY_SIZE["equation_transform"]
+    if prot_acc is not None:
+        proj += prot_acc * FULL947_PROTECTED_TOTAL
+    projected = int(round(proj))
+    return {
+        "projected_correct": projected,
+        "projected_score": round(projected / FULL947_TOTAL, 4),
+        "bit_acc": bit_acc, "eq_acc": eq_acc, "protected_acc": prot_acc,
+        "gap_to_0_87": SCORE_TARGETS["meta_0.87"] - projected,
+    }
+
+
+def render_dashboard(tel: dict[str, Any], *, title: str = "PAINEL SCORE-LIVE",
+                     source: str = "geracao real (greedy oficial)") -> str:
+    """Dashboard humano MUITO detalhado e didatico (Use a Cabeca)."""
+    em = tel.get("exact_match", {}); ed = tel.get("exact_delta", {})
+    tr = tel.get("truncation", {}); bx = tel.get("boxed", {})
+    fa = tel.get("format_anomalies", {}); ab = tel.get("abort", {})
+    fam = tel.get("by_family") or {}
+    L: list[str] = []
+    L.append("=" * 80)
+    L.append(f"  {title}  |  step {tel.get('step')}/{tel.get('max_step')}  |  fonte: {source}")
+    L.append("  (acerto = boxed exact-match OFICIAL, NAO loss. 'loss bom != score bom')")
+    L.append("=" * 80)
+    acc = float(em.get("accuracy") or 0.0)
+    L.append("[1] PLACAR GERAL (no eval-set):")
+    L.append(f"    acerto = {em.get('correct')}/{em.get('rows')} = {acc * 100:.1f}%   {_bar(acc)}")
+    if em.get("baseline_correct") is not None:
+        L.append(f"    vs 086 (baseline): delta {_delta_icon(ed.get('overall'))}   (>=0 = nao regrediu)")
+    expl = {"OK": "pode seguir", "WATCH": "observar (falta baseline ou em duvida)",
+            "ABORT": "score real REGREDIU -> PARAR"}.get(str(ab.get("decision")), "?")
+    L.append(f"    STATUS: {ab.get('decision')}  ->  {expl}")
+    if ab.get("abort_reasons"):
+        L.append("    motivos: " + "; ".join(str(x) for x in ab["abort_reasons"]))
+    if ab.get("blockers"):
+        L.append("    pendencias: " + "; ".join(str(x) for x in ab["blockers"]))
+    L.append("-" * 80)
+    L.append("[2] POR FAMILIA (onde esta o ganho/risco):")
+    L.append(f"    {'familia':<20}{'acerto':<12}{'barra':<14}{'trunc':<7}{'boxed':<7}{'vs086'}")
+    for name in list(WEAK_FAMILIES) + list(PROTECTED_FAMILIES):
+        f = fam.get(name)
+        if not f:
+            continue
+        a = float(f.get("accuracy") or 0.0)
+        L.append(
+            f"    {_FAMILY_LABEL.get(name, name):<20}"
+            f"{str(f.get('correct')) + '/' + str(f.get('rows')):<12}{_bar(a, 10):<14}"
+            f"{f.get('truncation_rate', 0) * 100:>3.0f}%   {f.get('boxed_rate', 0) * 100:>3.0f}%   "
+            f"{_delta_icon(f.get('exact_delta'))}"
+        )
+    pj = project_full947(tel)
+    L.append("-" * 80)
+    L.append("[3] PROJECAO full947 (INDICATIVA -- amostra pequena; juiz real = Notebook B):")
+    L.append(f"    se as taxas se mantiverem: ~{pj['projected_correct']}/947 = {pj['projected_score']:.4f}")
+    L.append("    referencias: 086(piso)=823/0.869 | meta=824/0.870 | stretch=843/0.890")
+    g = pj["gap_to_0_87"]
+    L.append(f"    p/ bater 0.87: " + (f"FALTAM +{g} itens" if g > 0 else f"JA NO ALVO ({-g} acima)"))
+    L.append("-" * 80)
+    L.append("[4] SAUDE DE FORMATO (impacta o score direto):")
+    L.append(f"    truncacao geral: {tr.get('rate', 0) * 100:.1f}% ({tr.get('count')} cortados antes do boxed)")
+    L.append(f"    tem boxed: {bx.get('boxed_rate', 0) * 100:.0f}% | exatamente 1 boxed: "
+             f"{bx.get('exactly_one_boxed_rate', 0) * 100:.0f}% | extracao ok: {bx.get('extract_ok_rate', 0) * 100:.0f}%")
+    L.append(f"    anomalias: sem_box={fa.get('no_box')} box_duplo={fa.get('double_boxed')} "
+             f"box_aberto={fa.get('unclosed_box')} nao_extraiu={fa.get('extract_not_found')}")
+    L.append("-" * 80)
+    L.append("[5] COMO LER (didatico):")
+    L.append("    - bit/equation = ALVOS (tem headroom). Protegidas devem ficar ~100%.")
+    L.append("    - truncacao alta = resposta cortada antes do boxed -> perde ponto.")
+    L.append("    - box_aberto/sem_box = formato quebrado -> a metrica nao acha a resposta.")
+    L.append("    - mede o SCORE REAL; confirme sempre no Notebook B (vLLM full947).")
+    L.append("=" * 80)
+    return "\n".join(L)

@@ -3018,6 +3018,7 @@ def score_live_panel(model, tokenizer, step: int, total_steps: int) -> None:
         _here = _os.path.dirname(_os.path.abspath(__file__))
         if _here not in _sys.path:
             _sys.path.insert(0, _here)
+        from kg1_score_live import render_dashboard
         from kg1_score_live_eval import (
             load_jsonl,
             make_hf_generate_fn,
@@ -3053,13 +3054,14 @@ def score_live_panel(model, tokenizer, step: int, total_steps: int) -> None:
             max_model_len=SCORE_LIVE_MAX_MODEL_LEN,
         )
         _t0 = _time.time()
-        run_score_live_eval(
+        tel = run_score_live_eval(
             rows,
             gen,
             render_fn=lambda it: render_eval_prompt(tokenizer, str(it.get("prompt", ""))),
             step=step,
             max_step=total_steps,
         )
+        print(render_dashboard(tel, title="PAINEL SCORE-LIVE (treino)"), flush=True)
         print(
             f"[KG1-SCORE-LIVE] painel: {(_time.time() - _t0) / 60:.1f}min para {len(rows)} exemplos",
             flush=True,
