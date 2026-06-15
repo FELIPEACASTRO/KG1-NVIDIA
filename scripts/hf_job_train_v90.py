@@ -829,7 +829,11 @@ def kg1_score_contract_teach(report: dict[str, Any]) -> None:
 def kg1_score_proxy_health(report: dict[str, Any]) -> tuple[str, str]:
     boxed_rows = int(report.get("boxed_tail_rows") or 0)
     if boxed_rows <= 0:
-        return "STOP", "Sem tokens boxed ponderados; o proxy nao mede a parte que vira score."
+        # boxed_tail NAO-MENSURAVEL (ex.: BOXED_PAYLOAD_LOSS_WEIGHT=1.0 -> 0 tokens ponderados).
+        # NAO e falha do modelo: no proxy teacher-forced a cauda boxed vem do GOLD do val, nao da
+        # geracao. "Nao consigo medir" JAMAIS pode MATAR o job (era falso-positivo que matava run
+        # sadio via watchdog health_stop). O gate REAL de score e o SCORE-LIVE (geracao exact-match).
+        return "WATCH", "boxed_tail nao-mensuravel (peso boxed=1.0); proxy nao mede a cauda -> use SCORE-LIVE."
     delta = report.get("delta_vs_baseline") or {}
     if not delta:
         return "BASELINE", "Baseline gravado; proximas avaliacoes precisam melhorar estes numeros."
