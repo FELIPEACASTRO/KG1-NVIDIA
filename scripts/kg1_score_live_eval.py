@@ -89,11 +89,16 @@ def run_score_live_eval(eval_rows: Iterable[dict[str, Any]],
     """
     if render_fn is None:
         raise ValueError("render_fn obrigatorio: use render_eval_prompt real (sem fallback mock).")
+    eval_rows = list(eval_rows)
+    total = len(eval_rows)
     rows = []
-    for it in eval_rows:
+    for k, it in enumerate(eval_rows, 1):
         raw, fr, ct = generate_fn(render_fn(it))
         rows.append({"id": it.get("id"), "raw_output": raw, "answer": it.get("answer", ""),
                      "family": it.get("family", "unknown"), "finish_reason": fr, "completion_tokens": ct})
+        # progresso por exemplo: mantem o stdout VIVO durante a geracao (que e silenciosa) ->
+        # evita falso-positivo do watchdog de stall (45min sem output) no treino real.
+        print(f"KG1_SCORE_LIVE_PROGRESS {k}/{total} family={it.get('family','?')} fr={fr} ct={ct}", flush=True)
     tel = compute_score_telemetry(rows, baseline_per_family=baseline_per_family,
                                   baseline_truncation_per_family=baseline_truncation_per_family,
                                   step=step, max_step=max_step)
