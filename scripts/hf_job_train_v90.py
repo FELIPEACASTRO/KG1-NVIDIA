@@ -265,6 +265,17 @@ DEBUG_MICRO = env_bool("KG1_DEBUG_MICRO", False)
 # decoder (Mamba / Attention / MoE-MLP). Liga so quando o DEBUG por micro nao bastar
 # p/ achar onde o forward gasta. Cirurgico (1 passada, hooks removidos depois).
 TRACE_LAYER_TYPES = env_bool("KG1_TRACE_LAYER_TYPES", False)
+# SCORE-LIVE (painel de observabilidade): geracao REAL + exact-match OFICIAL por familia
+# (bit/equation/protegidas), ao vivo no treino (HF+Colab). Plugа o modulo kg1_score_live_eval
+# (ja testado). default OFF. Custo: geracao e lenta -> use amostra pequena por familia.
+SCORE_LIVE = env_bool("KG1_SCORE_LIVE", False)
+SCORE_LIVE_EVALSET = env_str(
+    "KG1_SCORE_LIVE_EVALSET", "artifacts/v1244_cot_safe/v1244_scorelive_evalset_170.jsonl"
+)
+SCORE_LIVE_PER_FAMILY = env_int("KG1_SCORE_LIVE_PER_FAMILY", 2)  # 0 = todas as 170
+SCORE_LIVE_MAX_NEW_TOKENS = env_int("KG1_SCORE_LIVE_MAX_NEW_TOKENS", 2048)
+SCORE_LIVE_MAX_MODEL_LEN = env_int("KG1_SCORE_LIVE_MAX_MODEL_LEN", 8192)
+_SCORE_LIVE_ROWS = None  # cache do eval-set (carrega 1x)
 
 LEARNING_RATE = env_float("LEARNING_RATE", 2e-4)
 FINAL_LEARNING_RATE = env_float("FINAL_LEARNING_RATE", 1e-4)
@@ -2986,6 +2997,90 @@ def upload_dry_run_report(dry_run_path: Path) -> None:
     print(f"Dry-run report uploaded: {OUTPUT_REPO}/{path_in_repo}")
 
 
+def score_live_panel(model, tokenizer, step: int, total_steps: int) -> None:
+    """PAINEL SCORE-LIVE: geracao REAL + exact-match OFICIAL por familia, ao vivo.
+
+    Plugа kg1_score_live_eval (modulo testado): para o eval-set, GERA greedy (config
+    oficial), extrai+verifica com a metrica oficial, e emite KG1_SCORE_LIVE_* (por
+    familia: acerto, truncacao, boxed; + deltas/abort). Espelhado HF+Colab pelo wrapper.
+    Mem-safe: model.eval()+use_cache, empty_cache, restaura estado no finally.
+    Envolto em try/except: um diagnostico NUNCA pode quebrar o treino.
+    """
+    import os as _os
+    import sys as _sys
+    import time as _time
+    import collections as _collections
+
+    global _SCORE_LIVE_ROWS
+    was_training = bool(getattr(model, "training", True))
+    had_cache = getattr(getattr(model, "config", None), "use_cache", None)
+    try:
+        _here = _os.path.dirname(_os.path.abspath(__file__))
+        if _here not in _sys.path:
+            _sys.path.insert(0, _here)
+        from kg1_score_live_eval import (
+            load_jsonl,
+            make_hf_generate_fn,
+            render_eval_prompt,
+            run_score_live_eval,
+        )
+
+        if _SCORE_LIVE_ROWS is None:
+            rows = load_jsonl(SCORE_LIVE_EVALSET)
+            if SCORE_LIVE_PER_FAMILY > 0:
+                by_fam = _collections.defaultdict(list)
+                for r in rows:
+                    by_fam[str(r.get("family", "unknown"))].append(r)
+                rows = [r for fam in sorted(by_fam) for r in by_fam[fam][:SCORE_LIVE_PER_FAMILY]]
+            _SCORE_LIVE_ROWS = rows
+            print(
+                f"[KG1-SCORE-LIVE] eval-set: {len(rows)} exemplos "
+                f"(per_family={SCORE_LIVE_PER_FAMILY or 'todas'} max_new={SCORE_LIVE_MAX_NEW_TOKENS})",
+                flush=True,
+            )
+        rows = _SCORE_LIVE_ROWS
+
+        model.eval()
+        if hasattr(model, "config") and hasattr(model.config, "use_cache"):
+            model.config.use_cache = True
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+        gen = make_hf_generate_fn(
+            model,
+            tokenizer,
+            max_new_tokens=SCORE_LIVE_MAX_NEW_TOKENS,
+            max_model_len=SCORE_LIVE_MAX_MODEL_LEN,
+        )
+        _t0 = _time.time()
+        run_score_live_eval(
+            rows,
+            gen,
+            render_fn=lambda it: render_eval_prompt(tokenizer, str(it.get("prompt", ""))),
+            step=step,
+            max_step=total_steps,
+        )
+        print(
+            f"[KG1-SCORE-LIVE] painel: {(_time.time() - _t0) / 60:.1f}min para {len(rows)} exemplos",
+            flush=True,
+        )
+    except Exception as exc:  # diagnostico NUNCA quebra o treino
+        print(
+            f"[KG1-SCORE-LIVE] falhou (ignorado, treino segue): {type(exc).__name__}: {exc}",
+            flush=True,
+        )
+    finally:
+        try:
+            if had_cache is not None and hasattr(model, "config") and hasattr(model.config, "use_cache"):
+                model.config.use_cache = had_cache
+            if was_training:
+                model.train()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
+
+
 def trace_layer_types_once(model, tokenizer, train_data) -> None:
     """TRACE-alvo (gatilho, default OFF via KG1_TRACE_LAYER_TYPES).
 
@@ -3824,6 +3919,8 @@ def train() -> None:
                     f"boxed_tail_token_acc={eval_score_proxy_report['boxed_tail_token_accuracy']:.4f} "
                     f"boxed_tail_exact_rate={eval_score_proxy_report['boxed_tail_exact_rate']:.4f}"
                 )
+                if SCORE_LIVE:
+                    score_live_panel(model, tokenizer, global_step, total_steps)
                 if not math.isfinite(eval_loss):
                     raise FloatingPointError(f"Non-finite eval loss at step {global_step}")
                 if ABORT_EVAL_LOSS_GT > 0 and eval_loss > ABORT_EVAL_LOSS_GT:
