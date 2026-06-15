@@ -449,6 +449,49 @@ def evaluate_adapter(
         axis=1,
     )
 
+    # ---- JOB B: PAINEL DIDATICO (sempre) + TRACE por-item (KG1_EVAL_TRACE=1) ----
+    # Reusa a metrica oficial via kg1_score_live. try/except: o juiz e o report do eval;
+    # isto e camada de leitura humana e NUNCA pode quebrar o eval.
+    try:
+        import sys as _sys
+        _sd = os.path.dirname(os.path.abspath(__file__))
+        if _sd not in _sys.path:
+            _sys.path.insert(0, _sd)
+        from kg1_score_live import compute_score_telemetry, render_dashboard
+
+        _fam_col = "family" if "family" in merged.columns else ("type" if "type" in merged.columns else None)
+        _recs = merged.to_dict("records")
+        _tel_rows = [
+            {
+                "id": str(r.get("id", "")),
+                "raw_output": r.get("raw_output", "") or "",
+                "answer": r.get("answer", ""),
+                "family": (str(r.get(_fam_col, "unknown")) if _fam_col else "unknown"),
+                "finish_reason": r.get("finish_reason", ""),
+                "completion_tokens": r.get("completion_tokens", 0),
+            }
+            for r in _recs
+        ]
+        _tel = compute_score_telemetry(_tel_rows, step=None, max_step=None)
+        _title = "JOB B - EVAL full947 [" + os.path.basename(str(adapter_dir).rstrip("/")) + "]"
+        print(render_dashboard(_tel, title=_title, source="vLLM greedy full947 (JUIZ OFICIAL)"), flush=True)
+        if os.environ.get("KG1_EVAL_TRACE", "0") == "1":
+            print(
+                f"[KG1-EVAL-TRACE] por-item ({len(_recs)} itens) -- familia | id | correct | trunc | pred -> gold",
+                flush=True,
+            )
+            for r in _recs:
+                _fam = (str(r.get(_fam_col, "?")) if _fam_col else "?")
+                print(
+                    f"[TRACE] {_fam:<18} {str(r.get('id', ''))[:10]:<10} "
+                    f"correct={'Y' if bool(r.get('correct')) else 'N'} "
+                    f"trunc={'Y' if bool(r.get('truncated')) else 'N'} "
+                    f"pred={str(r.get('prediction', ''))[:40]!r} gold={str(r.get('answer', ''))[:40]!r}",
+                    flush=True,
+                )
+    except Exception as _exc:  # diagnostico NUNCA quebra o eval
+        print(f"[KG1-EVAL-PANEL] falhou (ignorado, eval segue): {type(_exc).__name__}: {_exc}", flush=True)
+
     total_tokens = int(merged["completion_tokens"].fillna(0).sum())
     boxed_rows = int(merged["boxed_count"].fillna(0).astype(int).gt(0).sum()) if "boxed_count" in merged else 0
     malformed_boxed_rows = (
