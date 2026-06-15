@@ -3830,6 +3830,15 @@ def train() -> None:
 
             avg_loss = accum_loss / GRADIENT_ACCUMULATION
             elapsed = time.time() - start_time
+            # divisor CLARO de fim de step (todo step, independente de LOG_EVERY) ->
+            # deixa obvio onde um step termina e o proximo comeca no log.
+            print(
+                "\n" + "=" * 64 + "\n"
+                f">>> FIM DO STEP {global_step}/{total_steps}  |  train_loss={avg_loss:.4f}  |  "
+                f"lr={lr:.2e}  |  elapsed={elapsed / 60:.1f}min  |  {GRADIENT_ACCUMULATION} micros\n"
+                + "=" * 64,
+                flush=True,
+            )
             if LOG_EVERY_STEPS > 0 and global_step % LOG_EVERY_STEPS == 0:
                 print(
                     f"step={global_step}/{total_steps} lr={lr:.2e} "
