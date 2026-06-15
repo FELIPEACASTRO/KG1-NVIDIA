@@ -257,6 +257,11 @@ if BATCH_SIZE % MICRO_BATCH_SIZE != 0:
     raise ValueError("BATCH_SIZE must be divisible by MICRO_BATCH_SIZE")
 GRADIENT_ACCUMULATION = BATCH_SIZE // MICRO_BATCH_SIZE
 
+# DEBUG de altissimo nivel: loga CADA micro-passo com tempo de forward/backward +
+# memoria + seq_len (com cuda.synchronize p/ timing real). Mostra exatamente onde
+# o tempo de cada step e gasto. Vai pro HF E pro Colab (wrapper espelha os dois).
+DEBUG_MICRO = env_bool("KG1_DEBUG_MICRO", False)
+
 LEARNING_RATE = env_float("LEARNING_RATE", 2e-4)
 FINAL_LEARNING_RATE = env_float("FINAL_LEARNING_RATE", 1e-4)
 ADAM_BETA1 = env_float("ADAM_BETA1", 0.9)
@@ -3555,19 +3560,39 @@ def train() -> None:
                 continue
 
             input_ids, attention_mask, loss_mask = tensorize_batch(batch, tokenizer.pad_token_id)
+            _dbg_seq_len = int(input_ids.shape[-1])
+            if DEBUG_MICRO and torch.cuda.is_available():
+                torch.cuda.synchronize()
+            _dbg_t_fwd0 = time.time()
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, use_cache=False)
             loss = masked_cross_entropy_loss(outputs.logits, input_ids, loss_mask)
+            if DEBUG_MICRO and torch.cuda.is_available():
+                torch.cuda.synchronize()
+            _dbg_t_fwd = time.time() - _dbg_t_fwd0
             if not torch.isfinite(loss):
                 raise FloatingPointError(f"Non-finite loss at step {global_step}: {loss}")
 
             scaled_loss = loss / GRADIENT_ACCUMULATION
+            _dbg_t_bwd0 = time.time()
             scaled_loss.backward()
+            if DEBUG_MICRO and torch.cuda.is_available():
+                torch.cuda.synchronize()
+            _dbg_t_bwd = time.time() - _dbg_t_bwd0
 
             loss_value = float(loss.item())
             accum_loss += loss_value
             accum_count += 1
             micro_in_step = accum_count % GRADIENT_ACCUMULATION
             should_step_optimizer = micro_in_step == 0
+
+            if DEBUG_MICRO:
+                print(
+                    f"[KG1-DEBUG][MICRO] step={global_step}/{total_steps} "
+                    f"micro={micro_in_step or GRADIENT_ACCUMULATION}/{GRADIENT_ACCUMULATION} "
+                    f"seq_len={_dbg_seq_len} t_fwd={_dbg_t_fwd:.2f}s t_bwd={_dbg_t_bwd:.2f}s "
+                    f"micro_loss={loss_value:.4f} {cuda_memory_line()}",
+                    flush=True,
+                )
 
             del input_ids, attention_mask, loss_mask, outputs, loss, scaled_loss
 
